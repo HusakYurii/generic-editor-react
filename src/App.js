@@ -1,25 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import React, { useState } from "react";
+import { Header } from "./components/header";
+import { Tree } from "./components/tree";
+
+import "./app.css";
+
+const getUID = function () {
+  let uid = 0;
+  return function () {
+    return (uid++);
+  }
+}();
+
+class NodeData {
+  constructor(id, nodes = []) {
+    this.id = id;
+    this.name = `Node_${id}`;
+    this.nodes = nodes;
+  }
 }
 
-export default App;
+export const App = () => {
+  const [tree, setTree] = useState(
+    new NodeData(getUID(), [
+      new NodeData(getUID()),
+      new NodeData(getUID(), [
+        new NodeData(getUID()),
+        new NodeData(getUID())
+      ])
+    ]));
+
+  return (
+    <>
+      <Header />
+      <div id="left-panel">
+        <div id="tree-container"><Tree tree={tree} /></div>
+      </div>
+      <div id="center-panel">"preview"</div>
+      <div id="right-panel">"properties"</div>
+      <div id="bottom-panel">"resources"</div>
+    </>
+  );
+}

@@ -1,0 +1,27 @@
+.node {
+  margin: 0 0 0 20px;
+}
+
+.node-indicator {
+  border: 2px solid transparent;
+  position: relative;
+}
+
+.toggler {
+  position: absolute;
+  left: -15px;
+}
+.name {
+  font-size: 15px;
+}
+
+.node-indicator::before {
+  position: absolute;
+  content: "";
+  width: 10px;
+  height: 15px;
+  border-left: 1px solid black;
+  border-bottom: 1px solid black;
+  left: -15px;
+  top: -5px;
+}
