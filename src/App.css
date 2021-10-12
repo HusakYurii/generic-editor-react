@@ -19,7 +19,7 @@
   left: 0;
   bottom: 0;
   width: 250px;
-  background-color: #c7c7c7;
+  background-color: #364346;
 }
 
 #center-panel {
@@ -27,7 +27,7 @@
   right: 250px;
   left: 250px;
   height: calc(100% - 200px);
-  background-color: #ededed;
+  background-color: #ffffff;
 }
 
 #right-panel {
@@ -35,7 +35,7 @@
   bottom: 0;
   right: 0;
   width: 250px;
-  background-color: #c7c7c7;
+  background-color: #364346;
 }
 
 #bottom-panel {
@@ -43,5 +43,5 @@
   left: 250px;
   right: 250px;
   height: 200px;
-  background-color: #a3a3a3;
+  background-color: #293538;
 }

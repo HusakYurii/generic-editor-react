@@ -7,21 +7,27 @@
   position: relative;
 }
 
-.toggler {
-  position: absolute;
-  left: -15px;
-}
-.name {
-  font-size: 15px;
+.node-indicator:hover {
+  background-color: #2c393c;
+  cursor: default;
 }
 
-.node-indicator::before {
+.node-indicator:hover > .name {
+  color: #ffffff;
+}
+
+.name {
+  font-size: 14px;
+  color: #86adaf;
+}
+
+.toggler {
   position: absolute;
-  content: "";
-  width: 10px;
-  height: 15px;
-  border-left: 1px solid black;
-  border-bottom: 1px solid black;
-  left: -15px;
-  top: -5px;
+  width: 16px;
+  height: 16px;
+  text-align: center;
+  line-height: 16px;
+  background-color: #2c393c;
+  color: #ffffff;
+  left: -20px;
 }
