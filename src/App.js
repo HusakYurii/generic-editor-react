@@ -4,21 +4,8 @@ import { Header } from "./components/header";
 import { Tree } from "./components/tree";
 
 import "./app.css";
-
-const getUID = function () {
-  let uid = 0;
-  return function () {
-    return (uid++);
-  }
-}();
-
-class NodeData {
-  constructor(id, nodes = []) {
-    this.id = id;
-    this.name = `Node_${id}`;
-    this.nodes = nodes;
-  }
-}
+import { NodeData } from "./data/NodeData";
+import { getUID } from "./tools/uidGenerator";
 
 export const App = () => {
   const [tree, setTree] = useState(
