@@ -3,41 +3,48 @@ import { Node } from "./Node";
 
 import "./tree.css";
 
+/**
+ * 
+ * @param {{tree: import("../../data/NodeData").INodeData}} props
+ * 
+ *  
+ */
 export const Tree = ({ tree }) => {
-    const handleDragStart = (node) => {
+    let targetElement
+
+    const handleDragStart = (event) => {
         console.log("handleDragStart");
-        console.log(node);
+        console.log(event.target.getAttribute("data-id"))
     };
-    const handleDragEnd = (node) => {
-        console.log("handleDragStart");
-        console.log(node);
+
+    const handleDrop = (event) => {
+        event.preventDefault();
+        console.log("handleDrop");
+        console.log(event.target.getAttribute("data-id"))
     };
-    const handleDragOver = (node) => {
+
+    const handleDragOver = (event) => {
+        event.preventDefault();
         console.log("handleDragOver");
-        console.log(node.id);
     };
 
     const handlers = {
         handleDragStart,
-        handleDragEnd,
         handleDragOver
     };
 
-
-
     return (
-        <div id="root-node">
-            <div id="root-node-indicator" >
-                <div id="root-node-name"
-                    onDragOver={handleDragOver.bind(null, tree)}
-                >{tree.name}</div>
-            </div>
+        <div id="root-node"
+            onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+        >
+            <div id="root-node-name" data-id={tree.id}>{tree.name}</div>
             <div id="root-node-nodes">{
                 tree.nodes.map(node => (
                     <Node
                         key={node.id}
                         node={node}
-                        handlers={handlers}
                     />
                 ))
             }</div>

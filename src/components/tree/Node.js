@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import "./node.css";
-
-export const Node = ({ node, handlers }) => {
+/**
+ * 
+ * @param {{node: import("../../data/NodeData").INodeData}} props 
+ */
+export const Node = ({ node }) => {
     const [collapsed, setCollapsed] = useState(true);
 
     const nodesList = <div className="node-nodes">{
@@ -9,7 +12,6 @@ export const Node = ({ node, handlers }) => {
             <Node
                 key={node.id}
                 node={node}
-                handlers={handlers}
             />
         ))
     }</div>;
@@ -18,12 +20,9 @@ export const Node = ({ node, handlers }) => {
 
     return (
         <div className="node">
-            <div className="node-indicator" draggable="true">
-                {node.nodes.length === 0 ? null : toggler}
-                <div className="name"
-                    onDragStart={handlers.handleDragStart.bind(null, node)}
-                    onDragOver={handlers.handleDragOver.bind(null, node)}
-                >{node.name}</div>
+            {node.nodes.length === 0 ? null : toggler}
+            <div className="node-name" draggable="true" data-id={node.id}>
+                {node.name}
             </div>
             {collapsed ? null : nodesList}
         </div>

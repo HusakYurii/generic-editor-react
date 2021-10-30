@@ -1,24 +1,16 @@
 #root-node {
   margin-left: 10px;
   user-select: none;
-  cursor: pointer;
-}
-
-#root-node-indicator {
-  border: 2px solid transparent;
-  position: relative;
-}
-
-#root-node-indicator:hover {
-  background-color: #2c393c;
   cursor: default;
 }
 
-#root-node-indicator:hover > #root-node-name {
-  color: #ffffff;
-}
-
 #root-node-name {
+  border: 2px solid transparent;
   font-size: 14px;
   color: #86adaf;
+}
+
+#root-node-name:hover {
+  background-color: #2c393c;
+  color: #ffffff;
 }
