@@ -27,6 +27,12 @@ export const App = () => {
       new NodeData(getUID(), [
         new NodeData(getUID()),
         new NodeData(getUID())
+      ]),
+      new NodeData(getUID(), [
+        new NodeData(getUID(), [
+          new NodeData(getUID()),
+          new NodeData(getUID())
+        ])
       ])
     ]));
 
