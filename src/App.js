@@ -4,30 +4,40 @@ import { Header } from "./components/header";
 import { Tree } from "./components/tree";
 
 import "./app.css";
-import { NodeData } from "./data/NodeData";
-import { getUID } from "./tools/uidGenerator";
+import { createNode } from "./data/NodeData";
+import { createGenerator } from "./tools/uidGenerator";
 
 export const App = () => {
-  const [tree, setTree] = useState(
-    new NodeData(getUID(), [
-      new NodeData(getUID()),
-      new NodeData(getUID(), [
-        new NodeData(getUID()),
-        new NodeData(getUID())
+
+  const getUID = createGenerator(1);
+
+  const [tree, setTreeState] = useState(
+    createNode(getUID(), [
+      createNode(getUID()),
+      createNode(getUID(), [
+        createNode(getUID()),
+        createNode(getUID())
       ]),
-      new NodeData(getUID(), [
-        new NodeData(getUID(), [
-          new NodeData(getUID()),
-          new NodeData(getUID())
+      createNode(getUID(), [
+        createNode(getUID(), [
+          createNode(getUID()),
+          createNode(getUID())
         ])
       ])
     ]));
 
+  const params = {
+    tree,
+    hooks: {
+      setTreeState,
+      getUID
+    }
+  }
   return (
     <>
       <Header />
       <div id="left-panel">
-        <div id="tree-container"><Tree tree={tree} /></div>
+        <div id="tree-container"><Tree {...params} /></div>
       </div>
       <div id="center-panel">"preview"</div>
       <div id="right-panel">"properties"</div>
