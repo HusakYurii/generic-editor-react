@@ -1,6 +1,6 @@
 import React from "react";
-import { cloneNodeShallow, createNode } from "../../data/NodeData";
-import { getNodeByID, isChild, isParent } from "../../tools/treeTools";
+import { createNode } from "../../data/NodeData";
+import { appendNode, getNodeByID, insertBefore, isChild, isParent, removeNode } from "../../tools/treeTools";
 import { getPositionInTheBox } from "../../tools/treeUITools";
 import { Node } from "./Node";
 
@@ -37,12 +37,27 @@ export const Tree = ({ tree, hooks }) => {
     };
 
     const handleDrop = (event) => {
-        console.log("handleDrop");
-        if (!targetNodeData || targetNodeData.id < 0) {
+        if (draggedNodeData.id < 0 || targetNodeData.id < 0) {
+            handleDragEnd(event);
             return;
         }
 
-        console.log(targetNodeData.id)
+        const newTreeData = { ...tree };
+
+        if (!removeNode(draggedNodeData.id, newTreeData)) {
+            throw new Error(`Tree: the node with id ${draggedNodeData.id} has not been removed!`);
+        }
+
+        if (hoverNodeElementStyle === "center") {
+            appendNode(draggedNodeData, targetNodeData.id, newTreeData);
+        }
+        else {
+            insertBefore(draggedNodeData, targetNodeData.id, newTreeData)
+        }
+
+        hooks.setTreeState(newTreeData);
+
+        handleDragEnd(event);
     };
 
     const handleDragOver = (event) => {
@@ -74,6 +89,7 @@ export const Tree = ({ tree, hooks }) => {
         const position = getPositionInTheBox(hoverNodeElement.getBoundingClientRect(), event.clientX, event.clientY);
         if (position !== hoverNodeElementStyle) {
             resetStyles(hoverNodeElement);
+            hoverNodeElementStyle = position;
             hoverNodeElement.classList.toggle(UI_CLASS_NAMES[position])
         }
 
@@ -92,11 +108,7 @@ export const Tree = ({ tree, hooks }) => {
     };
 
     return (
-        /* An interesting fact:
-          onDrop will be handled by Chrome browser first and then handle onDragEnd.
-          That is why the data is being reset in onDragEnd, in this component.
-          If there are any bugs in other browsers , consider this comment while debugging
-        */
+        // @TODO test in which order events are fired in the browser
         <div id="root-node"
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}
