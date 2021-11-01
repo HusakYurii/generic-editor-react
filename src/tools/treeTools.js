@@ -21,10 +21,10 @@ export const getParent = function (childId, tree) {
 };
 
 /**
- * This method is traversing through all the children and their children as well
+ * This method is traversing through all the children and children of the children as well
  * 
  * @param {number} childId 
- * @param {import("../data/NodeData").INodeData} node 
+ * @param {import("../data/NodeData").INodeData} node
  * @returns {boolean} 
  */
 export const isChild = function (childId, node) {
@@ -41,7 +41,6 @@ export const isChild = function (childId, node) {
 };
 
 /**
- * This method is traversing through all the children and their children as well
  * 
  * @param {number} childId 
  * @param {import("../data/NodeData").INodeData} node 

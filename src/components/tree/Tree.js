@@ -1,5 +1,5 @@
 import React from "react";
-import { createNode } from "../../data/NodeData";
+import { cloneNodeShallow, createNode } from "../../data/NodeData";
 import { appendNode, getNodeByID, insertBefore, isChild, isParent, removeNode } from "../../tools/treeTools";
 import { getPositionInTheBox } from "../../tools/treeUITools";
 import { Node } from "./Node";
@@ -42,7 +42,7 @@ export const Tree = ({ tree, hooks }) => {
             return;
         }
 
-        const newTreeData = { ...tree };
+        const newTreeData = cloneNodeShallow(tree);
 
         if (!removeNode(draggedNodeData.id, newTreeData)) {
             throw new Error(`Tree: the node with id ${draggedNodeData.id} has not been removed!`);
@@ -55,7 +55,7 @@ export const Tree = ({ tree, hooks }) => {
             insertBefore(draggedNodeData, targetNodeData.id, newTreeData)
         }
 
-        hooks.setTreeState(newTreeData);
+        hooks.setTreeState(() => newTreeData);
 
         handleDragEnd(event);
     };
