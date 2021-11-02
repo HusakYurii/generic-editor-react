@@ -1,7 +1,7 @@
 import React from "react";
 import { cloneNodeShallow, createNode } from "../../data/NodeData";
-import { appendNode, getNodeByID, insertBefore, isChild, isParent, removeNode } from "../../tools/treeTools";
-import { getPositionInTheBox } from "../../tools/treeUITools";
+import { appendNode, getNodeByID, getParent, insertBefore, isChild, isParent, removeNode } from "../../tools/treeTools";
+import { getPositionInTheBox, PositionsInTheBox } from "../../tools/treeUITools";
 import { Node } from "./Node";
 
 import "./tree.css";
@@ -19,21 +19,24 @@ const resetStyles = (nodeElement) => {
     });
 }
 
-export const Tree = ({ tree, hooks }) => {
+export const Tree = ({ data, hooks }) => {
 
     /* Some important rules the code follows
         - we can't set a node to itself
         - we can't set a node to its parent again (there is no sense in it )
-        - we can't set an node to any of its children
+        - we can't set a node to any of its children
+        - a node can be appended to another node
+        - a node can be appended inserted before another node
+        - we can't set a node before a root node, only append
     */
     let draggedNodeData = createNode(-1);
     let targetNodeData = createNode(-1);
     let hoverNodeElement = document.createElement("div");
-    let hoverNodeElementStyle = "";
+    let insertPosition = "";
 
 
     const handleDragStart = (event) => {
-        draggedNodeData = getNodeByID(Number(event.target.getAttribute("data-id")), tree);
+        draggedNodeData = getNodeByID(Number(event.target.getAttribute("data-id")), data.tree);
     };
 
     const handleDrop = (event) => {
@@ -42,38 +45,40 @@ export const Tree = ({ tree, hooks }) => {
             return;
         }
 
-        const newTreeData = cloneNodeShallow(tree);
+        const newTreeData = cloneNodeShallow(data.tree);
 
         if (!removeNode(draggedNodeData.id, newTreeData)) {
             throw new Error(`Tree: the node with id ${draggedNodeData.id} has not been removed!`);
         }
 
-        if (hoverNodeElementStyle === "center") {
+        if (insertPosition === PositionsInTheBox.center) {
             appendNode(draggedNodeData, targetNodeData.id, newTreeData);
         }
         else {
             insertBefore(draggedNodeData, targetNodeData.id, newTreeData)
         }
 
-        hooks.setTreeState(() => newTreeData);
+        hooks.setTreeState(newTreeData);
 
         handleDragEnd(event);
     };
 
     const handleDragOver = (event) => {
-        // for some reason preventDefault() has to be used otherwise onDrop event will not work
+        /* for some reason preventDefault() has to be used otherwise onDrop event will not work */
         event.preventDefault();
 
         /* The node data which is being dragged over */
-        const hoveredNodeData = getNodeByID(Number(event.target.getAttribute("data-id")), tree);
+        const hoveredNodeData = getNodeByID(Number(event.target.getAttribute("data-id")), data.tree);
 
         const isValid = (
-            draggedNodeData.id !== hoveredNodeData.id && /* Check if node is not the same */
-            !isChild(hoveredNodeData.id, draggedNodeData) && /* Check if hovered node is a child of the dragged node */
-            !isParent(draggedNodeData.id, hoveredNodeData) /* Check if hovered node is a parent of the dragged node */
+            draggedNodeData.id !== hoveredNodeData.id && /* Check if the nodes are NOT the same */
+            !isChild(hoveredNodeData.id, draggedNodeData) && /* Check if a hovered node is NOT a child of the dragged node */
+            !isParent(draggedNodeData.id, hoveredNodeData) && /* Check if a hovered node is NOT a parent of the dragged node */
+            getParent(hoveredNodeData.id, data.tree) !== null /* Check if a hovered node is NOT a root node */
         );
 
         if (!isValid) {
+            resetStyles(hoverNodeElement);
             targetNodeData = createNode(-1);
             return;
         }
@@ -81,15 +86,18 @@ export const Tree = ({ tree, hooks }) => {
         if (hoverNodeElement !== event.target) {
             resetStyles(hoverNodeElement);
             hoverNodeElement = event.target;
-            hoverNodeElementStyle = "";
+            insertPosition = "";
         }
 
         /* Get mouse position within the element we drag over and if the mouse position is
         new, reset all of the styles and set new one */
         const position = getPositionInTheBox(hoverNodeElement.getBoundingClientRect(), event.clientX, event.clientY);
-        if (position !== hoverNodeElementStyle) {
+
+        /* We don't highlight the bottom part because we cant insert node there anyway.
+        We use functionality to append node which is basically the same  */
+        if (position !== PositionsInTheBox.bottom && position !== insertPosition) {
             resetStyles(hoverNodeElement);
-            hoverNodeElementStyle = position;
+            insertPosition = position;
             hoverNodeElement.classList.toggle(UI_CLASS_NAMES[position])
         }
 
@@ -97,15 +105,24 @@ export const Tree = ({ tree, hooks }) => {
     };
 
     const handleDragEnd = (event) => {
-        /*No matter where we dropped the dragged element (within or outside tree bounds),
-         reset styles for the last hovered node element and reset the temporary data*/
+        /* No matter where we dropped the dragged element (within or outside tree bounds),
+         reset styles for the last hovered node element and reset the temporary data */
         resetStyles(hoverNodeElement);
 
         draggedNodeData = createNode(-1);
         targetNodeData = createNode(-1);
         hoverNodeElement = document.createElement("div");
-        hoverNodeElementStyle = "";
+        insertPosition = "";
     };
+
+    const handleClick = (event) => {
+        if (!event.target.hasAttribute("data-id")) {
+            hooks.selectNode(-1);
+            return;
+        }
+        const selectedID = Number(event.target.getAttribute("data-id"));
+        hooks.selectNode(selectedID);
+    }
 
     return (
         // @TODO test in which order events are fired in the browser
@@ -114,10 +131,11 @@ export const Tree = ({ tree, hooks }) => {
             onDragOver={handleDragOver}
             onDragEnd={handleDragEnd}
             onDrop={handleDrop}
+            onClick={handleClick}
         >
-            <div id="root-node-name" data-id={tree.id}>{tree.name}</div>
+            <div id="root-node-name" data-id={data.tree.id}>{data.tree.name}</div>
             <div id="root-node-nodes">{
-                tree.nodes.map(node => (
+                data.tree.nodes.map(node => (
                     <Node
                         key={node.id}
                         node={node}

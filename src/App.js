@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Header } from "./components/header";
 import { Tree } from "./components/tree";
 
@@ -15,7 +15,7 @@ export const App = () => {
      Think of moving keeping the tree data here but as an object and pass it to <Tree>.
      In the <Tree> we can set the tree data as initial value to useState(). By doing that only tree will be rerendered
   */
-  const [tree, setTreeState] = useState(
+  const [tree, setTree] = useState(
     createNode(getUID(), [
       createNode(getUID()),
       createNode(getUID(), [
@@ -30,10 +30,15 @@ export const App = () => {
       ])
     ]));
 
-  const params = {
-    tree,
+  const selectedNode = useRef();
+
+  const appStore = {
+    data: {
+      tree
+    },
     hooks: {
-      setTreeState,
+      selectNode: (nodeId) => selectedNode.current = nodeId,
+      setTreeState: (treeData) => setTree(() => treeData),
       getUID
     }
   }
@@ -41,7 +46,7 @@ export const App = () => {
     <>
       <Header />
       <div id="left-panel">
-        <div id="tree-container"><Tree {...params} /></div>
+        <div id="tree-container"><Tree {...appStore} /></div>
       </div>
       <div id="center-panel">"preview"</div>
       <div id="right-panel">"properties"</div>

@@ -17,11 +17,17 @@ export const isInside = (bounds, x, y) => {
     );
 };
 
+export const PositionsInTheBox = Object.freeze({
+    top: "top",
+    center: "center",
+    bottom: "bottom",
+});
+
 /**
  * @param {DOMRect} bounds 
  * @param {number} x 
  * @param {number} y 
- * @returns {"top" | "center" | null}
+ * @returns {keyof PositionsInTheBox}
  */
 export const getPositionInTheBox = (bounds, x, y) => {
     const top = {
@@ -40,5 +46,5 @@ export const getPositionInTheBox = (bounds, x, y) => {
 
     if (isInside(top, x, y)) return "top";
     if (isInside(center, x, y)) return "center";
-    else return null;
+    else return "bottom";
 };
