@@ -1,5 +1,5 @@
 
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { Header } from "./components/header";
 import { Tree } from "./components/tree";
 
@@ -30,15 +30,15 @@ export const App = () => {
       ])
     ]));
 
-  const selectedNode = useRef();
+  const [nodeId, setNodeId] = useState(null);
 
   const appStore = {
     data: {
       tree
     },
     hooks: {
-      selectNode: (nodeId) => selectedNode.current = nodeId,
-      setTreeState: (treeData) => setTree(() => treeData),
+      setNodeId,
+      setTree,
       getUID
     }
   }
