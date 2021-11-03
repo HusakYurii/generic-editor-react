@@ -1,17 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import "./node.css";
-
+/**
+ * 
+ * @param {{node: import("../../data/NodeData").INodeData}} props 
+ */
 export const Node = ({ node }) => {
-    const nodes = node.nodes.map(node => <Node key={node.id} node={node} />);
-    const toggler = node.nodes.length > 0 ? <span className="toggler">x</span> : null;
+    const [collapsed, setCollapsed] = useState(true);
+
+    const nodesList = <div className="node-nodes">{
+        node.nodes.map(node => (
+            <Node
+                key={node.id}
+                node={node}
+            />
+        ))
+    }</div>;
+
+    const toggler = <div className="toggler" onClick={() => setCollapsed(!collapsed)}>{collapsed ? "+" : "-"}</div>;
 
     return (
         <div className="node">
-            <div className="node-indicator">
-                {toggler}
-                <span className="name">{node.name}</span>
+            {node.nodes.length === 0 ? null : toggler}
+            <div className="node-name" draggable="true" data-id={node.id}>
+                {node.name}
             </div>
-            <div className="node-nodes">{nodes}</div>
+            {collapsed ? null : nodesList}
         </div>
     );
 }

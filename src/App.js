@@ -4,37 +4,49 @@ import { Header } from "./components/header";
 import { Tree } from "./components/tree";
 
 import "./app.css";
-
-const getUID = function () {
-  let uid = 0;
-  return function () {
-    return (uid++);
-  }
-}();
-
-class NodeData {
-  constructor(id, nodes = []) {
-    this.id = id;
-    this.name = `Node_${id}`;
-    this.nodes = nodes;
-  }
-}
+import { createNode } from "./data/NodeData";
+import { createGenerator } from "./tools/uidGenerator";
 
 export const App = () => {
+
+  const getUID = createGenerator(1);
+  /* @TODO There is one downside of having the data here.
+     When the tree data is being updated in <Tree>, the whole App is being rerendered
+     Think of moving keeping the tree data here but as an object and pass it to <Tree>.
+     In the <Tree> we can set the tree data as initial value to useState(). By doing that only tree will be rerendered
+  */
   const [tree, setTree] = useState(
-    new NodeData(getUID(), [
-      new NodeData(getUID()),
-      new NodeData(getUID(), [
-        new NodeData(getUID()),
-        new NodeData(getUID())
+    createNode(getUID(), [
+      createNode(getUID()),
+      createNode(getUID(), [
+        createNode(getUID()),
+        createNode(getUID())
+      ]),
+      createNode(getUID(), [
+        createNode(getUID(), [
+          createNode(getUID()),
+          createNode(getUID())
+        ])
       ])
     ]));
 
+  const [nodeId, setNodeId] = useState(null);
+
+  const appStore = {
+    data: {
+      tree
+    },
+    hooks: {
+      setNodeId,
+      setTree,
+      getUID
+    }
+  }
   return (
     <>
       <Header />
       <div id="left-panel">
-        <div id="tree-container"><Tree tree={tree} /></div>
+        <div id="tree-container"><Tree {...appStore} /></div>
       </div>
       <div id="center-panel">"preview"</div>
       <div id="right-panel">"properties"</div>
