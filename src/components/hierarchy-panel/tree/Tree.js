@@ -1,7 +1,7 @@
 import React from "react";
-import { cloneNodeDeep, createNode } from "../../data/NodeData";
-import { appendNode, getNodeByID, getParent, insertBefore, isChild, isParent, removeNode } from "../../tools/treeTools";
-import { getPositionInTheBox, PositionsInTheBox } from "../../tools/treeUITools";
+import { cloneNodeDeep, createNode } from "../../../data/NodeData";
+import { appendNode, getNodeByID, getParent, insertBefore, isChild, isParent, removeNode } from "../../../tools/treeTools";
+import { getPositionInTheBox, PositionsInTheBox } from "../../../tools/treeUITools";
 import { Node } from "./Node";
 
 import "./tree.css";

@@ -6,15 +6,15 @@
   height: 100%;
 }
 
-#left-panel,
-#center-panel,
-#right-panel,
-#bottom-panel {
+#hierarchy-panel,
+#preview-panel,
+#properties-panel,
+#resources-panel {
   position: absolute;
   padding: 50px 0 0 0;
 }
 
-#left-panel {
+#hierarchy-panel {
   top: 0;
   left: 0;
   bottom: 0;
@@ -22,7 +22,7 @@
   background-color: #364346;
 }
 
-#center-panel {
+#preview-panel {
   top: 0;
   right: 250px;
   left: 250px;
@@ -30,7 +30,7 @@
   background-color: #ffffff;
 }
 
-#right-panel {
+#properties-panel {
   top: 0;
   bottom: 0;
   right: 0;
@@ -38,7 +38,7 @@
   background-color: #364346;
 }
 
-#bottom-panel {
+#resources-panel {
   bottom: 0;
   left: 250px;
   right: 250px;

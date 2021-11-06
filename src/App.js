@@ -1,11 +1,12 @@
 
 import React, { useState } from "react";
-import { Header } from "./components/header";
-import { Tree } from "./components/tree";
 
 import "./app.css";
+
+import { Header } from "./components/header";
 import { createNode } from "./data/NodeData";
 import { createGenerator } from "./tools/uidGenerator";
+import { HierarchyPanel } from "./components/hierarchy-panel/HierarchyPanel";
 
 export const App = () => {
 
@@ -45,12 +46,10 @@ export const App = () => {
   return (
     <>
       <Header />
-      <div id="left-panel">
-        <div id="tree-container"><Tree {...appStore} /></div>
-      </div>
-      <div id="center-panel">"preview"</div>
-      <div id="right-panel">"properties"</div>
-      <div id="bottom-panel">"resources"</div>
+      <HierarchyPanel {...appStore} />
+      <div id="preview-panel">"preview"</div>
+      <div id="properties-panel">"properties"</div>
+      <div id="resources-panel">"resources"</div>
     </>
   );
 }

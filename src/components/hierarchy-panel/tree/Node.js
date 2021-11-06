@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./node.css";
 /**
  * 
- * @param {{node: import("../../data/NodeData").INodeData}} props 
+ * @param {{node: import("../../../data/NodeData").INodeData}} props 
  */
 export const Node = ({ node }) => {
     const [collapsed, setCollapsed] = useState(true);
