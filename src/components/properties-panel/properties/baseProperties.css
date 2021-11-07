@@ -1,0 +1,53 @@
+#base-properties {
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px;
+  color: #86adaf;
+}
+
+#name-property,
+#position-property,
+#scale-property,
+#rotation-property {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  margin: 5px 0;
+}
+
+.property-title {
+  flex-basis: 70px;
+}
+
+.property-inputs {
+  flex-basis: 150px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.property-inputs div {
+  position: relative;
+  width: 55px;
+  margin: 0 20px 0 0;
+}
+
+.property-inputs.full-with div {
+  position: relative;
+  width: 130px;
+  margin: 0 20px 0 0;
+}
+
+.property-inputs div::after {
+  content: attr(placeholder);
+  transform: translateX(100%);
+  color: #86adaf;
+  position: absolute;
+  top: 0;
+  right: -5px;
+}
+
+.property-inputs input {
+  width: 100%;
+}

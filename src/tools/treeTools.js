@@ -139,3 +139,26 @@ export const insertBefore = function (node, referenceID, tree) {
 
     return false;
 }
+
+/**
+ * This function is not pure, its modifies the node / tree data! 
+ * @param {number} oldNodeId - a target node we want to replace
+ * @param {import("../data/NodeData").INodeData} node - a target node
+ * @param {import("../data/NodeData").INodeData} tree - can be a node or an entire tree
+ * @returns {boolean} - whether a node has been inserted or not
+ */
+export const replaceNode = function (oldNodeId, node, tree) {
+    const parentNode = getParent(oldNodeId, tree);
+
+    if (parentNode) {
+        for (let i = 0; i < parentNode.nodes.length; i++) {
+            if (parentNode.nodes[i].id !== oldNodeId) {
+                continue;
+            }
+            parentNode.nodes.splice(i, 1, node);
+            return true;
+        }
+    }
+
+    return false;
+}

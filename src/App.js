@@ -7,6 +7,7 @@ import { Header } from "./components/header";
 import { createNode } from "./data/NodeData";
 import { createGenerator } from "./tools/uidGenerator";
 import { HierarchyPanel } from "./components/hierarchy-panel/HierarchyPanel";
+import { PropertiesPanel } from "./components/properties-panel/PropertiesPanel";
 
 export const App = () => {
 
@@ -35,7 +36,8 @@ export const App = () => {
 
   const appStore = {
     data: {
-      tree
+      tree,
+      nodeId
     },
     hooks: {
       setNodeId,
@@ -48,7 +50,7 @@ export const App = () => {
       <Header />
       <HierarchyPanel {...appStore} />
       <div id="preview-panel">"preview"</div>
-      <div id="properties-panel">"properties"</div>
+      <PropertiesPanel {...appStore} />
       <div id="resources-panel">"resources"</div>
     </>
   );
