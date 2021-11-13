@@ -2,48 +2,36 @@ import React from "react"
 import { cloneNodeDeep } from "../../../data/NodeData";
 import "./baseProperties.css";
 
-
-const InputElement = (props) => {
-    const { title, type, value, onChange, isExpanded = false, placeholder = "" } = props;
+const TextInput = ({ value, onChange }) => {
     return (
         <>
-            <div className="property-title">
-                <p>{title}</p>
-            </div>
-            <div className={`property-inputs ${isExpanded ? "full-with" : ""}`}>
-                <div placeholder={placeholder}>
-                    <input
-                        type={type}
-                        value={value}
-                        onInput={(e) => onChange(e.target.value)}
-                    ></input>
-                </div>
+            <div>
+                <input
+                    type="text"
+                    value={value}
+                    onInput={(e) => onChange(e.target.value)}
+                ></input>
             </div>
         </>
-    )
+    );
 };
 
-const InputGroupElement = (props) => {
-    const { title, group } = props;
-
+const NumberElement = (props) => {
+    const { value, placeholder, onChange, max = 10000, min = -10000, step = 1 } = props;
     return (
         <>
-            <div className="property-title">
-                <p>{title}</p>
-            </div>
-            <div className="property-inputs">
-                {group.map(({ id, type, value, onChange, placeholder = "" }) => (
-                    <div placeholder={placeholder} key={id}>
-                        <input
-                            type={type}
-                            value={value}
-                            onInput={(e) => onChange(e.target.value)}
-                        ></input>
-                    </div>
-                ))}
+            <div placeholder={placeholder}>
+                <input
+                    type="number"
+                    value={value}
+                    max={max}
+                    min={min}
+                    step={step}
+                    onInput={(e) => onChange(e.target.value)}
+                ></input>
             </div>
         </>
-    )
+    );
 };
 
 /**
@@ -76,41 +64,56 @@ export const BaseProperties = ({ node, onDataChange }) => {
     return (
         <div id="base-properties">
             <div id="name-property">
-                <InputElement {...{
-                    title: "Name",
-                    type: "text",
-                    value: name,
-                    isExpanded: true,
-                    onChange: (value) => { changeName(value) }
-                }} />
+                <div className="property-title"><p>Name</p></div>
+                <div className="property-inputs full-with">
+                    <TextInput {...{
+                        value: name,
+                        onChange: (value) => { changeName(value) }
+                    }} />
+                </div>
             </div>
             <div id="position-property">
-                <InputGroupElement {...{
-                    title: "Position",
-                    group: [
-                        { id: 10, type: "number", placeholder: "X", value: position.x, onChange: (value) => { changePosition("x", value) } },
-                        { id: 20, type: "number", placeholder: "Y", value: position.y, onChange: (value) => { changePosition("y", value) } }
-                    ]
-                }} />
+                <div className="property-title"><p>Position</p></div>
+                <div className="property-inputs">
+                    <NumberElement {...{
+                        placeholder: "X",
+                        value: position.x,
+                        onChange: (value) => { changePosition("x", value) }
+                    }} />
+                    <NumberElement {...{
+                        placeholder: "Y",
+                        value: position.y,
+                        onChange: (value) => { changePosition("y", value) }
+                    }} />
+                </div>
             </div>
 
             <div id="scale-property">
-                <InputGroupElement {...{
-                    title: "Scale",
-                    group: [
-                        { id: 30, type: "number", placeholder: "X", value: scale.x, onChange: (value) => { changeScale("x", value) } },
-                        { id: 40, type: "number", placeholder: "Y", value: scale.y, onChange: (value) => { changeScale("y", value) } }
-                    ]
-                }} />
+                <div className="property-title"><p>Scale</p></div>
+                <div className="property-inputs">
+                    <NumberElement {...{
+                        placeholder: "X",
+                        step: 0.1,
+                        value: scale.x,
+                        onChange: (value) => { changeScale("x", value) }
+                    }} />
+                    <NumberElement {...{
+                        placeholder: "Y",
+                        step: 0.1,
+                        value: scale.y,
+                        onChange: (value) => { changeScale("y", value) }
+                    }} />
+                </div>
             </div>
             <div id="rotation-property">
-                <InputElement {...{
-                    title: "Rotation",
-                    type: "number",
-                    placeholder: "DEG",
-                    value: rotation,
-                    onChange: (value) => { changeRotation(value) }
-                }} />
+                <div className="property-title"><p>Rotation</p></div>
+                <div className="property-inputs">
+                    <NumberElement {...{
+                        placeholder: "DEG",
+                        value: rotation,
+                        onChange: (value) => { changeRotation(value) }
+                    }} />
+                </div>
             </div>
         </div>
     );
