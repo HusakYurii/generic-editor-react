@@ -1,41 +1,12 @@
 import React from "react"
-import { cloneNodeDeep } from "../../../data/NodeData";
+import { cloneNodeDeep } from "../../../../data/NodeData";
+import { NumberInput, TextInput } from "../Inputs";
+
+
 import "./baseProperties.css";
 
-const TextInput = ({ value, onChange }) => {
-    return (
-        <>
-            <div>
-                <input
-                    type="text"
-                    value={value}
-                    onInput={(e) => onChange(e.target.value)}
-                ></input>
-            </div>
-        </>
-    );
-};
-
-const NumberElement = (props) => {
-    const { value, placeholder, onChange, max = 10000, min = -10000, step = 1 } = props;
-    return (
-        <>
-            <div placeholder={placeholder}>
-                <input
-                    type="number"
-                    value={value}
-                    max={max}
-                    min={min}
-                    step={step}
-                    onInput={(e) => onChange(e.target.value)}
-                ></input>
-            </div>
-        </>
-    );
-};
-
 /**
- * @typedef { import("../../../data/NodeData").INodeData } INodeData;
+ * @typedef { import("../../../../data/NodeData").INodeData } INodeData;
  * @param {{node: INodeData; onDataChange: (nodeId: number, node: INodeData) => void}} props 
  */
 export const BaseProperties = ({ node, onDataChange }) => {
@@ -75,12 +46,12 @@ export const BaseProperties = ({ node, onDataChange }) => {
             <div id="position-property">
                 <div className="property-title"><p>Position</p></div>
                 <div className="property-inputs">
-                    <NumberElement {...{
+                    <NumberInput {...{
                         placeholder: "X",
                         value: position.x,
                         onChange: (value) => { changePosition("x", value) }
                     }} />
-                    <NumberElement {...{
+                    <NumberInput {...{
                         placeholder: "Y",
                         value: position.y,
                         onChange: (value) => { changePosition("y", value) }
@@ -91,13 +62,13 @@ export const BaseProperties = ({ node, onDataChange }) => {
             <div id="scale-property">
                 <div className="property-title"><p>Scale</p></div>
                 <div className="property-inputs">
-                    <NumberElement {...{
+                    <NumberInput {...{
                         placeholder: "X",
                         step: 0.1,
                         value: scale.x,
                         onChange: (value) => { changeScale("x", value) }
                     }} />
-                    <NumberElement {...{
+                    <NumberInput {...{
                         placeholder: "Y",
                         step: 0.1,
                         value: scale.y,
@@ -108,7 +79,7 @@ export const BaseProperties = ({ node, onDataChange }) => {
             <div id="rotation-property">
                 <div className="property-title"><p>Rotation</p></div>
                 <div className="property-inputs">
-                    <NumberElement {...{
+                    <NumberInput {...{
                         placeholder: "DEG",
                         value: rotation,
                         onChange: (value) => { changeRotation(value) }

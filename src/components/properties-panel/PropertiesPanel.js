@@ -1,7 +1,7 @@
 import React from "react"
 import { cloneNodeDeep } from "../../data/NodeData";
 import { getNodeByID, replaceNode } from "../../tools/treeTools";
-import { BaseProperties } from "./properties";
+import { BaseProperties } from "./properties/base-properties";
 
 export const PropertiesPanel = ({ data, hooks }) => {
     const node = getNodeByID(data.nodeId, data.tree);
