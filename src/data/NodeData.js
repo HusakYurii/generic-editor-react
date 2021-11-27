@@ -1,9 +1,17 @@
+
+export const NodeTypes = {
+    NineSlicePlane: "NineSlicePlane",
+    Container: "Container",
+    Sprite: "Sprite",
+    Text: "Text",
+}
+
 /**
  * @typedef {{
  * id: number;
  * name: string;
  * nodes: INodeData[];
- * type: "Container" | "Sprite" | "Text" | "NineSlicePlane"
+ * type:  "Container" | "Sprite" | "Text" | "NineSlicePlane" | string;
  * baseProperties: {
  *  position: {x: number; y: number},
  *  scale: {x: number; y: number},
@@ -25,7 +33,7 @@ export const createNode = (id, nodes = []) => {
         name: `Node_${id}`,
         nodes: nodes,
         // view related things
-        type: "Container",
+        type: NodeTypes.Container,
         baseProperties: {
             position: { x: 0, y: 0 },
             scale: { x: 1, y: 1 },

@@ -2,6 +2,7 @@ import React from "react"
 import { cloneNodeDeep } from "../../data/NodeData";
 import { getNodeByID, replaceNode } from "../../tools/treeTools";
 import { BaseProperties } from "./properties/base-properties";
+import { TypeProperty } from "./properties/type-property";
 
 export const PropertiesPanel = ({ data, hooks }) => {
     const node = getNodeByID(data.nodeId, data.tree);
@@ -17,6 +18,7 @@ export const PropertiesPanel = ({ data, hooks }) => {
     return (
         <div id="properties-panel">
             {isNodeSelected && <BaseProperties node={node} onDataChange={handleDataChange} />}
+            {isNodeSelected && <TypeProperty node={node} />}
         </div>
     );
 }

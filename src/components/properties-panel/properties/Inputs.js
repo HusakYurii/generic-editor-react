@@ -1,10 +1,11 @@
-export const TextInput = ({ value, onChange }) => {
+export const TextInput = ({ value, onChange, disabled = false }) => {
     return (
         <>
             <div>
                 <input
                     type="text"
                     value={value}
+                    disabled={disabled}
                     onInput={(e) => onChange(e.target.value)}
                 ></input>
             </div>
