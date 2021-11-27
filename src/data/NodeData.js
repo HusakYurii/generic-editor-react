@@ -1,3 +1,4 @@
+import { clone, cloneDeep } from "lodash";
 
 export const NodeTypes = {
     NineSlicePlane: "NineSlicePlane",
@@ -23,6 +24,45 @@ export const NodeTypes = {
 
 /**
  * 
+ * @param {"Container" | "Sprite" | "Text" | "NineSlicePlane" | string} type 
+ */
+const createExtraProperties = (type = NodeTypes.Container) => {
+    switch (type) {
+        case NodeTypes.Sprite:
+            return {
+                texture: "",
+                anchor: { x: 0.5, y: 0.5 }
+            };
+        case NodeTypes.NineSlicePlane:
+            return {
+                texture: "",
+                anchor: { x: 0.5, y: 0.5 },
+                leftWidth: 15,
+                topHeight: 15,
+                rightWidth: 15,
+                bottomHeight: 15,
+            };
+        case NodeTypes.Text:
+            return {
+                text: "",
+                styles: {}
+            };
+        default:
+            return {};
+    }
+}
+
+
+const createBaseProperties = () => {
+    return {
+        position: { x: 0, y: 0 },
+        scale: { x: 1, y: 1 },
+        rotation: 0
+    };
+}
+
+/**
+ * 
  * @param {number} id 
  * @param {INodeData[]} [nodes = []]
  * @returns {INodeData} 
@@ -34,12 +74,8 @@ export const createNode = (id, nodes = []) => {
         nodes: nodes,
         // view related things
         type: NodeTypes.Container,
-        baseProperties: {
-            position: { x: 0, y: 0 },
-            scale: { x: 1, y: 1 },
-            rotation: 0
-        },
-        extraProperties: {}
+        baseProperties: createBaseProperties(),
+        extraProperties: createExtraProperties()
     }
 }
 
@@ -54,12 +90,8 @@ export const cloneNodeDeep = ({ id, name, nodes, type, baseProperties, extraProp
         name: name,
         nodes: nodes.map(cloneNodeDeep),
         type: type,
-        baseProperties: {
-            position: { ...baseProperties.position },
-            scale: { ...baseProperties.scale },
-            rotation: baseProperties.rotation
-        },
-        extraProperties: {}
+        baseProperties: cloneDeep(baseProperties),
+        extraProperties: cloneDeep(extraProperties)
     }
 }
 
@@ -74,7 +106,7 @@ export const cloneNodeShallow = ({ id, name, nodes, type, baseProperties, extraP
         name: name,
         nodes: nodes,
         type: type,
-        baseProperties: baseProperties,
-        extraProperties: extraProperties
+        baseProperties: clone(baseProperties),
+        extraProperties: clone(extraProperties)
     }
 }
