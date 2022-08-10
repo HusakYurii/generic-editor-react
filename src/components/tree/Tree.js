@@ -1,10 +1,13 @@
 import React from "react";
-import { cloneNodeDeep, createNode } from "../../data/NodeData";
-import { appendNode, getNodeByID, getParent, insertBefore, isChild, isParent, removeNode } from "../../tools/treeTools";
+import { createNode } from "../../data/NodeData";
+import { getNodeByID, getParent, isChild, isParent } from "../../tools/treeTools";
 import { getPositionInTheBox, PositionsInTheBox } from "../../tools/treeUITools";
 import { Node } from "./Node";
 
 import "./tree.css";
+
+import { connect } from "react-redux";
+import { moveNode, insertBeforeNode, setSelectedNodeID } from "../../store/treeReducer";
 
 const UI_CLASS_NAMES = {
     center: "insert-center",
@@ -19,7 +22,7 @@ const resetStyles = (nodeElement) => {
     });
 }
 
-export const Tree = ({ data, hooks }) => {
+const Tree = (props) => {
 
     /* Some important rules the code follows
         - we can't set a node to itself
@@ -36,7 +39,7 @@ export const Tree = ({ data, hooks }) => {
 
 
     const handleDragStart = (event) => {
-        draggedNodeData = getNodeByID(Number(event.target.getAttribute("data-id")), data.tree);
+        draggedNodeData = getNodeByID(Number(event.target.getAttribute("data-id")), props.treeData);
     };
 
     const handleDrop = (event) => {
@@ -45,20 +48,18 @@ export const Tree = ({ data, hooks }) => {
             return;
         }
 
-        const newTreeData = cloneNodeDeep(data.tree);
-
-        if (!removeNode(draggedNodeData.id, newTreeData)) {
-            throw new Error(`Tree: the node with id ${draggedNodeData.id} has not been removed!`);
-        }
-
         if (insertPosition === PositionsInTheBox.center) {
-            appendNode(draggedNodeData, targetNodeData.id, newTreeData);
+            props.moveNode({
+                nodeData: draggedNodeData,
+                referenceID: targetNodeData.id
+            });
         }
         else {
-            insertBefore(draggedNodeData, targetNodeData.id, newTreeData)
+            props.insertBeforeNode({
+                nodeData: draggedNodeData,
+                referenceID: targetNodeData.id
+            });
         }
-
-        hooks.setTree(() => newTreeData);
 
         handleDragEnd(event);
     };
@@ -68,13 +69,13 @@ export const Tree = ({ data, hooks }) => {
         event.preventDefault();
 
         /* The node data which is being dragged over */
-        const hoveredNodeData = getNodeByID(Number(event.target.getAttribute("data-id")), data.tree);
+        const hoveredNodeData = getNodeByID(Number(event.target.getAttribute("data-id")), props.treeData);
 
         const isValid = (
             draggedNodeData.id !== hoveredNodeData.id && /* Check if the nodes are NOT the same */
             !isChild(hoveredNodeData.id, draggedNodeData) && /* Check if a hovered node is NOT a child of the dragged node */
             !isParent(draggedNodeData.id, hoveredNodeData) && /* Check if a hovered node is NOT a parent of the dragged node */
-            getParent(hoveredNodeData.id, data.tree) !== null /* Check if a hovered node is NOT a root node */
+            getParent(hoveredNodeData.id, props.treeData) !== null /* Check if a hovered node is NOT a root node */
         );
 
         if (!isValid) {
@@ -117,15 +118,15 @@ export const Tree = ({ data, hooks }) => {
 
     const handleClick = (event) => {
         if (!event.target.hasAttribute("data-id")) {
-            hooks.setNodeId(() => null);
+            props.setSelectedNodeID(null)
             return;
         }
         const selectedID = Number(event.target.getAttribute("data-id"));
-        hooks.setNodeId(() => selectedID);
+        props.setSelectedNodeID(selectedID);
     }
 
     return (
-        // @TODO test in which order events are fired in the browser
+        // @TODO test in what order events are fired in the browser
         <div id="root-node"
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}
@@ -133,9 +134,9 @@ export const Tree = ({ data, hooks }) => {
             onDrop={handleDrop}
             onClick={handleClick}
         >
-            <div id="root-node-name" data-id={data.tree.id}>{data.tree.name}</div>
+            <div id="root-node-name" data-id={props.treeData.id}>{props.treeData.name}</div>
             <div id="root-node-nodes">{
-                data.tree.nodes.map(node => (
+                props.treeData.nodes.map(node => (
                     <Node
                         key={node.id}
                         node={node}
@@ -144,4 +145,15 @@ export const Tree = ({ data, hooks }) => {
             }</div>
         </div>
     );
-}
+};
+
+const mapStateToProps = ({ treeReducer }) => {
+    return {
+        treeData: treeReducer.treeData,
+    };
+};
+
+export const TreeElement = connect(
+    mapStateToProps,
+    { moveNode, insertBeforeNode, setSelectedNodeID }
+)(Tree)
