@@ -110,7 +110,7 @@ export const appendNode = function (node, referenceID, tree) {
     const targetNode = getNodeByID(referenceID, tree);
 
     if (targetNode) {
-        targetNode.nodes.push(node);
+        targetNode.nodes = [...targetNode.nodes, node];
         return true;
     }
 
@@ -132,7 +132,10 @@ export const insertBefore = function (node, referenceID, tree) {
             if (parentNode.nodes[i].id !== referenceID) {
                 continue;
             }
-            parentNode.nodes.splice(i, 0, node);
+            const copy = [...parentNode.nodes];
+            copy.splice(i, 0, node);
+            parentNode.nodes = copy;
+
             return true;
         }
     }
