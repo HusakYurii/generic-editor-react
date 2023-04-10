@@ -1,0 +1,50 @@
+import React from "react";
+
+import { connect } from "react-redux";
+import { updateNodeNameAction } from "../../store/treeReducer";
+import { getNodeByID } from "../../tools/treeTools";
+
+import "./nameProperty.css";
+
+
+/**
+ * @typedef {import("../../store/treeReducer/treeReducer").TreeState & {
+ * updateNodeNameAction: typeof updateNodeNameAction
+ * }} NamePropertyDependencies
+ */
+
+/**
+ * @param {NamePropertyDependencies} props 
+ * @returns
+ */
+const NamePropertyComponent = (props) => {
+
+    const node = getNodeByID(props.selectedNodeID, props.treeData);
+
+    if (!node) {
+        return (<div></div>)
+    };
+
+    const onChange = (event) => {
+        props.updateNodeNameAction({ nodeID: props.selectedNodeID, name: event.target.value });
+    };
+
+    return (
+        <div id="name-property" className="properties">
+            <label htmlFor="name">Name:</label>
+            <input type="text" id="base-property-name" value={node.name} onChange={onChange}></input>
+        </div>
+    )
+}
+
+const mapStateToProps = ({ treeReducer }) => {
+    return {
+        treeData: treeReducer.treeData,
+        selectedNodeID: treeReducer.selectedNodeID
+    }
+};
+
+export const NameProperty = connect(
+    mapStateToProps,
+    { updateNodeNameAction }
+)(NamePropertyComponent)
