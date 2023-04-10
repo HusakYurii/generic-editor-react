@@ -7,7 +7,7 @@ import { Node } from "./Node";
 import "./tree.css";
 
 import { connect } from "react-redux";
-import { moveNode, insertBeforeNode, setSelectedNodeID } from "../../store/treeReducer";
+import { moveNodeAction, insertBeforeNodeAction, setSelectedNodeIDAction } from "../../store/treeReducer";
 
 const UI_CLASS_NAMES = {
     center: "insert-center",
@@ -29,7 +29,7 @@ const Tree = (props) => {
         - we can't set a node to its parent again (there is no sense in it )
         - we can't set a node to any of its children
         - a node can be appended to another node
-        - a node can be appended inserted before another node
+        - a node can be inserted before another node
         - we can't set a node before a root node, only append
     */
     let draggedNodeData = createNode(-1);
@@ -49,13 +49,13 @@ const Tree = (props) => {
         }
 
         if (insertPosition === PositionsInTheBox.center) {
-            props.moveNode({
+            props.moveNodeAction({
                 nodeData: draggedNodeData,
                 referenceID: targetNodeData.id
             });
         }
         else {
-            props.insertBeforeNode({
+            props.insertBeforeNodeAction({
                 nodeData: draggedNodeData,
                 referenceID: targetNodeData.id
             });
@@ -75,6 +75,7 @@ const Tree = (props) => {
             draggedNodeData.id !== hoveredNodeData.id && /* Check if the nodes are NOT the same */
             !isChild(hoveredNodeData.id, draggedNodeData) && /* Check if a hovered node is NOT a child of the dragged node */
             !isParent(draggedNodeData.id, hoveredNodeData) && /* Check if a hovered node is NOT a parent of the dragged node */
+            //@TODO rethink this one, maybe it will be good to enable it to make it easy to move elements around
             getParent(hoveredNodeData.id, props.treeData) !== null /* Check if a hovered node is NOT a root node */
         );
 
@@ -118,11 +119,11 @@ const Tree = (props) => {
 
     const handleClick = (event) => {
         if (!event.target.hasAttribute("data-id")) {
-            props.setSelectedNodeID(null)
+            props.setSelectedNodeIDAction(null)
             return;
         }
         const selectedID = Number(event.target.getAttribute("data-id"));
-        props.setSelectedNodeID(selectedID);
+        props.setSelectedNodeIDAction(selectedID);
     }
 
     return (
@@ -155,5 +156,5 @@ const mapStateToProps = ({ treeReducer }) => {
 
 export const TreeElement = connect(
     mapStateToProps,
-    { moveNode, insertBeforeNode, setSelectedNodeID }
+    { moveNodeAction, insertBeforeNodeAction, setSelectedNodeIDAction }
 )(Tree)
