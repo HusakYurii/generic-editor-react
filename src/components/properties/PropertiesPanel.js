@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { updateNodeNameAction } from "../../store/treeReducer";
+import { updateNodeNameAction } from "../../store/tree";
 import { NameProperty } from "./NameProperty";
 
 import "./propertiesPanel.css";

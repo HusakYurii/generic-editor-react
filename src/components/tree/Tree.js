@@ -7,7 +7,7 @@ import { Node } from "./Node";
 import "./tree.css";
 
 import { connect } from "react-redux";
-import { moveNodeAction, insertBeforeNodeAction, setSelectedNodeIDAction } from "../../store/treeReducer";
+import { moveNodeAction, insertBeforeNodeAction, setSelectedNodeIDAction } from "../../store/tree";
 
 const UI_CLASS_NAMES = {
     center: "insert-center",

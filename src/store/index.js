@@ -1,5 +1,5 @@
 import { createStore, combineReducers } from 'redux';
-import { treeReducer } from "./treeReducer";
+import { treeReducer } from "./tree";
 
 const store = createStore(combineReducers({
     treeReducer

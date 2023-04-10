@@ -1,14 +1,14 @@
 import React from "react";
 
 import { connect } from "react-redux";
-import { updateNodeNameAction } from "../../store/treeReducer";
+import { updateNodeNameAction } from "../../store/tree";
 import { getNodeByID } from "../../tools/treeTools";
 
 import "./nameProperty.css";
 
 
 /**
- * @typedef {import("../../store/treeReducer/treeReducer").TreeState & {
+ * @typedef {import("../../store/tree/treeReducer").TreeState & {
  * updateNodeNameAction: typeof updateNodeNameAction
  * }} NamePropertyDependencies
  */
