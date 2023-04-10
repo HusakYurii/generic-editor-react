@@ -31,8 +31,8 @@ const NamePropertyComponent = (props) => {
 
     return (
         <div id="name-property" className="properties">
-            <label htmlFor="name">Name:</label>
-            <input type="text" id="base-property-name" value={node.name} onChange={onChange}></input>
+            <span htmlFor="name">Name</span>
+            <input type="text" value={node.name} onChange={onChange}></input>
         </div>
     )
 }

@@ -1,7 +1,14 @@
 #name-property {
     display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
-#name-property label {
+
+#name-property span {
     color: white;
-    margin: 0 10px 0 0;
+    width: 33%;
+}
+
+#name-property input {
+    width: 67%;
 }

@@ -1,7 +1,6 @@
 import { TREE_ACTIONS } from "./treeActionTypes";
-import { getUID } from "../../tools/uidGenerator";
 import { removeNode, appendNode, insertBefore, changeNodeName, changeRootNodeName } from "../../tools/treeTools";
-import { createNode } from "../../data/NodeData";
+import { getRoodNodeData } from "../defaultStoreData";
 
 /**
  * @typedef {{
@@ -14,19 +13,7 @@ import { createNode } from "../../data/NodeData";
  * @typeof TreeState
  */
 const INITIAL_TREE = {
-    treeData: createNode(getUID(), [
-        createNode(getUID()),
-        createNode(getUID(), [
-            createNode(getUID()),
-            createNode(getUID())
-        ]),
-        createNode(getUID(), [
-            createNode(getUID(), [
-                createNode(getUID()),
-                createNode(getUID())
-            ])
-        ])
-    ]),
+    treeData: getRoodNodeData(),
     selectedNodeID: null
 };;
 

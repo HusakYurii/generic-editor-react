@@ -1,8 +1,10 @@
 import { createStore, combineReducers } from 'redux';
 import { treeReducer } from "./tree";
+import { nodesPropertiesListReducer } from "./nodeProperties"
 
 const store = createStore(combineReducers({
-    treeReducer
+    treeReducer,
+    nodesPropertiesListReducer
 }));
 
 export default store;

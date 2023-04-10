@@ -1,0 +1,17 @@
+#base-properties {
+    margin-top: 30px;
+}
+
+#base-properties div {
+    display: flex;
+    flex-direction: row;
+}
+
+#base-properties div span {
+    color: white;
+}
+
+#base-properties div > * {
+    text-align: left;
+    width: 33%;
+}
