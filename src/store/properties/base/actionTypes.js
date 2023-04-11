@@ -1,0 +1,3 @@
+export const BASE_PROPERTIES_ACTIONS = Object.freeze({
+    UPDATE_BASE_PROPERTIES: "UPDATE_BASE_PROPERTIES",
+});

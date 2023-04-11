@@ -1,3 +1,2 @@
-export * from "./treeActions";
-export * from "./treeActionTypes";
-export * from "./treeReducer";
+export * from "./actions";
+export * from "./reducer";

@@ -1,9 +1,8 @@
-import { TREE_ACTIONS } from "./treeActionTypes"
+import { TREE_ACTIONS } from "./actionTypes"
 
 /**
- * 
+ * Whenever a node is selected in the tree, we want to make the rest to be aware of that.
  * @param {number | null} nodeID 
- * @returns 
  */
 export const setSelectedNodeIDAction = (nodeID) => {
     return { type: TREE_ACTIONS.SET_SELECTED_NODE_ID, payload: nodeID }
@@ -15,7 +14,6 @@ export const setSelectedNodeIDAction = (nodeID) => {
  * referenceID: number;
  * nodeData: import("../../data/NodeData").INodeData;
  * }} payload 
- * @returns 
  */
 export const appendNodeAction = (payload) => {
     return { type: TREE_ACTIONS.APPEND_NODE, payload }
@@ -27,7 +25,6 @@ export const appendNodeAction = (payload) => {
  * referenceID: number;
  * nodeData: import("../../data/NodeData").INodeData;
  * }} payload 
- * @returns 
  */
 export const moveNodeAction = (payload) => {
     return { type: TREE_ACTIONS.MOVE_NODE, payload }
@@ -40,7 +37,6 @@ export const moveNodeAction = (payload) => {
  * referenceID: number;
  * nodeData: import("../../data/NodeData").INodeData;
  * }} payload 
- * @returns 
  */
 export const insertBeforeNodeAction = (payload) => {
     return { type: TREE_ACTIONS.INSERT_BEFORE_NODE, payload }
@@ -58,7 +54,6 @@ export const updateNodeNameAction = (payload) => {
 /**
  * To delete a node from a tree by its nodeID
  * @param {{nodeID: number}} payload 
- * @returns 
  */
 export const deleteNodeAction = (payload) => {
     return { type: TREE_ACTIONS.DELETE_NODE, payload }

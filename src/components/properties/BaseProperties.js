@@ -1,7 +1,7 @@
 import React from "react";
 
 import { connect } from "react-redux";
-import { updateNodeBasePropertiesActions } from "../../store/nodeProperties";
+import { updateBasePropertiesAction } from "../../store/properties/base";
 
 import "./baseProperties.css";
 
@@ -9,15 +9,14 @@ import "./baseProperties.css";
 /**
  * @typedef {{
  * selectedNodeID: number | null;
- * nodesPropertiesList: import("../../store/nodeProperties/nodesPropertiesReducer").NodesPropertiesListState;
- * updateNodeBasePropertiesActions: typeof updateNodeBasePropertiesActions;
- * }} BasePropertiesDependencies
+ * basePropertiesList: import("../../store/properties/base").IBasePropertiesListState;
+ * updateBasePropertiesAction: typeof updateBasePropertiesAction;
+ * }} BasePropertiesComponentDependencies
  */
 
 /**
  * Each node must have base properties
- * @param { BasePropertiesDependencies} props 
- * @returns
+ * @param { BasePropertiesComponentDependencies} props 
  */
 const BasePropertiesComponent = (props) => {
 
@@ -27,7 +26,7 @@ const BasePropertiesComponent = (props) => {
         return (<div></div>)
     };
 
-    const { scale, position, rotation } = props.nodesPropertiesList[id];
+    const { scale, position, rotation } = props.basePropertiesList[id];
 
     const onChange = (event) => {
         const [groupName, valueName] = event.target.id.split("-");
@@ -39,7 +38,7 @@ const BasePropertiesComponent = (props) => {
         else payload[groupName] = value;
 
 
-        props.updateNodeBasePropertiesActions(payload);
+        props.updateBasePropertiesAction(payload);
     };
 
     return (
@@ -64,14 +63,17 @@ const BasePropertiesComponent = (props) => {
     )
 }
 
-const mapStateToProps = ({ treeReducer, nodesPropertiesListReducer }) => {
+/**
+ * @param {import("../../store").IStore} data 
+ */
+const mapStateToProps = ({ treeReducer, basePropertiesListReducer }) => {
     return {
-        nodesPropertiesList: nodesPropertiesListReducer,
+        basePropertiesList: basePropertiesListReducer,
         selectedNodeID: treeReducer.selectedNodeID
     }
 };
 
 export const BaseProperties = connect(
     mapStateToProps,
-    { updateNodeBasePropertiesActions }
+    { updateBasePropertiesAction }
 )(BasePropertiesComponent)

@@ -7,6 +7,7 @@ import { PropertiesPanel } from "./components/properties";
 import "./app.css";
 
 export const App = () => {
+  window.addEventListener("contextmenu", (event) => event.preventDefault());
 
   return (
     <>

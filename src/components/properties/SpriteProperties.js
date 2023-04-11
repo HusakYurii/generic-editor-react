@@ -1,7 +1,7 @@
 import React from "react";
 
 import { connect } from "react-redux";
-import { updateNodeSpritePropertiesActions } from "../../store/nodeProperties";
+import { updateSpritePropertiesAction } from "../../store/properties/sprite";
 
 import "./spriteProperties.css";
 
@@ -9,14 +9,14 @@ import "./spriteProperties.css";
 /**
  * @typedef {{
  * selectedNodeID: number | null;
- * nodesSpritePropertiesList: import("../../store/nodeProperties/nodesSpritePropertiesReducer").NodesSpritePropertiesListState;
- * updateNodeSpritePropertiesActions: typeof updateNodeSpritePropertiesActions;
- * }} SpritePropertiesDependencies
+ * spritePropertiesList: import("../../store/properties/sprite").ISpritePropertiesListState;
+ * updateSpritePropertiesAction: typeof updateSpritePropertiesAction;
+ * }} SpritePropertiesComponentDependencies
  */
 
 /**
  * Each node must have base properties
- * @param { SpritePropertiesDependencies} props 
+ * @param { SpritePropertiesComponentDependencies} props 
  * @returns
  */
 const SpritePropertiesComponent = (props) => {
@@ -27,11 +27,11 @@ const SpritePropertiesComponent = (props) => {
         return null;
     };
 
-    if (!props.nodesSpritePropertiesList[id]) {
+    if (!props.spritePropertiesList[id]) {
         return null;
     }
 
-    const { anchor, textureName } = props.nodesSpritePropertiesList[id];
+    const { anchor, textureName } = props.spritePropertiesList[id];
 
     const onChange = (event) => {
         const [groupName, valueName] = event.target.id.split("-");
@@ -40,13 +40,13 @@ const SpritePropertiesComponent = (props) => {
         const payload = { nodeID: id, anchor: { ...anchor } };
         payload[groupName][valueName] = value;
 
-        props.updateNodeSpritePropertiesActions(payload);
+        props.updateSpritePropertiesAction(payload);
     };
 
     const onTextureChange = (event) => {
         const payload = { nodeID: id, textureName: event.target.value };
 
-        props.updateNodeSpritePropertiesActions(payload);
+        props.updateSpritePropertiesAction(payload);
     }
 
     return (
@@ -68,14 +68,17 @@ const SpritePropertiesComponent = (props) => {
     )
 }
 
-const mapStateToProps = ({ treeReducer, nodesSpritePropertiesListReducer }) => {
+/**
+ * @param {import("../../store").IStore} data 
+ */
+const mapStateToProps = ({ treeReducer, spritePropertiesListReducer }) => {
     return {
-        nodesSpritePropertiesList: nodesSpritePropertiesListReducer,
+        spritePropertiesList: spritePropertiesListReducer,
         selectedNodeID: treeReducer.selectedNodeID
     }
 };
 
 export const SpriteProperties = connect(
     mapStateToProps,
-    { updateNodeSpritePropertiesActions }
+    { updateSpritePropertiesAction }
 )(SpritePropertiesComponent)

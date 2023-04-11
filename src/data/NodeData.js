@@ -12,36 +12,10 @@
  * @param {INodeData[]} [nodes = []]
  * @returns {INodeData} 
  */
-export const createNode = (id, nodes = []) => {
+export const createNode = (id, name = `Node_${id}`, nodes = []) => {
     return {
-        id,
-        name: `Node_${id}`,
+        id: id,
+        name: name,
         nodes: nodes,
-    }
-}
-
-/**
- * @deprecated
- * @param {INodeData} node
- * @returns {INodeData} 
- */
-export const cloneNodeDeep = (node) => {
-    return {
-        id: node.id,
-        name: node.name,
-        nodes: node.nodes.map(cloneNodeDeep),
-    }
-}
-
-/**
- * @deprecated
- * @param {INodeData} node
- * @returns {INodeData} 
- */
-export const cloneNodeShallow = (node) => {
-    return {
-        id: node.id,
-        name: node.name,
-        nodes: node.nodes,
     }
 }

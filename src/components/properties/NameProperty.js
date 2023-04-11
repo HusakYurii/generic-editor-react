@@ -8,14 +8,13 @@ import "./nameProperty.css";
 
 
 /**
- * @typedef {import("../../store/tree/treeReducer").TreeState & {
+ * @typedef {import("../../store/tree").ITreeState & {
  * updateNodeNameAction: typeof updateNodeNameAction
- * }} NamePropertyDependencies
+ * }} NamePropertyComponentDependencies
  */
 
 /**
- * @param {NamePropertyDependencies} props 
- * @returns
+ * @param {NamePropertyComponentDependencies} props 
  */
 const NamePropertyComponent = (props) => {
 
@@ -37,6 +36,9 @@ const NamePropertyComponent = (props) => {
     )
 }
 
+/**
+ * @param {import("../../store").IStore} data 
+ */
 const mapStateToProps = ({ treeReducer }) => {
     return {
         treeData: treeReducer.treeData,
