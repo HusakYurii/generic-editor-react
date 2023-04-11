@@ -35,7 +35,7 @@ const NODES_SPRITE_PROPERTIES_LIST = getRootNodeSpriteProperties();
  */
 export const nodesSpritePropertiesListReducer = (state = NODES_SPRITE_PROPERTIES_LIST, { type, payload }) => {
     switch (type) {
-        case NODE_PROPERTIES_ACTIONS.UPDATE_NODE_BASE_PROPERTIES:
+        case NODE_PROPERTIES_ACTIONS.UPDATE_NODE_SPRITE_PROPERTIES:
             const { nodeID, ...properties } = payload;
             const newState = { ...state };
             const newNodeProps = { ...newState[nodeID], ...properties };

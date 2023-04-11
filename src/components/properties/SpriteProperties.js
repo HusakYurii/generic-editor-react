@@ -37,21 +37,24 @@ const SpritePropertiesComponent = (props) => {
         const [groupName, valueName] = event.target.id.split("-");
         const value = parseFloat(event.target.value);
 
-        const payload = { nodeID: id, ...anchor };
+        const payload = { nodeID: id, anchor: { ...anchor } };
         payload[groupName][valueName] = value;
 
         props.updateNodeSpritePropertiesActions(payload);
     };
 
     const onTextureChange = (event) => {
+        const payload = { nodeID: id, textureName: event.target.value };
 
+        props.updateNodeSpritePropertiesActions(payload);
     }
 
     return (
         <div id="sprite-properties" className="properties">
             <div>
                 <span>Texture</span>
-                <select name="texture" id="texture-select">
+                {/* @TODO FINISH IT. IT should be connected to the actual textures in the assets component */}
+                <select name="texture" id="texture-select" onChange={onTextureChange}>
                     <option value="Empty">Empty</option>
                     <option value="Example">Example</option>
                 </select>
