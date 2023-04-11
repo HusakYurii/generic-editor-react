@@ -1,0 +1,14 @@
+#name-property {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#name-property span {
+    color: white;
+    width: 33%;
+}
+
+#name-property input {
+    width: 66%;
+}

@@ -21,7 +21,7 @@ export const createNode = (id, nodes = []) => {
 }
 
 /**
- * 
+ * @deprecated
  * @param {INodeData} node
  * @returns {INodeData} 
  */
@@ -34,7 +34,7 @@ export const cloneNodeDeep = (node) => {
 }
 
 /**
- * 
+ * @deprecated
  * @param {INodeData} node
  * @returns {INodeData} 
  */

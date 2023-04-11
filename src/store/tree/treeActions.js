@@ -5,7 +5,7 @@ import { TREE_ACTIONS } from "./treeActionTypes"
  * @param {number | null} nodeID 
  * @returns 
  */
-export const setSelectedNodeID = (nodeID) => {
+export const setSelectedNodeIDAction = (nodeID) => {
     return { type: TREE_ACTIONS.SET_SELECTED_NODE_ID, payload: nodeID }
 };
 
@@ -17,7 +17,7 @@ export const setSelectedNodeID = (nodeID) => {
  * }} payload 
  * @returns 
  */
-export const appendNode = (payload) => {
+export const appendNodeAction = (payload) => {
     return { type: TREE_ACTIONS.APPEND_NODE, payload }
 };
 
@@ -29,30 +29,30 @@ export const appendNode = (payload) => {
  * }} payload 
  * @returns 
  */
-export const moveNode = (payload) => {
+export const moveNodeAction = (payload) => {
     return { type: TREE_ACTIONS.MOVE_NODE, payload }
 };
 
 /**
  * This function is called when we want to move (re-append) a node. But,
- * unlike `moveNode` function this one inserts the node before the reference one
+ * unlike `moveNodeAction` function this one inserts the node before the reference one
  * @param {{
  * referenceID: number;
  * nodeData: import("../../data/NodeData").INodeData;
  * }} payload 
  * @returns 
  */
-export const insertBeforeNode = (payload) => {
+export const insertBeforeNodeAction = (payload) => {
     return { type: TREE_ACTIONS.INSERT_BEFORE_NODE, payload }
 };
 
 /**
  * When we update any params of the selected node (find node by nodeID)
- * @param {{nodeID: number, properties: Record<string, unknown>}} payload 
+ * @param {{nodeID: number, name: string }} payload 
  * @returns 
  */
-export const updateNode = (payload) => {
-    return { type: TREE_ACTIONS.UPDATE_NODE, payload }
+export const updateNodeNameAction = (payload) => {
+    return { type: TREE_ACTIONS.UPDATE_NODE_NAME, payload }
 };
 
 /**
@@ -60,6 +60,6 @@ export const updateNode = (payload) => {
  * @param {{nodeID: number}} payload 
  * @returns 
  */
-export const deleteNode = (payload) => {
+export const deleteNodeAction = (payload) => {
     return { type: TREE_ACTIONS.DELETE_NODE, payload }
 };

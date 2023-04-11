@@ -142,3 +142,41 @@ export const insertBefore = function (node, referenceID, tree) {
 
     return false;
 }
+
+/**
+ *If you are not sure whether a selected node has parents, you should try `changeNodeName` function first
+ * 
+ * @param {import("../data/NodeData").INodeData} node - root node
+ * @param {string} name 
+ * @returns {boolean} - whether a node has been updated or not
+ */
+export const changeRootNodeName = (node, name) => {
+    if (!node) {
+        return false;
+    }
+    node.name = name;
+    return true;
+}
+
+/**
+ * Unlike the `changeRootNodeName` this function will try to find a node's parent element.
+ * That is needed to process a child node and replace it in the parent's children array;
+ * 
+ * @param {import("../data/NodeData").INodeData} tree - can be a node or an entire tree 
+ * @param {number} referenceID - the ID of the node which will get a new name
+ * @param {string} name 
+ * @returns {boolean} - whether a node has been updated or not
+ */
+export const changeNodeName = function (tree, referenceID, name) {
+
+    const parentNode = getParent(referenceID, tree);
+    if (!parentNode) {
+        return false;
+    }
+
+    const childIndex = parentNode.nodes.findIndex((child) => child.id === referenceID);
+    const child = { ...parentNode.nodes[childIndex], name };
+    parentNode.nodes.splice(childIndex, 1, child);
+
+    return true;
+}
