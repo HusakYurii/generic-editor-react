@@ -1,27 +1,28 @@
-import { TREE_ACTIONS } from "./treeActionTypes";
+import { TREE_ACTIONS } from "./actionTypes";
 import { removeNode, appendNode, insertBefore, changeNodeName, changeRootNodeName } from "../../tools/treeTools";
-import { getRoodNodeData } from "../defaultStoreData";
+import { createNode } from "../../data/NodeData";
+import { ROOT_NODE_ID } from "../../data/StoreData";
 
 /**
  * @typedef {{
  * treeData: import("../../data/NodeData").INodeData;
  * selectedNodeID: null | number;
- * }} TreeState;
+ * }} ITreeState;
  */
 
 /**
- * @typeof TreeState
+ * @typeof ITreeState
  */
-const INITIAL_TREE = {
-    treeData: getRoodNodeData(),
+const STATE = {
+    treeData: createNode(ROOT_NODE_ID, "RootNode", []),
     selectedNodeID: null
 };;
 
 /**
  * 
- * @param {TreeState} state 
+ * @param {ITreeState} state 
  * @param {*} payload 
- * @returns {TreeState}
+ * @returns {ITreeState}
  */
 const processInsertBeforeNodeAction = (state, payload) => {
     const treeData = { ...state.treeData }
@@ -37,9 +38,9 @@ const processInsertBeforeNodeAction = (state, payload) => {
 
 /**
  * 
- * @param {TreeState} state 
+ * @param {ITreeState} state 
  * @param {*} payload 
- * @returns {TreeState}
+ * @returns {ITreeState}
  */
 const processMoveNodeAction = (state, payload) => {
     const treeData = { ...state.treeData }
@@ -55,9 +56,9 @@ const processMoveNodeAction = (state, payload) => {
 
 /**
  * 
- * @param {TreeState} state 
+ * @param {ITreeState} state 
  * @param {*} payload 
- * @returns {TreeState}
+ * @returns {ITreeState}
  */
 const processSelectNodeIDAction = (state, payload) => {
     const newState = { ...state, selectedNodeID: payload };
@@ -66,9 +67,9 @@ const processSelectNodeIDAction = (state, payload) => {
 
 /**
  * 
- * @param {TreeState} state 
+ * @param {ITreeState} state 
  * @param {*} payload 
- * @returns {TreeState}
+ * @returns {ITreeState}
  */
 const processUpdateNodeNameAction = (state, payload) => {
     const treeData = { ...state.treeData }
@@ -85,11 +86,11 @@ const processUpdateNodeNameAction = (state, payload) => {
 
 /**
  * 
- * @param {TreeState} state 
+ * @param {ITreeState} state 
  * @param {{type: string; payload: any}} data 
- * @returns {TreeState}
+ * @returns {ITreeState}
  */
-export const treeReducer = (state = INITIAL_TREE, { type, payload }) => {
+export const treeReducer = (state = STATE, { type, payload }) => {
     switch (type) {
         case TREE_ACTIONS.SET_SELECTED_NODE_ID:
             return processSelectNodeIDAction(state, payload);
