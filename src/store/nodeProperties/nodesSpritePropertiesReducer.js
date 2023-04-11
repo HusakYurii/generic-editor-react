@@ -1,16 +1,15 @@
-import { getRootNodeBaseProperties } from "../defaultStoreData";
+import { getRootNodeSpriteProperties } from "../defaultStoreData";
 import { NODE_PROPERTIES_ACTIONS } from "./nodePropertiesActionTypes";
 
 /**
  * @typedef {{
- * position: { x: number; y: number; }
- * scale: { x: number; y: number; }
- * rotation: number;
- * }} NodesBaseProperties;
+ * anchor: { x: number; y: number; }
+ * textureName: string;
+ * }} NodesSpriteProperties;
  */
 
 /**
- * @typedef {NodesBaseProperties & {
+ * @typedef {NodesSpriteProperties & {
  * nodeID: number;
  * }} ActionPayload 
  */
@@ -18,23 +17,23 @@ import { NODE_PROPERTIES_ACTIONS } from "./nodePropertiesActionTypes";
 
 /**
  * @typedef {{
- * [nodeID: number]: NodesBaseProperties
- * }} NodesPropertiesListState;
+ * [nodeID: number]: NodesSpriteProperties
+ * }} NodesSpritePropertiesListState;
  */
 
 
 /**
- * @typeof NodesPropertiesListState
+ * @typeof NodesSpritePropertiesListState
  */
-const NODES_PROPERTIES_LIST = getRootNodeBaseProperties();
+const NODES_SPRITE_PROPERTIES_LIST = getRootNodeSpriteProperties();
 
 /**
  * 
- * @param {NodesPropertiesListState} state 
+ * @param {NodesSpritePropertiesListState} state 
  * @param {{type: string; payload: ActionPayload}} data 
- * @returns {NodesPropertiesListState}
+ * @returns {NodesSpritePropertiesListState}
  */
-export const nodesPropertiesListReducer = (state = NODES_PROPERTIES_LIST, { type, payload }) => {
+export const nodesSpritePropertiesListReducer = (state = NODES_SPRITE_PROPERTIES_LIST, { type, payload }) => {
     switch (type) {
         case NODE_PROPERTIES_ACTIONS.UPDATE_NODE_BASE_PROPERTIES:
             const { nodeID, ...properties } = payload;

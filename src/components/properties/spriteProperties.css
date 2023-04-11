@@ -1,18 +1,22 @@
-#base-properties {
+#sprite-properties {
     margin-top: 30px;
 }
 
-#base-properties div {
+#sprite-properties div {
     display: flex;
     flex-direction: row;
     margin-top: 4px;
 }
 
-#base-properties div span {
+#sprite-properties div span {
     color: white;
 }
 
-#base-properties div > * {
+#sprite-properties div > * {
     text-align: left;
     width: 33%;
+}
+
+#sprite-properties select {
+    width: 66%;
 }

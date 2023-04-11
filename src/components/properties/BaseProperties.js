@@ -15,6 +15,7 @@ import "./baseProperties.css";
  */
 
 /**
+ * Each node must have base properties
  * @param { BasePropertiesDependencies} props 
  * @returns
  */

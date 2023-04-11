@@ -1,10 +1,11 @@
 import { createStore, combineReducers } from 'redux';
 import { treeReducer } from "./tree";
-import { nodesPropertiesListReducer } from "./nodeProperties"
+import { nodesPropertiesListReducer, nodesSpritePropertiesListReducer } from "./nodeProperties"
 
 const store = createStore(combineReducers({
     treeReducer,
-    nodesPropertiesListReducer
+    nodesPropertiesListReducer,
+    nodesSpritePropertiesListReducer
 }));
 
 export default store;

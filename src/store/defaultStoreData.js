@@ -18,3 +18,16 @@ export const getRootNodeBaseProperties = () => {
     }
 };
 
+/**
+ * For testing
+ * @deprecated
+ */
+export const getRootNodeSpriteProperties = () => {
+    return {
+        [ROOT_NODE_ID]: {
+            anchor: { x: 0, y: 0, },
+            textureName: ""
+        }
+    }
+};
+
