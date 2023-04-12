@@ -1,8 +1,22 @@
 export const ROOT_NODE_ID = 1;
 
-export const getNodeProperties = (id, initProps = []) => {
+export const AVAILABLE_PROPERTIES_LIST = {
+    BASE: "BASE",
+    SPRITE: "SPRITE"
+};
+
+export const ENTITY_TYPES = {
+    CONTAINER: "CONTAINER",
+    SPRITE: "SPRITE"
+}
+
+
+export const getEntityType = (id, type, properties = []) => {
     return {
-        [id]: initProps
+        [id]: {
+            type,
+            properties
+        }
     }
 }
 
@@ -24,4 +38,3 @@ export const getSpriteProperties = (id) => {
         }
     }
 };
-

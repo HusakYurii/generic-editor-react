@@ -1,7 +1,7 @@
 import React from "react";
 
 import { connect } from "react-redux";
-import { updateBasePropertiesAction } from "../../store/properties/base";
+import { updateBasePropertiesAction } from "../../../store/properties/base";
 
 import "./baseProperties.css";
 
@@ -9,7 +9,7 @@ import "./baseProperties.css";
 /**
  * @typedef {{
  * selectedNodeID: number | null;
- * basePropertiesList: import("../../store/properties/base").IBasePropertiesListState;
+ * basePropertiesList: import("../../../store/properties/base").IBasePropertiesListState;
  * updateBasePropertiesAction: typeof updateBasePropertiesAction;
  * }} BasePropertiesComponentDependencies
  */
@@ -21,10 +21,6 @@ import "./baseProperties.css";
 const BasePropertiesComponent = (props) => {
 
     const id = props.selectedNodeID;
-
-    if (!id) {
-        return (<div></div>)
-    };
 
     const { scale, position, rotation } = props.basePropertiesList[id];
 
@@ -64,12 +60,12 @@ const BasePropertiesComponent = (props) => {
 }
 
 /**
- * @param {import("../../store").IStore} data 
+ * @param {import("../../../store").IStore} data 
  */
-const mapStateToProps = ({ treeReducer, basePropertiesListReducer }) => {
+const mapStateToProps = ({ tree, basePropertiesList }) => {
     return {
-        basePropertiesList: basePropertiesListReducer,
-        selectedNodeID: treeReducer.selectedNodeID
+        basePropertiesList: basePropertiesList,
+        selectedNodeID: tree.selectedNodeID
     }
 };
 

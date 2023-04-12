@@ -1,14 +1,14 @@
 import React from "react";
 
 import { connect } from "react-redux";
-import { updateNodeNameAction } from "../../store/tree";
-import { getNodeByID } from "../../tools/treeTools";
+import { updateNodeNameAction } from "../../../store/tree";
+import { getNodeByID } from "../../../tools/treeTools";
 
 import "./nameProperty.css";
 
 
 /**
- * @typedef {import("../../store/tree").ITreeState & {
+ * @typedef {import("../../../store/tree").ITreeState & {
  * updateNodeNameAction: typeof updateNodeNameAction
  * }} NamePropertyComponentDependencies
  */
@@ -19,10 +19,6 @@ import "./nameProperty.css";
 const NamePropertyComponent = (props) => {
 
     const node = getNodeByID(props.selectedNodeID, props.treeData);
-
-    if (!node) {
-        return (<div></div>)
-    };
 
     const onChange = (event) => {
         props.updateNodeNameAction({ nodeID: props.selectedNodeID, name: event.target.value });
@@ -37,12 +33,12 @@ const NamePropertyComponent = (props) => {
 }
 
 /**
- * @param {import("../../store").IStore} data 
+ * @param {import("../../../store").IStore} data 
  */
-const mapStateToProps = ({ treeReducer }) => {
+const mapStateToProps = ({ tree }) => {
     return {
-        treeData: treeReducer.treeData,
-        selectedNodeID: treeReducer.selectedNodeID
+        treeData: tree.treeData,
+        selectedNodeID: tree.selectedNodeID
     }
 };
 

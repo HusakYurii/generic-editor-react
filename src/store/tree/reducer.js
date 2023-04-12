@@ -1,7 +1,8 @@
 import { TREE_ACTIONS } from "./actionTypes";
 import { removeNode, appendNode, insertBefore, changeNodeName, changeRootNodeName } from "../../tools/treeTools";
 import { createNode } from "../../data/NodeData";
-import { ROOT_NODE_ID } from "../../data/StoreData";
+import { defaultStoreData } from "../../data/DefaultStoreData";
+import { mockStoreData } from "../../data/MockStreData";
 
 /**
  * @typedef {{
@@ -13,10 +14,8 @@ import { ROOT_NODE_ID } from "../../data/StoreData";
 /**
  * @typeof ITreeState
  */
-const STATE = {
-    treeData: createNode(ROOT_NODE_ID, "RootNode", []),
-    selectedNodeID: null
-};;
+// const STATE = defaultStoreData.tree
+const STATE = mockStoreData.tree
 
 /**
  * 

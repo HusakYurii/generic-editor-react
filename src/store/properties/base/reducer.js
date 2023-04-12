@@ -1,3 +1,5 @@
+import { defaultStoreData } from "../../../data/DefaultStoreData";
+import { mockStoreData } from "../../../data/MockStreData";
 import { ROOT_NODE_ID, getBaseProperties } from "../../../data/StoreData";
 import { BASE_PROPERTIES_ACTIONS } from "./actionTypes";
 
@@ -23,7 +25,8 @@ import { BASE_PROPERTIES_ACTIONS } from "./actionTypes";
  * By default the root node has the base properties
  * @typeof IBasePropertiesListState
  */
-const STATE = { ...getBaseProperties(ROOT_NODE_ID) };
+// const STATE = defaultStoreData.properties.base;
+const STATE = mockStoreData.properties.base;
 
 /**
  * 
