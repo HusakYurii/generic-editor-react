@@ -8,8 +8,8 @@ import { ContainerEntity, isContainerEntity } from "./ContainerEntity";
 import { SpriteEntity, isSpriteEntity } from "./SpriteEntity";
 
 const TYPE_TO_ENTITY_MAP = [
-    { checker: isContainerEntity, component: ContainerEntity },
-    { checker: isSpriteEntity, component: SpriteEntity },
+    { checker: isContainerEntity, component: <ContainerEntity /> },
+    { checker: isSpriteEntity, component: <SpriteEntity /> },
 ]
 
 const PropertiesPanelComponent = (props) => {

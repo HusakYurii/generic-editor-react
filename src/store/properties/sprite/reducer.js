@@ -1,3 +1,5 @@
+import { defaultStoreData } from "../../../data/DefaultStoreData";
+import { mockStoreData } from "../../../data/MockStreData";
 import { SPRITE_PROPERTIES_ACTIONS } from "./actionTypes";
 
 /**
@@ -20,7 +22,8 @@ import { SPRITE_PROPERTIES_ACTIONS } from "./actionTypes";
 /**
  * @typeof ISpritePropertiesListState
  */
-const STATE = {};
+// const STATE = defaultStoreData.properties.sprite;
+const STATE = mockStoreData.properties.sprite;
 
 /**
  * 
