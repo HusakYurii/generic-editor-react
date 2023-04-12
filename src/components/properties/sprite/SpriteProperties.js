@@ -1,7 +1,7 @@
 import React from "react";
 
 import { connect } from "react-redux";
-import { updateSpritePropertiesAction } from "../../store/properties/sprite";
+import { updateSpritePropertiesAction } from "../../../store/properties/sprite";
 
 import "./spriteProperties.css";
 
@@ -9,7 +9,7 @@ import "./spriteProperties.css";
 /**
  * @typedef {{
  * selectedNodeID: number | null;
- * spritePropertiesList: import("../../store/properties/sprite").ISpritePropertiesListState;
+ * spritePropertiesList: import("../../../store/properties/sprite").ISpritePropertiesListState;
  * updateSpritePropertiesAction: typeof updateSpritePropertiesAction;
  * }} SpritePropertiesComponentDependencies
  */
@@ -22,14 +22,6 @@ import "./spriteProperties.css";
 const SpritePropertiesComponent = (props) => {
 
     const id = props.selectedNodeID;
-
-    if (!id) {
-        return null;
-    };
-
-    if (!props.spritePropertiesList[id]) {
-        return null;
-    }
 
     const { anchor, textureName } = props.spritePropertiesList[id];
 
@@ -69,12 +61,12 @@ const SpritePropertiesComponent = (props) => {
 }
 
 /**
- * @param {import("../../store").IStore} data 
+ * @param {import("../../../store").IStore} data 
  */
-const mapStateToProps = ({ treeReducer, spritePropertiesListReducer }) => {
+const mapStateToProps = ({ tree, spritePropertiesList }) => {
     return {
-        spritePropertiesList: spritePropertiesListReducer,
-        selectedNodeID: treeReducer.selectedNodeID
+        spritePropertiesList: spritePropertiesList,
+        selectedNodeID: tree.selectedNodeID
     }
 };
 

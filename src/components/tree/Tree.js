@@ -148,9 +148,9 @@ const Tree = (props) => {
     );
 };
 
-const mapStateToProps = ({ treeReducer }) => {
+const mapStateToProps = ({ tree }) => {
     return {
-        treeData: treeReducer.treeData,
+        treeData: tree.treeData,
     };
 };
 
