@@ -1,5 +1,6 @@
 import { defaultStoreData } from "../../../data/DefaultStoreData";
 import { mockStoreData } from "../../../data/MockStreData";
+import { getSpriteProperties } from "../../../data/StoreData";
 import { SPRITE_PROPERTIES_ACTIONS } from "./actionTypes";
 
 /**
@@ -32,16 +33,26 @@ const STATE = mockStoreData.properties.sprite;
  * @returns {ISpritePropertiesListState}
  */
 export const spritePropertiesListReducer = (state = STATE, { type, payload }) => {
-    switch (type) {
-        case SPRITE_PROPERTIES_ACTIONS.UPDATE_SPRITE_PROPERTIES:
-            const { nodeID, ...properties } = payload;
-            const newState = { ...state };
-            const newNodeProps = { ...newState[nodeID], ...properties };
-            newState[nodeID] = newNodeProps;
-            return newState;
-
-        default: return state;
+    if (type === SPRITE_PROPERTIES_ACTIONS.INIT_SPRITE_PROPERTIES) {
+        const newState = { ...state, ...getSpriteProperties(payload.nodeID) };
+        return newState;
     }
+    else if (type === SPRITE_PROPERTIES_ACTIONS.REMOVE_SPRITE_PROPERTIES) {
+        const newState = { ...state };
+        delete newState[payload.nodeID];
+        return newState;
+    }
+    else if (type === SPRITE_PROPERTIES_ACTIONS.UPDATE_SPRITE_PROPERTIES) {
+        const { nodeID, ...properties } = payload;
+        const newState = { ...state };
+        const newNodeProps = { ...newState[nodeID], ...properties };
+        newState[nodeID] = newNodeProps;
+        return newState;
+    }
+    else {
+        return state;
+    }
+
 };
 
 

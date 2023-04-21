@@ -1,5 +1,6 @@
 #tree-options-popup {
-    position: absolute;;
+    position: absolute;
+    z-index: 100;
     background-color: #f1f1f1;
     min-width: 160px;
     overflow: auto;

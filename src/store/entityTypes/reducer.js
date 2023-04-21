@@ -8,7 +8,7 @@ import { ENTITY_TYPES_LIST_ACTIONS } from "./actionTypes";
  */
 
 /**
- * @typedef {{ [nodeID: number]: {type: keyof ENTITY_TYPES, properties: string[] } }} IEntityTypesListState;
+ * @typedef {{ [nodeID: number]: {type: keyof ENTITY_TYPES, properties: Array<keyof AVAILABLE_PROPERTIES_LIST> } }} IEntityTypesListState;
  */
 
 
@@ -29,14 +29,14 @@ export const entityTypesListReducer = (state = STATE, { type, payload }) => {
     if (type === ENTITY_TYPES_LIST_ACTIONS.INIT_CONTAINER_ENTITY) {
         const newState = {
             ...state,
-            ...getEntityType(payload.nodeID, ENTITY_TYPES.CONTAINER, [AVAILABLE_PROPERTIES_LIST.BASE])
+            ...getEntityType(payload.nodeID, ENTITY_TYPES.CONTAINER, [])
         };
         return newState;
     }
     else if (type === ENTITY_TYPES_LIST_ACTIONS.INIT_SPRITE_ENTITY) {
         const newState = {
             ...state,
-            ...getEntityType(payload.nodeID, ENTITY_TYPES.SPRITE, [AVAILABLE_PROPERTIES_LIST.BASE, AVAILABLE_PROPERTIES_LIST.SPRITE])
+            ...getEntityType(payload.nodeID, ENTITY_TYPES.SPRITE, [])
         };
         return newState;
     }
@@ -45,17 +45,19 @@ export const entityTypesListReducer = (state = STATE, { type, payload }) => {
         delete newState[payload.nodeID];
         return newState;
     }
-    else if (type === ENTITY_TYPES_LIST_ACTIONS.ADD_EXTRA_ENTITY_PROPS) {
-        const newState = { ...state };
-        newState[payload.nodeID].properties.push(payload.property);
-        return newState;
-    }
-    else if (type === ENTITY_TYPES_LIST_ACTIONS.REMOVE_EXTRA_ENTITY_PROPS) {
-        const newState = { ...state };
-        newState[payload.nodeID].properties = newState[payload.nodeID].properties
-            .filter(val => val !== payload.property);
-        return newState;
-    }
+    // I haven't decided if the editor will support some extra props like collision  box or mask etc
+
+    // else if (type === ENTITY_TYPES_LIST_ACTIONS.ADD_EXTRA_ENTITY_PROPS) {
+    //     const newState = { ...state };
+    //     newState[payload.nodeID].properties.push(payload.property);
+    //     return newState;
+    // }
+    // else if (type === ENTITY_TYPES_LIST_ACTIONS.REMOVE_EXTRA_ENTITY_PROPS) {
+    //     const newState = { ...state };
+    //     newState[payload.nodeID].properties = newState[payload.nodeID].properties
+    //         .filter(val => val !== payload.property);
+    //     return newState;
+    // }
     else {
         return state;
     }

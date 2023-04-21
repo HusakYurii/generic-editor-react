@@ -53,8 +53,17 @@ export const updateNodeNameAction = (payload) => {
 
 /**
  * To delete a node from a tree by its nodeID
- * @param {{nodeID: number}} payload 
+ * @param {number} id
  */
-export const deleteNodeAction = (payload) => {
-    return { type: TREE_ACTIONS.DELETE_NODE, payload }
+export const deleteNodeAction = (id) => {
+    return { type: TREE_ACTIONS.DELETE_NODE, payload: { nodeID: id } }
+};
+
+/**
+ * To create a new node in a tree
+ * @param {number} parentID the parent's node ID we need to append a new node to
+ * @param {number} id new node id
+ */
+export const createNodeAction = (parentID, id) => {
+    return { type: TREE_ACTIONS.CREATE_NODE, payload: { nodeID: id, referenceID: parentID } }
 };
