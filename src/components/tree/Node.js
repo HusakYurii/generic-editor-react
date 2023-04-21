@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./node.css";
+
+export const NODE_DATA_TYPE_ATTRIBUTE = "node-element"
 /**
  * 
  * @param {{node: import("../../data/NodeData").INodeData}} props 
@@ -21,7 +23,7 @@ export const Node = ({ node }) => {
     return (
         <div className="node">
             {node.nodes.length === 0 ? null : toggler}
-            <div className="node-name" draggable="true" data-id={node.id}>
+            <div className="node-name" draggable="true" data-id={node.id} data-type={NODE_DATA_TYPE_ATTRIBUTE}>
                 {node.name}
             </div>
             {collapsed ? null : nodesList}
