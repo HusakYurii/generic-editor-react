@@ -1,0 +1,28 @@
+#tree-options-popup {
+    position: absolute;
+    z-index: 100;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+#tree-options-popup div {
+    color: black;
+    padding: 5px 10px;
+    user-select: none;
+}
+
+#tree-options-popup div:hover {
+    background-color: #ddd;
+}
+
+#tree-options-popup .remove-option {
+    margin-top: 20px;
+    
+}
+
+#tree-options-popup .remove-option:hover {
+    color: red;
+    
+}

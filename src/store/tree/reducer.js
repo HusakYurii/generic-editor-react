@@ -83,6 +83,32 @@ const processUpdateNodeNameAction = (state, payload) => {
     return newState;
 }
 
+const processDeleteNodeNameAction = (state, payload) => {
+    const treeData = { ...state.treeData }
+
+    const newState = {
+        ...state,
+        treeData,
+        // just in case if a currently selected node is the one we are removing.
+        // otherwise we will have errors in other components
+        selectedNodeID: payload.nodeID === state.selectedNodeID ? null : state.selectedNodeID
+    };
+
+    if (!removeNode(payload.nodeID, newState.treeData)) {
+        throw new Error(`Tree Reducer: the node with id ${payload.referenceID} has not been removed!`);
+    }
+    return newState;
+}
+
+const processCreateNodeNameAction = (state, payload) => {
+    const treeData = { ...state.treeData }
+    const newState = { ...state, treeData };
+
+    appendNode(createNode(payload.nodeID), payload.referenceID, newState.treeData);
+
+    return newState;
+}
+
 /**
  * 
  * @param {ITreeState} state 
@@ -105,7 +131,11 @@ export const treeReducer = (state = STATE, { type, payload }) => {
         case TREE_ACTIONS.UPDATE_NODE_NAME:
             return processUpdateNodeNameAction(state, payload);
 
-        case TREE_ACTIONS.DELETE_NODE: return state;
+        case TREE_ACTIONS.CREATE_NODE:
+            return processCreateNodeNameAction(state, payload);
+
+        case TREE_ACTIONS.DELETE_NODE:
+            return processDeleteNodeNameAction(state, payload);
         default: return state;
     }
 };

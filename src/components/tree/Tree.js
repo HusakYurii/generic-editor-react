@@ -2,7 +2,7 @@ import React from "react";
 import { createNode } from "../../data/NodeData";
 import { getNodeByID, getParent, isChild, isParent } from "../../tools/treeTools";
 import { getPositionInTheBox, PositionsInTheBox } from "../../tools/treeUITools";
-import { Node } from "./Node";
+import { Node, NODE_DATA_TYPE_ATTRIBUTE } from "./Node";
 
 import "./tree.css";
 
@@ -16,12 +16,23 @@ const UI_CLASS_NAMES = {
 
 const resetStyles = (nodeElement) => {
     Object.values(UI_CLASS_NAMES).forEach((className) => {
-        if (nodeElement.classList.contains(className)) {
-            nodeElement.classList.toggle(className)
-        }
+        nodeElement.classList.remove(className);
     });
 }
 
+/**
+ * @typedef {{
+* treeData:  import("../../data/NodeData").INodeData;
+* moveNodeAction: typeof moveNodeAction;
+* insertBeforeNodeAction: typeof insertBeforeNodeAction;
+* setSelectedNodeIDAction: typeof setSelectedNodeIDAction;
+* }} TreeComponentDependencies
+*/
+
+/**
+* Each node must have base properties
+* @param { TreeComponentDependencies} props 
+*/
 const Tree = (props) => {
 
     /* Some important rules the code follows
@@ -100,7 +111,7 @@ const Tree = (props) => {
         if (position !== PositionsInTheBox.bottom && position !== insertPosition) {
             resetStyles(hoverNodeElement);
             insertPosition = position;
-            hoverNodeElement.classList.toggle(UI_CLASS_NAMES[position])
+            hoverNodeElement.classList.add(UI_CLASS_NAMES[position])
         }
 
         targetNodeData = hoveredNodeData;
@@ -135,7 +146,7 @@ const Tree = (props) => {
             onDrop={handleDrop}
             onClick={handleClick}
         >
-            <div id="root-node-name" data-id={props.treeData.id}>{props.treeData.name}</div>
+            <div id="root-node-name" data-id={props.treeData.id} data-type={NODE_DATA_TYPE_ATTRIBUTE}>{props.treeData.name}</div>
             <div id="root-node-nodes">{
                 props.treeData.nodes.map(node => (
                     <Node
@@ -148,6 +159,9 @@ const Tree = (props) => {
     );
 };
 
+/**
+ * @param {import("../../store").IStore} data 
+ */
 const mapStateToProps = ({ tree }) => {
     return {
         treeData: tree.treeData,

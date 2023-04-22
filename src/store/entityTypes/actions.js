@@ -16,22 +16,25 @@ export const initSpriteEntityAction = (id) => {
 };
 
 /**
- * @param {import("./reducer").IActionPayload} payload 
+ * @param {number} id 
  */
-export const removeEntityAction = (payload) => {
-    return { type: ENTITY_TYPES_LIST_ACTIONS.REMOVE_ENTITY, payload }
+export const removeEntityAction = (id) => {
+    return { type: ENTITY_TYPES_LIST_ACTIONS.REMOVE_ENTITY, payload: {nodeID: id} }
 };
 
-/**
- * @param {import("./reducer").IActionPayload} payload 
- */
-export const addEntityPropsAction = (payload) => {
-    return { type: ENTITY_TYPES_LIST_ACTIONS.ADD_EXTRA_ENTITY_PROPS, payload }
-};
+// I haven't decided if the editor will support some extra props like collision  box or mask etc
+   
 
-/**
- * @param {import("./reducer").IActionPayload} payload 
- */
-export const removeEntityPropsAction = (payload) => {
-    return { type: ENTITY_TYPES_LIST_ACTIONS.REMOVE_EXTRA_ENTITY_PROPS, payload }
-};
+// /**
+//  * @param {import("./reducer").IActionPayload} payload 
+//  */
+// export const addEntityPropsAction = (payload) => {
+//     return { type: ENTITY_TYPES_LIST_ACTIONS.ADD_EXTRA_ENTITY_PROPS, payload }
+// };
+
+// /**
+//  * @param {import("./reducer").IActionPayload} payload 
+//  */
+// export const removeEntityPropsAction = (payload) => {
+//     return { type: ENTITY_TYPES_LIST_ACTIONS.REMOVE_EXTRA_ENTITY_PROPS, payload }
+// };

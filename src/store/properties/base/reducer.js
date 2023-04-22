@@ -35,15 +35,26 @@ const STATE = mockStoreData.properties.base;
  * @returns {IBasePropertiesListState}
  */
 export const basePropertiesListReducer = (state = STATE, { type, payload }) => {
-    switch (type) {
-        case BASE_PROPERTIES_ACTIONS.UPDATE_BASE_PROPERTIES:
-            const { nodeID, ...properties } = payload;
-            const newState = { ...state };
-            const newNodeProps = { ...newState[nodeID], ...properties };
-            newState[nodeID] = newNodeProps;
-            return newState;
+    if (type === BASE_PROPERTIES_ACTIONS.INIT_BASE_PROPERTIES) {
+        const newState = { ...state, ...getBaseProperties(payload.nodeID) };
+        return newState;
+    }
 
-        default: return state;
+    else if (type === BASE_PROPERTIES_ACTIONS.REMOVE_BASE_PROPERTIES) {
+        const newState = { ...state };
+        delete newState[payload.nodeID];
+        return newState;
+    }
+
+    else if (type === BASE_PROPERTIES_ACTIONS.UPDATE_BASE_PROPERTIES) {
+        const { nodeID, ...properties } = payload;
+        const newState = { ...state };
+        const newNodeProps = { ...newState[nodeID], ...properties };
+        newState[nodeID] = newNodeProps;
+        return newState;
+    }
+    else {
+        return state;
     }
 };
 
