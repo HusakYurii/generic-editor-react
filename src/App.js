@@ -6,6 +6,7 @@ import { Header } from "./components/header";
 import { TreeElement } from "./components/tree";
 import { PropertiesPanel } from "./components/properties";
 import { TreeOptionsPopup } from "./components/treeOptions";
+import { ResourcesPanel } from "./components/resources";
 
 
 export const App = () => {
@@ -20,7 +21,7 @@ export const App = () => {
       </div>
       <div id="center-panel">"preview"</div>
       <div id="right-panel"><PropertiesPanel /></div>
-      <div id="bottom-panel">"resources"</div>
+      <div id="bottom-panel"><ResourcesPanel /></div>
     </>
   );
 }

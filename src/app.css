@@ -11,6 +11,11 @@
 #right-panel,
 #bottom-panel {
   position: absolute;
+}
+
+#left-panel,
+#center-panel,
+#right-panel {
   padding: 50px 0 0 0;
 }
 

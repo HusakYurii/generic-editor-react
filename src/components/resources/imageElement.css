@@ -1,0 +1,20 @@
+.image-preview {
+    width: 100px;
+    height: 120px;
+    margin: 5px;
+    padding: 5px;
+    background-color: #57686c;
+    user-select: none;
+}
+
+.image-preview > img {
+    height: 80px;
+    width: 100%;
+    clip: rect(0, 80px, 100px, 0);
+}
+
+.image-preview > p {
+    color: white;
+    font-size: 12px;
+    text-align: center;
+}
