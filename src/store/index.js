@@ -3,6 +3,7 @@ import { treeReducer } from "./tree";
 import { basePropertiesListReducer } from "./properties/base";
 import { spritePropertiesListReducer } from "./properties/sprite";
 import { entityTypesListReducer } from "./entityTypes";
+import { resourcesListReducer } from "./resources";
 
 /**
  * @typedef {{
@@ -10,6 +11,7 @@ import { entityTypesListReducer } from "./entityTypes";
  * basePropertiesList: import("./properties/base").IBasePropertiesListState;
  * spritePropertiesList: import("./properties/sprite").ISpritePropertiesListState;
  * entityTypesList: import("./entityTypes").IEntityTypesListState;
+ * resourcesList: import("./resources").IResourcesListState;
  * }} IStore
  */
 
@@ -24,7 +26,9 @@ const store = createStore(combineReducers({
     // map of id to sprite properties for nodes which have it
     spritePropertiesList: spritePropertiesListReducer,
     // contains the data about the components each entity has
-    entityTypesList: entityTypesListReducer
+    entityTypesList: entityTypesListReducer,
+    // all the Files loaded by a user
+    resourcesList: resourcesListReducer
 }));
 
 export default store;
