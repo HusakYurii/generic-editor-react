@@ -14,7 +14,7 @@ import "./imageElement.css";
  */
 const ImageElementComponent = (props) => {
     return (
-        <div className="image-preview" style={{ backgroundImage: `url(${props.resource.url})` }}>
+        <div id={props.id} className="image-preview" data-type="image-preview" style={{ backgroundImage: `url(${props.resource.url})` }}>
             {props.resource.name}
         </div>
     )

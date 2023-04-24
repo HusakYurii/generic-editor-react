@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import { connect } from "react-redux";
-
-import "./treeOptionsPopup.css";
 
 import { NODE_DATA_TYPE_ATTRIBUTE } from "../tree";
 
@@ -11,8 +9,12 @@ import { initBasePropertiesAction, removeBasePropertiesAction } from "../../stor
 import { initSpritePropertiesAction, removeSpritePropertiesAction } from "../../store/properties/sprite";
 import { ENTITY_TYPES, ROOT_NODE_ID } from "../../data/StoreData";
 import { getUID } from "../../tools/uidGenerator";
+import { PopupWithOptions, REMOVE_OPTION } from "../optionsPopup";
 
-const REMOVE_OPTION = "REMOVE";
+const OPTIONS_MAP = [
+    { id: ENTITY_TYPES.CONTAINER, option: "Add Container" },
+    { id: ENTITY_TYPES.SPRITE, option: "Add Sprite" },
+]
 
 /**
  * @typedef {{
@@ -33,91 +35,60 @@ const REMOVE_OPTION = "REMOVE";
  * @param { TreeOptionsPopupComponentDependencies} props 
  */
 const TreeOptionsPopupComponent = (props) => {
+    const optionsMap = [...OPTIONS_MAP];
 
-    const [position, setPosition] = useState({ top: 0, left: 0 });
-    const [isVisible, setVisibility] = useState(false);
-    const [hoveredNodeID, setHoveredNodeID] = useState(null);
-    const popupRef = useRef(null);
-
-    const onContextmenu = ({ target, clientX, clientY }) => {
-        const type = target.getAttribute("data-type");
-        const id = target.getAttribute("data-id");
-        if (id && type && type === NODE_DATA_TYPE_ATTRIBUTE) {
-            setVisibility(true);
-            setPosition({ top: clientY - 5, left: clientX - 5 });
-            setHoveredNodeID(Number(id));
-        }
+    const canShowRemoveOption = (hoveredElement) => {
+        /* ROOT_NODE_ID can't be deleted so the option will become disabled */
+        const id = hoveredElement ? hoveredElement.getAttribute("data-id") : undefined;
+        return id && Number(id) !== ROOT_NODE_ID;
     };
 
-    useEffect(() => {
-        window.addEventListener("contextmenu", onContextmenu);
-        return () => window.removeEventListener("contextmenu", onContextmenu);
-    }, []);
-
-    const onMouseleave = () => {
-        setVisibility(false);
-        setPosition({ top: 0, left: 0 });
-        setHoveredNodeID(null);
+    const canProcessContextMenu = (event) => {
+        const type = event.target.getAttribute("data-type");
+        const id = event.target.getAttribute("data-id");
+        return (id && type && type === NODE_DATA_TYPE_ATTRIBUTE)
     };
 
-    useEffect(() => {
-        // we know that when the useEffect fires the ref element will be there
-        popupRef.current.addEventListener("mouseleave", onMouseleave);
-        return () => popupRef.current.removeEventListener("mouseleave", onMouseleave);
-    }, []);
+    const canProcessClick = (event) => {
+        return Boolean(event.target.getAttribute("data-option"));
+    };
 
-    const onClick = (event) => {
+    const processClick = (event, hoveredElement) => {
         const option = event.target.getAttribute("data-option");
-        if (!option) {
-            return;
-        }
+        const id = Number(hoveredElement.getAttribute("data-id"));
 
         if (option === REMOVE_OPTION) {
-            props.deleteNodeAction(hoveredNodeID);
-            props.removeEntityAction(hoveredNodeID);
-            props.removeBasePropertiesAction(hoveredNodeID);
-            props.removeSpritePropertiesAction(hoveredNodeID);
+            props.deleteNodeAction(id);
+            props.removeEntityAction(id);
+            props.removeBasePropertiesAction(id);
+            props.removeSpritePropertiesAction(id);
         }
         else {
-            const id = getUID();
-            props.createNodeAction(hoveredNodeID, id);
-            props.initBasePropertiesAction(id);
+            const newID = getUID();
+            props.createNodeAction(id, newID);
+            props.initBasePropertiesAction(newID);
 
             if (option === ENTITY_TYPES.SPRITE) {
-                props.initSpriteEntityAction(id);
-                props.initSpritePropertiesAction(id);
+                props.initSpriteEntityAction(newID);
+                props.initSpritePropertiesAction(newID);
             }
             else if (option === ENTITY_TYPES.CONTAINER) {
-                props.initContainerEntityAction(id);
+                props.initContainerEntityAction(newID);
             }
         }
-
-        onMouseleave();
-    }
+    };
 
     return (
-        <div
-            id="tree-options-popup"
-            ref={popupRef}
-            style={{ ...position, display: isVisible ? "block" : "none" }}
-            onClick={onClick}
-        >
-            <div data-option={ENTITY_TYPES.CONTAINER}>Add Container</div>
-            <div data-option={ENTITY_TYPES.SPRITE}>Add Sprite</div>
-
-            {/* ROOT_NODE_ID can't be deleted so the option will become disabled */}
-            <div data-option={REMOVE_OPTION}
-                className="remove-option"
-                style={{ display: hoveredNodeID !== ROOT_NODE_ID ? "block" : "none" }}
-            >Remove</div>
-        </div>
+        <PopupWithOptions {
+            ...{ canShowRemoveOption, canProcessContextMenu, canProcessClick, processClick, optionsMap }
+        } />
     );
 };
 
 /**
  * @param {import("../../store").IStore} data 
  */
-const mapStateToProps = ({ tree }) => {
+const mapStateToProps = ({ }) => {
     return {};
 };
 
