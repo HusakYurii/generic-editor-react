@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { NODE_DATA_TYPE_ATTRIBUTE } from "../tree";
+import { NODE_DATA_TYPE_ATTRIBUTE } from ".";
 
 import { createNodeAction, deleteNodeAction } from "../../store/tree";
 import { initContainerEntityAction, initSpriteEntityAction, removeEntityAction } from "../../store/entityTypes";
