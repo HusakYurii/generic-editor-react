@@ -7,6 +7,7 @@ import { TreeElement } from "./components/tree";
 import { PropertiesPanel } from "./components/properties";
 import { TreeOptionsPopup } from "./components/treeOptions";
 import { ResourcesPanel } from "./components/resources";
+import { ResourcesOptionsPopup } from "./components/resourcesOptions";
 
 
 export const App = () => {
@@ -17,11 +18,14 @@ export const App = () => {
       <Header />
       <div id="left-panel">
         <TreeElement />
-        <TreeOptionsPopup />
       </div>
       <div id="center-panel">"preview"</div>
       <div id="right-panel"><PropertiesPanel /></div>
-      <div id="bottom-panel"><ResourcesPanel /></div>
+      <div id="bottom-panel">
+        <ResourcesPanel />
+      </div>
+      <TreeOptionsPopup />
+      <ResourcesOptionsPopup />
     </>
   );
 }
