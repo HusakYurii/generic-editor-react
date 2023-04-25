@@ -53,7 +53,7 @@ const ResourcesOptionsPopupComponent = (props) => {
             props.removeResourceAction(id);
         }
         else {
-            const imageLoaderElement = createImageLoader("image/png, image/jpeg", (files) => {
+            const imageLoaderElement = createImageLoader("image/png, image/jpeg, image/jpg", (files) => {
                 files.forEach(file => props.addResourceAction(getUID(), file));
             });
             imageLoaderElement.click();
