@@ -1,0 +1,4 @@
+export const RESOURCE_ACTIONS = Object.freeze({
+    ADD_RESOURCE: "ADD_RESOURCE",
+    REMOVE_RESOURCE: "REMOVE_RESOURCE",
+});
