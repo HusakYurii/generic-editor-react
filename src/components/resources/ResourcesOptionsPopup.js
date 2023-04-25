@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 
 import { addResourceAction, removeResourceAction } from "../../store/resources";
 import { getUID } from "../../tools/uidGenerator";
+import { createImageLoader } from "../../tools/resourcesTools";
 import { REMOVE_OPTION, PopupWithOptions } from "../optionsPopup";
 
 const OPTIONS = {
@@ -49,11 +50,13 @@ const ResourcesOptionsPopupComponent = (props) => {
         const id = Number(hoveredElement.getAttribute("id"));
 
         if (option === REMOVE_OPTION) {
-            console.log("remove", id)
+            props.removeResourceAction(id);
         }
         else {
-            const id = getUID();
-            console.log("add")
+            const imageLoaderElement = createImageLoader("image/png, image/jpeg", (files) => {
+                files.forEach(file => props.addResourceAction(getUID(), file));
+            });
+            imageLoaderElement.click();
         }
     };
 
