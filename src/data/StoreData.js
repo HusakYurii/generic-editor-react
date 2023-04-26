@@ -45,7 +45,7 @@ export const getSpriteProperties = (id) => {
     return {
         [id]: {
             anchor: { x: 0, y: 0 },
-            textureName: ""
+            resourceID: null
         }
     }
 };

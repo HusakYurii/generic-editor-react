@@ -17,6 +17,13 @@
     width: 33%;
 }
 
-#sprite-properties select {
+#sprite-properties textarea {
     width: 66%;
+    height: 19px;
+    resize: none;
+    background-color: white;
+}
+
+#sprite-properties textarea.dragOver {
+    background-color: rgb(243, 123, 62);
 }

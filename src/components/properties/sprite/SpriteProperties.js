@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { connect } from "react-redux";
 import { updateSpritePropertiesAction } from "../../../store/properties/sprite";
@@ -9,6 +9,7 @@ import "./spriteProperties.css";
 /**
  * @typedef {{
  * selectedNodeID: number | null;
+ * resourcesList: import("../../../store/resources").IResourcesListState
  * spritePropertiesList: import("../../../store/properties/sprite").ISpritePropertiesListState;
  * updateSpritePropertiesAction: typeof updateSpritePropertiesAction;
  * }} SpritePropertiesComponentDependencies
@@ -23,9 +24,17 @@ const SpritePropertiesComponent = (props) => {
 
     const id = props.selectedNodeID;
 
-    const { anchor, textureName } = props.spritePropertiesList[id];
+    const { anchor, resourceID } = props.spritePropertiesList[id];
 
-    const onChange = (event) => {
+    const resource = props.resourcesList[resourceID];
+    const resourceName = resource ? resource.name : "";
+
+    useEffect(() => {
+        // Edge case when a resource get's removed from resources but the id is still in the sprite property
+        if (resourceID && !resource) props.updateSpritePropertiesAction({ nodeID: id, resourceID: null });
+    }, [resource]);
+
+    const onInputChange = (event) => {
         const [groupName, valueName] = event.target.id.split("-");
         const value = parseFloat(event.target.value);
 
@@ -35,26 +44,38 @@ const SpritePropertiesComponent = (props) => {
         props.updateSpritePropertiesAction(payload);
     };
 
-    const onTextureChange = (event) => {
-        const payload = { nodeID: id, textureName: event.target.value };
+    /* for some reason preventDefault() has to be used otherwise onDrop event will not work */
+    const onDragOver = (event) => event.preventDefault();
+    const onDragEnter = ({ target }) => target.classList.add("dragOver");
+    const onDragLeave = ({ target }) => target.classList.remove("dragOver");
 
-        props.updateSpritePropertiesAction(payload);
-    }
+    const onDrop = (event) => {
+        onDragLeave(event);
+
+        // @TODO find another way of doing it. I tried to add it to the dataTransfer.items, but it didn't work
+        if (!window["__RESOURCE_ID"]) { return; }
+
+        props.updateSpritePropertiesAction({ nodeID: id, resourceID: window["__RESOURCE_ID"] });
+        window["__RESOURCE_ID"] = undefined;
+    };
 
     return (
         <div id="sprite-properties" className="properties">
             <div>
                 <span>Texture</span>
-                {/* @TODO FINISH IT. IT should be connected to the actual textures in the assets component */}
-                <select name="texture" id="texture-select" onChange={onTextureChange}>
-                    <option value="Empty">Empty</option>
-                    <option value="Example">Example</option>
-                </select>
+                <textarea
+                    id="texture"
+                    disabled value={resourceName}
+                    onDragOver={onDragOver}
+                    onDragEnter={onDragEnter}
+                    onDragLeave={onDragLeave}
+                    onDrop={onDrop}
+                ></textarea>
             </div>
             <div>
                 <span>Anchor</span>
-                <input type="number" id="anchor-x" value={anchor.x} onChange={onChange}></input>
-                <input type="number" id="anchor-y" value={anchor.y} onChange={onChange}></input>
+                <input type="number" id="anchor-x" value={anchor.x} onChange={onInputChange}></input>
+                <input type="number" id="anchor-y" value={anchor.y} onChange={onInputChange}></input>
             </div>
         </div>
     )
@@ -63,10 +84,11 @@ const SpritePropertiesComponent = (props) => {
 /**
  * @param {import("../../../store").IStore} data 
  */
-const mapStateToProps = ({ tree, spritePropertiesList }) => {
+const mapStateToProps = ({ tree, spritePropertiesList, resourcesList }) => {
     return {
         spritePropertiesList: spritePropertiesList,
-        selectedNodeID: tree.selectedNodeID
+        selectedNodeID: tree.selectedNodeID,
+        resourcesList: resourcesList
     }
 };
 
