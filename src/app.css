@@ -13,14 +13,8 @@
   position: absolute;
 }
 
-#left-panel,
-#center-panel,
-#right-panel {
-  padding: 50px 0 0 0;
-}
-
 #left-panel {
-  top: 0;
+  top: 40px;
   left: 0;
   bottom: 0;
   width: 250px;
@@ -28,15 +22,15 @@
 }
 
 #center-panel {
-  top: 0;
+  top: 40px;
   right: 250px;
   left: 250px;
-  height: calc(100% - 200px);
+  height: calc(100% - 200px - 40px);
   background-color: #ffffff;
 }
 
 #right-panel {
-  top: 0;
+  top: 40px;
   bottom: 0;
   right: 0;
   width: 250px;
