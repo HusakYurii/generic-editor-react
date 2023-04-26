@@ -33,9 +33,18 @@ const ImageElementComponent = (props) => {
         return () => (proxy.setParsedResource = () => { });
     }, [])
 
+    // @TODO find another way of doing it. I tried to add it to the dataTransfer.items, but it didn't work
+    const onDragStart = () => window["__RESOURCE_ID"] = props.id;
 
     return (
-        <div id={props.id} className="image-preview" data-type="image-preview" style={{ backgroundImage: `url(${parsedResource.url})` }}>
+        <div
+            draggable
+            id={props.id}
+            onDragStart={onDragStart}
+            className="image-preview"
+            data-type="image-preview"
+            style={{ backgroundImage: `url(${parsedResource.url})` }}
+        >
             {parsedResource.name}
         </div>
     )
