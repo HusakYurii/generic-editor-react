@@ -25,8 +25,8 @@ import { BASE_PROPERTIES_ACTIONS } from "./actionTypes";
  * By default the root node has the base properties
  * @typeof IBasePropertiesListState
  */
-// const STATE = defaultStoreData.properties.base;
-const STATE = mockStoreData.properties.base;
+const STATE = defaultStoreData.properties.base;
+// const STATE = mockStoreData.properties.base;
 
 /**
  * 

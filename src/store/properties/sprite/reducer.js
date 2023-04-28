@@ -23,8 +23,8 @@ import { SPRITE_PROPERTIES_ACTIONS } from "./actionTypes";
 /**
  * @typeof ISpritePropertiesListState
  */
-// const STATE = defaultStoreData.properties.sprite;
-const STATE = mockStoreData.properties.sprite;
+const STATE = defaultStoreData.properties.sprite;
+// const STATE = mockStoreData.properties.sprite;
 
 /**
  * 

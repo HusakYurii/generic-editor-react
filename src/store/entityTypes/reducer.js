@@ -15,8 +15,8 @@ import { ENTITY_TYPES_LIST_ACTIONS } from "./actionTypes";
 /**
  * @typeof IEntityTypesListState
  */
-// const STATE = defaultStoreData.entitiesList;
-const STATE = mockStoreData.entitiesList;
+const STATE = defaultStoreData.entitiesList;
+// const STATE = mockStoreData.entitiesList;
 
 /**
  * 
