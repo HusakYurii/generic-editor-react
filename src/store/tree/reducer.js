@@ -14,8 +14,8 @@ import { mockStoreData } from "../../data/MockStreData";
 /**
  * @typeof ITreeState
  */
-// const STATE = defaultStoreData.tree
-const STATE = mockStoreData.tree
+const STATE = defaultStoreData.tree
+// const STATE = mockStoreData.tree
 
 /**
  * 

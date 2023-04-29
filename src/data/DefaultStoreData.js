@@ -11,7 +11,7 @@ export const defaultStoreData = {
         selectedNodeID: null
     },
     entitiesList: {
-        ...getEntityType(ROOT_NODE_ID, ENTITY_TYPES.CONTAINER, [AVAILABLE_PROPERTIES_LIST.BASE])
+        ...getEntityType(ROOT_NODE_ID, ENTITY_TYPES.CONTAINER, [])
     },
     properties: {
         base: {

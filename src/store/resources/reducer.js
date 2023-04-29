@@ -9,6 +9,9 @@ import { RESOURCE_ACTIONS } from "./actionTypes";
  */
 const STATE = {};
 
+export const onResourceAddMiddlewares = [];
+export const onResourceRemoveMiddlewares = []
+
 /**
  * 
  * @param {IResourcesListState} state 
@@ -19,12 +22,15 @@ export const resourcesListReducer = (state = STATE, { type, payload }) => {
     if (type === RESOURCE_ACTIONS.ADD_RESOURCE) {
         const newState = { ...state };
         newState[payload.id] = payload.file;
+        onResourceAddMiddlewares.forEach(middleware => middleware(payload.file));
         return newState;
     }
 
     else if (type === RESOURCE_ACTIONS.REMOVE_RESOURCE) {
         const newState = { ...state };
+        const file = newState[payload.id];
         delete newState[payload.id];
+        onResourceRemoveMiddlewares.forEach(middleware => middleware(file));
         return newState;
     }
     else {

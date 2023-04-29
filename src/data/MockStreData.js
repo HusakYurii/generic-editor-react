@@ -14,10 +14,10 @@ export const mockStoreData = {
         selectedNodeID: null
     },
     entitiesList: {
-        ...getEntityType(ROOT_NODE_ID, ENTITY_TYPES.CONTAINER, [AVAILABLE_PROPERTIES_LIST.BASE]),
-        ...getEntityType(123, ENTITY_TYPES.CONTAINER, [AVAILABLE_PROPERTIES_LIST.BASE]),
-        ...getEntityType(222, ENTITY_TYPES.CONTAINER, [AVAILABLE_PROPERTIES_LIST.BASE]),
-        ...getEntityType(645, ENTITY_TYPES.SPRITE, [AVAILABLE_PROPERTIES_LIST.BASE, AVAILABLE_PROPERTIES_LIST.SPRITE]),
+        ...getEntityType(ROOT_NODE_ID, ENTITY_TYPES.CONTAINER, []),
+        ...getEntityType(123, ENTITY_TYPES.CONTAINER, []),
+        ...getEntityType(222, ENTITY_TYPES.CONTAINER, []),
+        ...getEntityType(645, ENTITY_TYPES.SPRITE, []),
     },
     properties: {
         base: {
