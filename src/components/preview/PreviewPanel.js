@@ -6,7 +6,7 @@ import { ResizeController } from "./ResizeContoller";
 
 /**
  * @typedef {{
- * treeData:  import("../../store/tree").ITreeState;
+ * treeData:  import("../../data/NodeData").INodeData;
  * basePropertiesList: import("../../store/properties/base").IBasePropertiesListState;
  * spritePropertiesList: import("../../store/properties/sprite").ISpritePropertiesListState;
  * entityTypesList: import("../../store/entityTypes").IEntityTypesListState;
@@ -18,7 +18,7 @@ import { ResizeController } from "./ResizeContoller";
  * @param { PreviewPanelComponentDependencies} props 
  */
 const PreviewPanelComponent = ({
-    tree,
+    treeData,
     basePropertiesList,
     spritePropertiesList,
     entityTypesList,
@@ -59,7 +59,7 @@ const PreviewPanelComponent = ({
             <AppContext.Consumer>
                 {setApp}
             </AppContext.Consumer>
-            {createPixiTree(tree.treeData, basePropertiesList, spritePropertiesList, entityTypesList, resourcesList)}
+            {createPixiTree(treeData, basePropertiesList, spritePropertiesList, entityTypesList, resourcesList)}
         </Stage>
     );
 };
@@ -69,7 +69,7 @@ const PreviewPanelComponent = ({
  */
 const mapStateToProps = ({ tree, resourcesList, basePropertiesList, spritePropertiesList, entityTypesList }) => {
     return {
-        tree,
+        treeData: tree.treeData,
         basePropertiesList,
         spritePropertiesList,
         entityTypesList,
