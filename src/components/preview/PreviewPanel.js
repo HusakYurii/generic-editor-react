@@ -1,48 +1,8 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
-import { ENTITY_TYPES } from "../../data/StoreData";
-import { Stage, Container, Sprite } from 'react-pixi-fiber';
-import { utils, Texture } from "pixi.js";
-
-// class ResizeController {
-//     constructor(renderer, { width = 900, height = 900 } = {}) {
-
-//         this._renderer = renderer;
-//         this._designSize = { width, height };
-
-//         this.currentSize = { width, height };
-//         this.onResize = (currentSize) => { }
-//     }
-
-//     /**
-//      * @param {{ width: number; height: number;}} newSizes 
-//      */
-//     resize(newSizes) {
-//         const { width, height } = this._designSize;
-
-//         const containerHeight = newSizes.height;
-//         const containerWidth = newSizes.width;
-
-//         const isPortrait = containerHeight > containerWidth;
-//         const gameSize = { width: 0, height: 0 };
-
-//         if (isPortrait) {
-//             gameSize.width = width | 0;
-//             gameSize.height = (height * (containerHeight / containerWidth)) | 0;
-//         } else {
-//             gameSize.height = height | 0;
-//             gameSize.width = (width * (containerWidth / containerHeight)) | 0;
-//         }
-
-//         this._renderer.resize(gameSize.width, gameSize.height);
-//         this._renderer.view.style.width = `${containerWidth}px`;
-//         this._renderer.view.style.height = `${containerHeight}px`;
-
-//         this.currentSize = gameSize;
-//         this.onResize && this.onResize({ ...gameSize })
-//     }
-// }
-
+import { Stage } from 'react-pixi-fiber';
+import { createPixiTree } from "./custom/createPixiTree";
+import { ResizeController } from "./ResizeContoller";
 
 /**
  * @typedef {{
@@ -53,7 +13,6 @@ import { utils, Texture } from "pixi.js";
  * resourcesList: import("../../store/resources").IResourcesListState;
  * }} PreviewPanelComponentDependencies
  */
-
 
 /**
  * @param { PreviewPanelComponentDependencies} props 
@@ -66,34 +25,31 @@ const PreviewPanelComponent = ({
     resourcesList
 }) => {
 
-    const createPixiTree = (nodeData) => {
-        const entity = entityTypesList[nodeData.id];
+    const stageRef = useRef(null);
 
-        if (entity.type === ENTITY_TYPES.CONTAINER) {
-            const { position, scale, rotation } = basePropertiesList[nodeData.id];
-            return (
-                <Container key={nodeData.id} x={position.x} y={position.y}>
-                    {nodeData.nodes.map(createPixiTree)}
-                </Container>
-            );
-        }
-        if (entity.type === ENTITY_TYPES.SPRITE) {
-            const { position, scale, rotation } = basePropertiesList[nodeData.id];
-            const { anchor, resourceID } = spritePropertiesList[nodeData.id];
-            const resource = resourcesList[resourceID];
+    useEffect(() => {
+        // I could have used the AppContext to provide the reference to the app, but I would need to create an extra
+        // component, which maybe redundant, and move logic there. But accessing private properties works for the prototype
+        const stage = stageRef.current._app.current.stage;
+        const renderer = stageRef.current._app.current.renderer;
+        const parentDivElement = stageRef.current._canvas.current.parentElement;
 
-            const texture = resource ? Texture.from(resource.name) : Texture.EMPTY;
-            return (
-                <Sprite key={nodeData.id} texture={texture} x={position.x} y={position.y}>
-                    {nodeData.nodes.map(createPixiTree)}
-                </Sprite>
-            );
-        }
-    }
+        const resizeController = new ResizeController(renderer, { width: 950, height: 950 });
+
+        const observer = new ResizeObserver(() => {
+            resizeController.resize({ width: parentDivElement.offsetWidth, height: parentDivElement.offsetHeight });
+            // I could have used useState and pass x,y to the <Stage/> but that makes an extra rendering call I don't need
+            stage.position.set(resizeController.size.width / 2, resizeController.size.height / 2)
+        });
+
+        observer.observe(parentDivElement);
+
+        return () => observer.unobserve(parentDivElement);
+    }, [])
 
     return (
-        <Stage options={{ backgroundColor: 0xc2c2c2 }}>
-            {createPixiTree(tree.treeData)}
+        <Stage ref={stageRef} options={{ backgroundColor: 0xc2c2c2 }}>
+            {createPixiTree(tree.treeData, basePropertiesList, spritePropertiesList, entityTypesList, resourcesList)}
         </Stage>
     );
 };
@@ -111,9 +67,6 @@ const mapStateToProps = ({ tree, resourcesList, basePropertiesList, spriteProper
     };
 };
 
-
 export const PreviewPanel = connect(
-    mapStateToProps,
-    {
-    }
+    mapStateToProps, {}
 )(PreviewPanelComponent)
