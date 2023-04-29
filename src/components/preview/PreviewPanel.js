@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { connect } from "react-redux";
-import { Stage } from 'react-pixi-fiber';
+import { Stage, AppContext } from 'react-pixi-fiber';
 import { createPixiTree } from "./custom/createPixiTree";
 import { ResizeController } from "./ResizeContoller";
 
@@ -25,16 +25,14 @@ const PreviewPanelComponent = ({
     resourcesList
 }) => {
 
-    const stageRef = useRef(null);
+    const pixiApp = useRef(null);
 
     useEffect(() => {
-        // I could have used the AppContext to provide the reference to the app, but I would need to create an extra
-        // component, which maybe redundant, and move logic there. But accessing private properties works for the prototype
-        const stage = stageRef.current._app.current.stage;
-        const renderer = stageRef.current._app.current.renderer;
-        const parentDivElement = stageRef.current._canvas.current.parentElement;
+        const stage = pixiApp.current.stage;
+        const renderer = pixiApp.current.renderer;
+        const parentDivElement = pixiApp.current.view.parentElement;
 
-        const resizeController = new ResizeController(renderer, { width: 950, height: 950 });
+        const resizeController = new ResizeController(renderer, { width: 1280, height: 1280 });
 
         const observer = new ResizeObserver(() => {
             resizeController.resize({ width: parentDivElement.offsetWidth, height: parentDivElement.offsetHeight });
@@ -45,10 +43,22 @@ const PreviewPanelComponent = ({
         observer.observe(parentDivElement);
 
         return () => observer.unobserve(parentDivElement);
-    }, [])
+    }, []);
+
+    // This is a small workaround to get the instance of the pixi app avoiding different issues
+    // when I tried to use withApp hook in combination with redux connect hook
+    const setApp = (app) => {
+        if (pixiApp.current) {
+            return;
+        }
+        pixiApp.current = app;
+    }
 
     return (
-        <Stage ref={stageRef} options={{ backgroundColor: 0xc2c2c2 }}>
+        <Stage options={{ backgroundColor: 0xc2c2c2 }}>
+            <AppContext.Consumer>
+                {setApp}
+            </AppContext.Consumer>
             {createPixiTree(tree.treeData, basePropertiesList, spritePropertiesList, entityTypesList, resourcesList)}
         </Stage>
     );
