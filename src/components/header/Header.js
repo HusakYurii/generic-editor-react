@@ -35,7 +35,14 @@ export const Header = () => {
             "mainData.json"
         );
 
-        convertResourcesRecursively(Object.entries(resourcesList), {}, (resources) => {
+        const resourcesToExport = Object.values(spritePropertiesList).reduce((acc, properties) => {
+            if (properties.resourceID) {
+                acc.push([properties.resourceID, resourcesList[properties.resourceID]])
+            }
+            return acc;
+        }, [])
+
+        convertResourcesRecursively(resourcesToExport, {}, (resources) => {
             exportJSONFile(
                 JSON.stringify(resources, null, 2),
                 "assesMapAsBase64.json"
