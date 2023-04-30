@@ -1,14 +1,14 @@
 import { defaultStoreData } from "../../data/DefaultStoreData";
 import { mockStoreData } from "../../data/MockStreData";
-import { AVAILABLE_PROPERTIES_LIST, ENTITY_TYPES, getEntityType } from "../../data/StoreData";
+import { AVAILABLE_COMPONENTS, ENTITY_TYPES, getEntityType } from "../../data/StoreData";
 import { ENTITY_TYPES_LIST_ACTIONS } from "./actionTypes";
 
 /**
- * @typedef {{ nodeID: number; property: keyof AVAILABLE_PROPERTIES_LIST; }} IActionPayload 
+ * @typedef {{ nodeID: number; property: keyof AVAILABLE_COMPONENTS; }} IActionPayload 
  */
 
 /**
- * @typedef {{ [nodeID: number]: {type: keyof ENTITY_TYPES, properties: Array<keyof AVAILABLE_PROPERTIES_LIST> } }} IEntityTypesListState;
+ * @typedef {{ [nodeID: number]: {type: keyof ENTITY_TYPES, properties: Array<keyof AVAILABLE_COMPONENTS> } }} IEntityTypesListState;
  */
 
 
@@ -45,14 +45,14 @@ export const entityTypesListReducer = (state = STATE, { type, payload }) => {
         delete newState[payload.nodeID];
         return newState;
     }
-    // I haven't decided if the editor will support some extra props like collision  box or mask etc
+    // I haven't decided if the editor will support some extra COMPONENTS like collision  box or mask etc
 
-    // else if (type === ENTITY_TYPES_LIST_ACTIONS.ADD_EXTRA_ENTITY_PROPS) {
+    // else if (type === ENTITY_TYPES_LIST_ACTIONS.ADD_EXTRA_ENTITY_COMPONENTS) {
     //     const newState = { ...state };
     //     newState[payload.nodeID].properties.push(payload.property);
     //     return newState;
     // }
-    // else if (type === ENTITY_TYPES_LIST_ACTIONS.REMOVE_EXTRA_ENTITY_PROPS) {
+    // else if (type === ENTITY_TYPES_LIST_ACTIONS.REMOVE_EXTRA_ENTITY_COMPONENTS) {
     //     const newState = { ...state };
     //     newState[payload.nodeID].properties = newState[payload.nodeID].properties
     //         .filter(val => val !== payload.property);

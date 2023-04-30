@@ -1,5 +1,5 @@
 import { createNode } from "./NodeData";
-import { AVAILABLE_PROPERTIES_LIST, ENTITY_TYPES, ROOT_NODE_ID, getBaseProperties, getEntityType, getSpriteProperties } from "./StoreData";
+import { ENTITY_TYPES, ROOT_NODE_ID, getBaseProperties, getEntityType, getSpriteProperties } from "./StoreData";
 
 export const mockStoreData = {
     tree: {

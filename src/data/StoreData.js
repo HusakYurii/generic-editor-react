@@ -1,7 +1,7 @@
 export const ROOT_NODE_ID = 1;
 
-// I haven't decided if the editor will support some extra props like collision  box or mask etc
-export const AVAILABLE_PROPERTIES_LIST = {
+// I haven't decided if the editor will support some extra COMPONENTS like collision  box or mask etc
+export const AVAILABLE_COMPONENTS = {
     MASK: "MASK",
     HIT_AREA: "HIT_AREA"
 };
@@ -20,13 +20,13 @@ export const ENTITY_TYPES = {
  * 
  * @param {number} id 
  * @param {keyof ENTITY_TYPES} type 
- * @param {Array<keyof AVAILABLE_PROPERTIES_LIST>} properties 
+ * @param {Array<keyof AVAILABLE_COMPONENTS>} properties 
  */
-export const getEntityType = (id, type, properties = []) => {
+export const getEntityType = (id, type, components = []) => {
     return {
         [id]: {
             type,
-            properties
+            components
         }
     }
 }
