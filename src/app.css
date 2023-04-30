@@ -14,7 +14,7 @@
 }
 
 #left-panel {
-  top: 40px;
+  top: 50px;
   left: 0;
   bottom: 0;
   width: 250px;
@@ -22,15 +22,15 @@
 }
 
 #center-panel {
-  top: 40px;
+  top: 50px;
   right: 250px;
   left: 250px;
-  height: calc(100% - 200px - 40px);
+  height: calc(100% - 200px - 50px);
   background-color: #ffffff;
 }
 
 #right-panel {
-  top: 40px;
+  top: 50px;
   bottom: 0;
   right: 0;
   width: 250px;
