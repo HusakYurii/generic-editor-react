@@ -12,3 +12,7 @@
 #name-property input {
     width: 66%;
 }
+
+#name-property input.invalid {
+    outline: 2px solid red;
+}

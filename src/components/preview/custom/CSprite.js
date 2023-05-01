@@ -1,6 +1,7 @@
 
 import { CustomPIXIComponent } from "react-pixi-fiber";
 import { Sprite } from "pixi.js";
+import { toRadians } from "../../../tools/math";
 
 export const behavior = {
     customDisplayObject: () => new Sprite(),
@@ -10,7 +11,7 @@ export const behavior = {
         instance.position.set(position.x, position.y);
         instance.scale.set(scale.x, scale.y);
         instance.anchor.set(anchor.x, anchor.y);
-        instance.rotation = rotation;
+        instance.rotation = toRadians(rotation);
     }
 };
 export const CSprite = CustomPIXIComponent(behavior, "CSprite");
