@@ -22,7 +22,7 @@ export const resourcesListReducer = (state = STATE, { type, payload }) => {
     if (type === RESOURCE_ACTIONS.ADD_RESOURCE) {
         const newState = { ...state };
         newState[payload.id] = payload.file;
-        onResourceAddMiddlewares.forEach(middleware => middleware(payload.file));
+        onResourceAddMiddlewares.forEach(middleware => middleware([payload.file]));
         return newState;
     }
 
@@ -30,13 +30,13 @@ export const resourcesListReducer = (state = STATE, { type, payload }) => {
         const newState = { ...state };
         const file = newState[payload.id];
         delete newState[payload.id];
-        onResourceRemoveMiddlewares.forEach(middleware => middleware(file));
+        onResourceRemoveMiddlewares.forEach(middleware => middleware([file]));
         return newState;
     }
 
     else if (type === RESOURCE_ACTIONS.IMPORT_RESOURCES) {
-        Object.values(payload)
-            .forEach(file => onResourceAddMiddlewares.forEach(middleware => middleware(file)))
+        const files = Object.values(payload);
+        onResourceAddMiddlewares.forEach(middleware => middleware(files));
         return { ...payload };
     }
 

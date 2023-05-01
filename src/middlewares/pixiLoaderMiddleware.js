@@ -1,5 +1,5 @@
 import { Texture, utils, BaseTexture } from "pixi.js";
-import { convertFilesToBase64 } from "../tools/resourcesTools";
+import { convertImageFilesToBase64 } from "../tools/resourcesTools";
 
 /**
  * Because I use the pixi as the renderer in this editor I need to preload the resources to the pixi texture cache
@@ -19,7 +19,7 @@ const pixiLoaderMiddleware = (textureCache, baseTextureCache) => {
                 assets = [assets]
             }
 
-            convertFilesToBase64(assets, (convertedAssets) => {
+            convertImageFilesToBase64(assets, (convertedAssets) => {
                 convertedAssets.forEach(({ name, url }) => {
                     const image = new Image();
                     image.src = url;
