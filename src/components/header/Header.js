@@ -1,8 +1,16 @@
 import React from "react";
+import { connect } from "react-redux";
 import "./header.css";
+
 import store from "../../store";
-import { convertFileToBase64, exportJSONFile } from "../../tools/resourcesTools";
+import { importEntityDataAction } from "../../store/entityTypes";
+import { importBasePropertiesAction } from "../../store/properties/base";
+import { importSpritePropertiesAction } from "../../store/properties/sprite";
+import { importResourcesAction } from "../../store/resources";
+import { importTreeDataAction } from "../../store/tree";
+import { base64ImageToFile, convertImageFileToBase64, convertJSONFilesToText, createJSONLoader, exportJSONFile } from "../../tools/resourcesTools";
 import { VERSION } from "../../VERSION";
+
 
 /**
  * 
@@ -19,7 +27,7 @@ const convertResourcesRecursively = (queue, memo, onFinish) => {
 
     const [id, file] = queue.shift();
 
-    convertFileToBase64(file, (data) => {
+    convertImageFileToBase64(file, (data) => {
         memo[id] = data;
         convertResourcesRecursively(queue, memo, onFinish);
     });
@@ -78,18 +86,79 @@ const exportMainData = (store) => {
     );
 };
 
+/**
+ * @typedef {{
+ * importEntityDataAction: typeof importEntityDataAction; 
+ * importBasePropertiesAction: typeof importBasePropertiesAction; 
+ * importSpritePropertiesAction: typeof importSpritePropertiesAction; 
+ * importResourcesAction: typeof importResourcesAction; 
+ * importTreeDataAction: typeof importTreeDataAction;
+ * }} HeaderComponentDependencies
+ */
 
-export const Header = () => {
+/**
+* Each node must have base properties
+* @param { HeaderComponentDependencies} props 
+*/
+export const HeaderComponent = (props) => {
 
     const exportData = () => {
         exportMainData(store);
         exportResourcesAsBase64(store);
     };
 
+    const importData = () => {
+        const jsonLoader = createJSONLoader((files) => {
+            convertJSONFilesToText(files, (convertedFiles) => {
+
+                /**
+                 * @param {Array<[string, File]>} queue 
+                 * @param {object} memo 
+                 * @param {(daa: object) => void} onFinish 
+                 * @returns 
+                 */
+                const convertResourcesRecursively = (queue, memo, onFinish) => {
+                    if (queue.length === 0) {
+                        onFinish(memo);
+                        return;
+                    }
+
+                    const [id, file] = queue.shift();
+
+                    base64ImageToFile(file, (data) => {
+                        memo[id] = data;
+                        convertResourcesRecursively(queue, memo, onFinish);
+                    });
+                }
+
+                const dataFiles = convertedFiles.map((file) => JSON.parse(file.url));
+
+
+                const mainDataFile = dataFiles.find(({ meta }) => meta.type === "data-main");
+                if (mainDataFile) {
+                    props.importBasePropertiesAction(mainDataFile.basePropertiesList);
+                    props.importSpritePropertiesAction(mainDataFile.spritePropertiesList);
+                    props.importEntityDataAction(mainDataFile.entityTypesList);
+                    props.importTreeDataAction(mainDataFile.treeData);
+                }
+
+                const resourcesDataFile = dataFiles.find(({ meta }) => meta.type === "data-resources-base64");
+                if (resourcesDataFile) {
+                    convertResourcesRecursively(
+                        Object.entries(resourcesDataFile.resources), {}, (convertedResources) => {
+                            props.importResourcesAction(convertedResources);
+                        });
+                }
+            });
+        });
+        jsonLoader.click();
+
+    }
+
     return (
         <header>
             <div id="processor-options">
-                <span id="upload-option">Upload File</span>
+                <span onClick={importData} id="upload-option">Upload File</span>
                 <span onClick={exportData} id="export-option">Export File</span>
             </div>
             <div>
@@ -99,4 +168,20 @@ export const Header = () => {
             </div>
         </header>
     );
-}
+};
+
+
+const mapStateToProps = (store) => {
+    return {}
+};
+
+export const Header = connect(
+    mapStateToProps,
+    {
+        importEntityDataAction,
+        importBasePropertiesAction,
+        importSpritePropertiesAction,
+        importResourcesAction,
+        importTreeDataAction,
+    }
+)(HeaderComponent)

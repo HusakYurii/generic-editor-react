@@ -22,6 +22,13 @@ export const removeEntityAction = (id) => {
     return { type: ENTITY_TYPES_LIST_ACTIONS.REMOVE_ENTITY, payload: {nodeID: id} }
 };
 
+/**
+ * @param {import ("./reducer").IEntityTypesListState} payload 
+ */
+export const importEntityDataAction = (payload) => {
+    return { type: ENTITY_TYPES_LIST_ACTIONS.IMPORT_ENTITY_DATA, payload }
+};
+
 // I haven't decided if the editor will support some extra props like collision  box or mask etc
    
 

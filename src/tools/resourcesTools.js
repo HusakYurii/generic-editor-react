@@ -1,31 +1,67 @@
 
 /**
- * 
+ * Generic function to convert a File object
  * @param {File} file 
+ * @param {"base64" | "text"} type 
  * @param {(data: {name: string, url: string})=> void} onLoad
  * @param {(error: unknown)=> void} [orError]
  */
-export const convertFileToBase64 = (file, onLoad, orError = (err) => console.error(err)) => {
+const convertFileTo = (file, type, onLoad, orError = (err) => console.error(err)) => {
     const reader = new FileReader();
-    reader.readAsDataURL(file);
     reader.onerror = orError;
     reader.onload = () => onLoad({ name: file.name, url: reader.result });
+    const method = type === "base64" ? "readAsDataURL" : "readAsText";
+    reader[method](file);
 }
 
 /**
- * 
  * @param {File[]} files 
  * @param {(data: Array<{name: string, url: string}>)=> void} cb
  */
-export const convertFilesToBase64 = (files, cb) => {
+export const convertImageFilesToBase64 = (files, cb) => {
 
-    const convertFileAsync = async (file) => {
-        return new Promise((res, rej) => convertFileToBase64(file, res, rej));
-    }
+    const convertFile = (file) => {
+        return new Promise((res, rej) => {
+            convertFileTo(file, "base64", res, rej)
+        });
+    };
 
-    Promise.all(files.map(convertFileAsync))
+    Promise.all(files.map(convertFile))
         .then(cb)
         .catch(err => console.error(err));
+}
+
+/**
+ * @param {File} file 
+ * @param {(data: {name: string, url: string})=> void} onLoad
+ */
+export const convertImageFileToBase64 = (file, onLoad) => {
+    convertFileTo(file, "base64", onLoad);
+}
+
+
+/**
+ * @param {File[]} files 
+ * @param {(data: Array<{name: string, url: string}>)=> void} cb
+ */
+export const convertJSONFilesToText = (files, cb) => {
+    const convertFile = (file) => {
+        return new Promise((res, rej) => {
+            convertFileTo(file, "text", res, rej)
+        });
+    };
+
+    Promise.all(files.map(convertFile))
+        .then(cb)
+        .catch(err => console.error(err));
+}
+
+/**
+ * @param {File} file
+ * @param {(data: {name: string, url: string})=> void} cb
+ */
+export const convertJSONFileToText = (file, cb) => {
+    convertFileTo(file, "text", cb);
 }
 
 /**
@@ -57,22 +93,25 @@ export const createImagesLoader = (onLoaded) => {
 
 /**
  * @param {string} acceptFileTypes
- * @param {(files: File) => void} onLoaded
+ * @param {(files: File[]) => void} onLoaded
  * @returns HTMLInputElement
  */
 export const createJSONLoader = (onLoaded) => {
-    return createLoader("application/json", false, (files) => {
-        onLoaded(files[0])
-    })
+    return createLoader("application/json", true, onLoaded);
 };
 
 /**
- * @param {Array<{name: string, url: string}>}
- * @returns {Array<{name: string, file: File}>} 
+ * 
+ * @param {{name: string, url: string}} param0 
+ * @param {{(file: File) => void}} onComplete 
  */
-export const base64ToFile = (url, filename) => {
-    // https://stackoverflow.com/questions/35940290/how-to-convert-base64-string-to-javascript-file-object-like-as-from-file-input-f
-}
+export const base64ImageToFile = ({ name, url }, onComplete) => {
+    const mimeType = url.match(/:(.*?);/)[1];
+    fetch(url)
+        .then((response) => response.arrayBuffer())
+        .then((buffer) => new File([buffer], name, { type: mimeType }))
+        .then(onComplete);
+};
 
 const exportFile = (content, fileName, contentType) => {
     const a = document.createElement("a");

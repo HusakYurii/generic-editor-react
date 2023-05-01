@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import "./imageElement.css";
-import { convertFileToBase64 } from "../../../tools/resourcesTools";
+import { convertImageFileToBase64 } from "../../../tools/resourcesTools";
 
 /**
  * @typedef {{
@@ -28,7 +28,7 @@ const ImageElementComponent = (props) => {
 
         // it is an async operation but if the component gets unmounted before the callback files, 
         // there will be a complain from React framework about memory leakage. I use proxy to fix that
-        convertFileToBase64(props.resource, (data) => proxy.setParsedResource(data));
+        convertImageFileToBase64(props.resource, (data) => proxy.setParsedResource(data));
 
         return () => (proxy.setParsedResource = () => { });
     }, [])

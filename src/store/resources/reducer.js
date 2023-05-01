@@ -10,7 +10,7 @@ import { RESOURCE_ACTIONS } from "./actionTypes";
 const STATE = {};
 
 export const onResourceAddMiddlewares = [];
-export const onResourceRemoveMiddlewares = []
+export const onResourceRemoveMiddlewares = [];
 
 /**
  * 
@@ -33,6 +33,13 @@ export const resourcesListReducer = (state = STATE, { type, payload }) => {
         onResourceRemoveMiddlewares.forEach(middleware => middleware(file));
         return newState;
     }
+
+    else if (type === RESOURCE_ACTIONS.IMPORT_RESOURCES) {
+        Object.values(payload)
+            .forEach(file => onResourceAddMiddlewares.forEach(middleware => middleware(file)))
+        return { ...payload };
+    }
+
     else {
         return state;
     }

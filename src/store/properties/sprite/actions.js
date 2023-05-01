@@ -20,3 +20,10 @@ export const removeSpritePropertiesAction = (id) => {
 export const updateSpritePropertiesAction = (payload) => {
     return { type: SPRITE_PROPERTIES_ACTIONS.UPDATE_SPRITE_PROPERTIES, payload }
 };
+
+/**
+ * @param {import("./reducer").ISpritePropertiesListState} payload
+ */
+export const importSpritePropertiesAction = (payload) => {
+    return { type: SPRITE_PROPERTIES_ACTIONS.IMPORT_SPRITE_PROPERTIES, payload }
+};
