@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 
 import { connect } from "react-redux";
 import { updateNodeNameAction } from "../../../store/tree";
@@ -17,17 +17,23 @@ import "./nameProperty.css";
  * @param {NamePropertyComponentDependencies} props 
  */
 const NamePropertyComponent = (props) => {
-
+    const inputRef = useRef(null);
     const node = getNodeByID(props.selectedNodeID, props.treeData);
 
     const onChange = (event) => {
         props.updateNodeNameAction({ nodeID: props.selectedNodeID, name: event.target.value });
+        if (event.target.value.length === 0) {
+            inputRef.current.classList.add("invalid")
+        }
+        else {
+            inputRef.current.classList.remove("invalid")
+        }
     };
 
     return (
         <div id="name-property" className="properties">
             <span htmlFor="name">Name</span>
-            <input type="text" value={node.name} onChange={onChange}></input>
+            <input type="text" ref={inputRef} value={node.name} onChange={onChange}></input>
         </div>
     )
 }

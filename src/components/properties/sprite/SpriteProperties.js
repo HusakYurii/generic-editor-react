@@ -36,7 +36,7 @@ const SpritePropertiesComponent = (props) => {
 
     const onInputChange = (event) => {
         const [groupName, valueName] = event.target.id.split("-");
-        const value = parseFloat(event.target.value);
+        const value = parseFloat(event.target.value) || "";
 
         const payload = { nodeID: id, anchor: { ...anchor } };
         payload[groupName][valueName] = value;
@@ -74,8 +74,8 @@ const SpritePropertiesComponent = (props) => {
             </div>
             <div>
                 <span>Anchor</span>
-                <input type="number" id="anchor-x" value={anchor.x} onChange={onInputChange}></input>
-                <input type="number" id="anchor-y" value={anchor.y} onChange={onInputChange}></input>
+                <input type="number" id="anchor-x" step="0.01" value={anchor.x} onChange={onInputChange}></input>
+                <input type="number" id="anchor-y" step="0.01" value={anchor.y} onChange={onInputChange}></input>
             </div>
         </div>
     )
