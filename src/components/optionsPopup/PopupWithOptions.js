@@ -2,15 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 
 import "./popupWithOptions.css";
 
-export const REMOVE_OPTION = "REMOVE";
-
 /**
  * @typedef {{
- *  canShowRemoveOption: (hoveredElement: HTMLElement) => boolean;
  *  canProcessContextMenu: (event: MouseEvent) => boolean;
  *  canProcessClick: (event: MouseEvent) => boolean;
  *  processClick: (event: MouseEvent) => boolean;
- *  optionsMap: Array<{id: number, option: string}>;
+ *  optionsMap: Array<{option: string, label: string, className?: sting; canShow: (target: HTMLElement) => boolean}>;
  * }} PopupWithOptionsDependencies
  */
 
@@ -19,7 +16,7 @@ export const REMOVE_OPTION = "REMOVE";
  */
 export const PopupWithOptions = (props) => {
 
-    const [options, setOptions] = useState({
+    const [data, setData] = useState({
         position: { top: 0, left: 0 },
         isVisible: false,
         hoveredElement: null
@@ -41,7 +38,7 @@ export const PopupWithOptions = (props) => {
         if (!props.canProcessContextMenu(event)) { return; }
 
         const { target, clientX, clientY } = event;
-        setOptions({
+        setData({
             position: { top: clientY - 5, left: clientX - 5 },
             hoveredElement: target,
             isVisible: true
@@ -49,7 +46,7 @@ export const PopupWithOptions = (props) => {
     };
 
     const onMouseleave = () => {
-        setOptions({
+        setData({
             position: { top: 0, left: 0 },
             isVisible: false,
             hoveredElement: null
@@ -59,24 +56,27 @@ export const PopupWithOptions = (props) => {
     const onClick = (event) => {
         if (!props.canProcessClick(event)) { return; }
 
-        props.processClick(event, options.hoveredElement);
+        props.processClick(event, data.hoveredElement);
         onMouseleave();
     }
-
-    const calculateStyle = (element) => {
-        return { display: props.canShowRemoveOption(element) ? "block" : "none" }
-    };
 
     return (
         <div
             className="options-popup"
             ref={popupRef}
             onClick={onClick}
-            style={{ ...options.position, display: options.isVisible ? "block" : "none" }}
+            style={{ ...data.position, display: data.isVisible ? "block" : "none" }}
         >
-            {props.optionsMap.map(({ id, option }) => <div key={id} data-option={id}>{option}</div>)}
-            {/* props.canShowRemoveOption will decide when this option is available */}
-            <div data-option={REMOVE_OPTION} className="remove-option" style={{ ...calculateStyle(options.hoveredElement) }}>Remove</div>
+            {props.optionsMap.map((params, index) => {
+                const { option, label, canShow, className = "" } = params;
+
+                return <div
+                    key={index}
+                    data-option={option}
+                    className={className}
+                    style={{ display: canShow(data.hoveredElement) ? "block" : "none" }}
+                >{label}</div>
+            })}
         </div>
     );
 };

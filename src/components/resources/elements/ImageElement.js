@@ -39,10 +39,10 @@ const ImageElementComponent = (props) => {
     return (
         <div
             draggable
-            id={props.id}
             onDragStart={onDragStart}
             className="image-preview"
             data-type="image-preview"
+            data-image-id={props.id}
             style={{ backgroundImage: `url(${parsedResource.url})` }}
         >
             {parsedResource.name}
