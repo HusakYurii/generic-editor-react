@@ -7,7 +7,7 @@ import { ENTITY_TYPES, ROOT_NODE_ID, getBaseProperties, getEntityType } from "./
 */
 export const defaultStoreData = {
     tree: {
-        treeData: createNode(ROOT_NODE_ID, "RootNode", []),
+        treeData: createNode(ROOT_NODE_ID, "Scene", []),
         selectedNodeID: null
     },
     entitiesList: {

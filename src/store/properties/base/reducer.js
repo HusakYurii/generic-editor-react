@@ -53,6 +53,10 @@ export const basePropertiesListReducer = (state = STATE, { type, payload }) => {
         newState[nodeID] = newNodeProps;
         return newState;
     }
+
+    else if (type === BASE_PROPERTIES_ACTIONS.IMPORT_BASE_PROPERTIES) {
+        return { ...payload }
+    }
     else {
         return state;
     }

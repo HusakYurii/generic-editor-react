@@ -109,6 +109,10 @@ const processCreateNodeNameAction = (state, payload) => {
     return newState;
 }
 
+const processImportTreeData = (state, payload) => {
+    return { ...payload }
+}
+
 /**
  * 
  * @param {ITreeState} state 
@@ -136,6 +140,10 @@ export const treeReducer = (state = STATE, { type, payload }) => {
 
         case TREE_ACTIONS.DELETE_NODE:
             return processDeleteNodeNameAction(state, payload);
+
+        case TREE_ACTIONS.IMPORT_TREE_DATA:
+            return processImportTreeData(state, payload);
+
         default: return state;
     }
 };

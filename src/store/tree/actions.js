@@ -67,3 +67,10 @@ export const deleteNodeAction = (id) => {
 export const createNodeAction = (parentID, id) => {
     return { type: TREE_ACTIONS.CREATE_NODE, payload: { nodeID: id, referenceID: parentID } }
 };
+
+/**
+ * @param {import("./reducer").ITreeState} parentID the parent's node ID we need to append a new node to
+ */
+export const importTreeDataAction = (treeData) => {
+    return { type: TREE_ACTIONS.IMPORT_TREE_DATA, payload: { treeData, selectedNodeID: null } }
+};

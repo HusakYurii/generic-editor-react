@@ -40,6 +40,9 @@ export const entityTypesListReducer = (state = STATE, { type, payload }) => {
         };
         return newState;
     }
+    else if (type === ENTITY_TYPES_LIST_ACTIONS.IMPORT_ENTITY_DATA) {
+        return { ...payload };
+    }
     else if (type === ENTITY_TYPES_LIST_ACTIONS.REMOVE_ENTITY) {
         const newState = { ...state };
         delete newState[payload.nodeID];

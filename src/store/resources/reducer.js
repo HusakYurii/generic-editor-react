@@ -9,30 +9,29 @@ import { RESOURCE_ACTIONS } from "./actionTypes";
  */
 const STATE = {};
 
-export const onResourceAddMiddlewares = [];
-export const onResourceRemoveMiddlewares = []
-
 /**
  * 
  * @param {IResourcesListState} state 
- * @param {{type: string; payload: {id: number; file: File}}} data 
+ * @param {{type: string; payload: {id: number; file: File} | Array<{id: number, file: File}}} data 
  * @returns {IResourcesListState}
  */
 export const resourcesListReducer = (state = STATE, { type, payload }) => {
-    if (type === RESOURCE_ACTIONS.ADD_RESOURCE) {
+    if (type === RESOURCE_ACTIONS.ADD_RESOURCES) {
         const newState = { ...state };
-        newState[payload.id] = payload.file;
-        onResourceAddMiddlewares.forEach(middleware => middleware(payload.file));
+        payload.forEach(({ id, file }) => newState[id] = file);
         return newState;
     }
 
     else if (type === RESOURCE_ACTIONS.REMOVE_RESOURCE) {
         const newState = { ...state };
-        const file = newState[payload.id];
         delete newState[payload.id];
-        onResourceRemoveMiddlewares.forEach(middleware => middleware(file));
         return newState;
     }
+
+    else if (type === RESOURCE_ACTIONS.IMPORT_RESOURCES) {
+        return { ...payload };
+    }
+
     else {
         return state;
     }

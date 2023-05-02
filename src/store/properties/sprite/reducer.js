@@ -49,6 +49,9 @@ export const spritePropertiesListReducer = (state = STATE, { type, payload }) =>
         newState[nodeID] = newNodeProps;
         return newState;
     }
+    else if (type === SPRITE_PROPERTIES_ACTIONS.IMPORT_SPRITE_PROPERTIES) {
+        return { ...payload }
+    }
     else {
         return state;
     }

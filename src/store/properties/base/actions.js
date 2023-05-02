@@ -20,3 +20,10 @@ export const removeBasePropertiesAction = (id) => {
 export const updateBasePropertiesAction = (payload) => {
     return { type: BASE_PROPERTIES_ACTIONS.UPDATE_BASE_PROPERTIES, payload }
 };
+
+/**
+ * @param {import("./reducer").IBasePropertiesListState} payload 
+ */
+export const importBasePropertiesAction = (payload) => {
+    return { type: BASE_PROPERTIES_ACTIONS.IMPORT_BASE_PROPERTIES, payload }
+};
