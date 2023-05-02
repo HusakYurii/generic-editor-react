@@ -5,6 +5,8 @@ import { addResourceAction, removeResourceAction } from "../../store/resources";
 import { getUID } from "../../tools/uidGenerator";
 import { createImagesLoader } from "../../tools/resourcesTools";
 import { REMOVE_OPTION, PopupWithOptions } from "../optionsPopup";
+import { pixiLoader } from "../../middlewares/pixiLoaderMiddleware";
+import store from "../../store";
 
 const OPTIONS = {
     ADD_IMAGE: "ADD_IMAGE"
@@ -50,12 +52,18 @@ const ResourcesOptionsPopupComponent = (props) => {
         const id = Number(hoveredElement.getAttribute("id"));
 
         if (option === REMOVE_OPTION) {
+            pixiLoader.removeAssets(store.getState().resourcesList[id])
             props.removeResourceAction(id);
         }
         else {
-            const imageLoaderElement = createImagesLoader((files) => {
-                files.forEach(file => props.addResourceAction(getUID(), file));
-            });
+            const onImagesLoaded = (files) => {
+                pixiLoader.loadAssets(files, () => {
+                    const data = files.map((file) => ({ id: getUID(), file }));
+                    props.addResourceAction(data);
+                });
+            };
+
+            const imageLoaderElement = createImagesLoader(onImagesLoaded);
             imageLoaderElement.click();
         }
     };

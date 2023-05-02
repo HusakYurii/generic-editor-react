@@ -6,15 +6,15 @@ import { convertImageFilesToBase64 } from "../tools/resourcesTools";
  * That is why I use this middle ware to make it easier to remove the pixi from the project if I need
  * @param {Loader} pixiLoader 
  * @param {{[key: string]: Texture}} textureCache 
- * @returns 
+ * @returns {{
+ * loadAssets: (assets: File[] | File, onFinish?: () => void) => void;
+ * removeAssets: (assets: File[] | File) => void;
+ * }}
  */
 const pixiLoaderMiddleware = (textureCache, baseTextureCache) => {
 
     return {
-        /**
-         * @param {files: File[] | File} assets
-         */
-        loadAssets(assets) {
+        loadAssets(assets, onFinish = () => { }) {
             if (!Array.isArray(assets)) {
                 assets = [assets]
             }
@@ -30,11 +30,10 @@ const pixiLoaderMiddleware = (textureCache, baseTextureCache) => {
                     BaseTexture.addToCache(texture, name);
                     Texture.addToCache(texture, name);
                 });
+                onFinish();
             });
         },
-        /**
-         * @param {files: File[] | File} assets
-         */
+
         removeAssets(assets) {
             if (!Array.isArray(assets)) {
                 assets = [assets]
@@ -42,10 +41,15 @@ const pixiLoaderMiddleware = (textureCache, baseTextureCache) => {
 
             assets.forEach((file) => {
                 textureCache[file.name].destroy(true);
-                baseTextureCache[file.name].destroy(true)
+                baseTextureCache[file.name].destroy(true);
+                delete textureCache[file.name];
+                delete baseTextureCache[file.name];
             });
         }
     }
 }
 
+/**
+ * Middleware
+ */
 export const pixiLoader = pixiLoaderMiddleware(utils.TextureCache, utils.BaseTextureCache);

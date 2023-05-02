@@ -3,7 +3,7 @@ import { ENTITY_TYPES, ROOT_NODE_ID, getBaseProperties, getEntityType, getSprite
 
 export const mockStoreData = {
     tree: {
-        treeData: createNode(ROOT_NODE_ID, "RootNode", [
+        treeData: createNode(ROOT_NODE_ID, "Scene", [
             createNode(123, "Header", [
                 createNode(645, "LogoSprite", []),
             ]),

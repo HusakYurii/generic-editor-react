@@ -10,16 +10,17 @@ import { importResourcesAction } from "../../store/resources";
 import { importTreeDataAction } from "../../store/tree";
 import { base64ImageToFile, convertImageFileToBase64, convertJSONFilesToText, createJSONLoader, exportJSONFile } from "../../tools/resourcesTools";
 import { VERSION } from "../../VERSION";
+import { pixiLoader } from "../../middlewares/pixiLoaderMiddleware";
 
 
 /**
- * 
  * @param {Array<[string, File]>} queue 
  * @param {{[id: string]: {name: string; url: string;}}} memo 
+ * @param {(file: File, cb: (data: {name: string; url: string;}) => void) => void} strategy
  * @param {(data: {[id: string]: {name: string; url: string;}}) => void} onFinish 
  * @returns 
  */
-const convertResourcesRecursively = (queue, memo, onFinish) => {
+const convertResourcesRecursively = (queue, memo, strategy, onFinish) => {
     if (queue.length === 0) {
         onFinish(memo);
         return;
@@ -27,9 +28,9 @@ const convertResourcesRecursively = (queue, memo, onFinish) => {
 
     const [id, file] = queue.shift();
 
-    convertImageFileToBase64(file, (data) => {
+    strategy(file, (data) => {
         memo[id] = data;
-        convertResourcesRecursively(queue, memo, onFinish);
+        convertResourcesRecursively(queue, memo, strategy, onFinish);
     });
 }
 
@@ -41,14 +42,13 @@ const convertResourcesRecursively = (queue, memo, onFinish) => {
 const exportResourcesAsBase64 = (store) => {
     const { resourcesList, spritePropertiesList } = store.getState();
 
-    const resourcesToExport = Object.values(spritePropertiesList).reduce((acc, properties) => {
-        if (properties.resourceID) {
-            acc.push([properties.resourceID, resourcesList[properties.resourceID]])
-        }
-        return acc;
-    }, []);
+    const resourcesToExport = Object.values(spritePropertiesList)
+        .reduce((acc, { resourceID }) => {
+            if (resourceID) { acc.push([resourceID, resourcesList[resourceID]]) }
+            return acc;
+        }, []);
 
-    convertResourcesRecursively(resourcesToExport, {}, (resources) => {
+    const onResourcesConverted = (resources) => {
         exportJSONFile(
             JSON.stringify({
                 meta: {
@@ -60,7 +60,9 @@ const exportResourcesAsBase64 = (store) => {
             }, null, 2),
             "assesMapAsBase64.json"
         );
-    });
+    };
+
+    convertResourcesRecursively(resourcesToExport, {}, convertImageFileToBase64, onResourcesConverted);
 };
 
 /**
@@ -86,6 +88,45 @@ const exportMainData = (store) => {
     );
 };
 
+const parseAndImportFiles = (files, props) => {
+
+    const importMainFile = (props, dataFiles) => {
+        const mainDataFile = dataFiles.find(({ meta }) => meta.type === "data-main");
+
+        if (mainDataFile) {
+            props.importBasePropertiesAction(mainDataFile.basePropertiesList);
+            props.importSpritePropertiesAction(mainDataFile.spritePropertiesList);
+            props.importEntityDataAction(mainDataFile.entityTypesList);
+            props.importTreeDataAction(mainDataFile.treeData);
+        }
+    };
+
+    const importResources = (props, dataFiles, onFinish) => {
+        const resourcesDataFile = dataFiles.find(({ meta }) => meta.type === "data-resources-base64");
+
+        if (resourcesDataFile) {
+            const onResourcesConverted = (convertedResources) => {
+                pixiLoader.loadAssets(Object.values(convertedResources), () => {
+                    props.importResourcesAction(convertedResources);
+                    onFinish();
+                })
+            };
+
+            convertResourcesRecursively(Object.entries(resourcesDataFile.resources), {}, base64ImageToFile, onResourcesConverted);
+        }
+        else {
+            onFinish();
+        }
+    }
+
+    const onFilesConverted = (convertedFiles) => {
+        const dataFiles = convertedFiles.map((file) => JSON.parse(file.url));
+        importResources(props, dataFiles, () => importMainFile(props, dataFiles));
+    };
+
+    convertJSONFilesToText(files, onFilesConverted);
+};
+
 /**
  * @typedef {{
  * importEntityDataAction: typeof importEntityDataAction; 
@@ -109,51 +150,10 @@ export const HeaderComponent = (props) => {
 
     const importData = () => {
         const jsonLoader = createJSONLoader((files) => {
-            convertJSONFilesToText(files, (convertedFiles) => {
-
-                /**
-                 * @param {Array<[string, File]>} queue 
-                 * @param {object} memo 
-                 * @param {(daa: object) => void} onFinish 
-                 * @returns 
-                 */
-                const convertResourcesRecursively = (queue, memo, onFinish) => {
-                    if (queue.length === 0) {
-                        onFinish(memo);
-                        return;
-                    }
-
-                    const [id, file] = queue.shift();
-
-                    base64ImageToFile(file, (data) => {
-                        memo[id] = data;
-                        convertResourcesRecursively(queue, memo, onFinish);
-                    });
-                }
-
-                const dataFiles = convertedFiles.map((file) => JSON.parse(file.url));
-
-
-                const mainDataFile = dataFiles.find(({ meta }) => meta.type === "data-main");
-                if (mainDataFile) {
-                    props.importBasePropertiesAction(mainDataFile.basePropertiesList);
-                    props.importSpritePropertiesAction(mainDataFile.spritePropertiesList);
-                    props.importEntityDataAction(mainDataFile.entityTypesList);
-                    props.importTreeDataAction(mainDataFile.treeData);
-                }
-
-                const resourcesDataFile = dataFiles.find(({ meta }) => meta.type === "data-resources-base64");
-                if (resourcesDataFile) {
-                    convertResourcesRecursively(
-                        Object.entries(resourcesDataFile.resources), {}, (convertedResources) => {
-                            props.importResourcesAction(convertedResources);
-                        });
-                }
-            });
+            parseAndImportFiles(files, props)
         });
         jsonLoader.click();
-
-    }
+    };
 
     return (
         <header>

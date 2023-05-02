@@ -1,11 +1,10 @@
 import { RESOURCE_ACTIONS } from "./actionTypes"
 
 /**
- * @param {number} id 
- * @param {File} file 
+ * @param {Array<{id: number, file: File}} payload
  */
-export const addResourceAction = (id, file) => {
-    return { type: RESOURCE_ACTIONS.ADD_RESOURCE, payload: { id, file } }
+export const addResourceAction = (payload) => {
+    return { type: RESOURCE_ACTIONS.ADD_RESOURCES, payload }
 };
 
 /**
