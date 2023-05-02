@@ -9,12 +9,12 @@ import { initBasePropertiesAction, removeBasePropertiesAction } from "../../stor
 import { initSpritePropertiesAction, removeSpritePropertiesAction } from "../../store/properties/sprite";
 import { ENTITY_TYPES, ROOT_NODE_ID } from "../../data/StoreData";
 import { getUID } from "../../tools/uidGenerator";
-import { PopupWithOptions, REMOVE_OPTION } from "../optionsPopup";
+import { PopupWithOptions } from "../optionsPopup";
 
-const OPTIONS_MAP = [
-    { id: ENTITY_TYPES.CONTAINER, option: "Add Container" },
-    { id: ENTITY_TYPES.SPRITE, option: "Add Sprite" },
-]
+const OPTIONS_MAP = {
+    ...ENTITY_TYPES,
+    REMOVE_OPTION: "REMOVE_OPTION"
+}
 
 /**
  * @typedef {{
@@ -35,13 +35,18 @@ const OPTIONS_MAP = [
  * @param { TreeOptionsPopupComponentDependencies} props 
  */
 const TreeOptionsPopupComponent = (props) => {
-    const optionsMap = [...OPTIONS_MAP];
 
     const canShowRemoveOption = (hoveredElement) => {
         /* ROOT_NODE_ID can't be deleted so the option will become disabled */
         const id = hoveredElement ? hoveredElement.getAttribute("data-id") : undefined;
         return id && Number(id) !== ROOT_NODE_ID;
     };
+
+    const optionsMap = [
+        { option: OPTIONS_MAP.CONTAINER, label: "Add Container", canShow: () => true },
+        { option: OPTIONS_MAP.SPRITE, label: "Add Sprite", canShow: () => true },
+        { option: OPTIONS_MAP.REMOVE_OPTION, label: "Remove", className: "remove-option", canShow: canShowRemoveOption },
+    ];
 
     const canProcessContextMenu = (event) => {
         const type = event.target.getAttribute("data-type");
@@ -57,24 +62,27 @@ const TreeOptionsPopupComponent = (props) => {
         const option = event.target.getAttribute("data-option");
         const id = Number(hoveredElement.getAttribute("data-id"));
 
-        if (option === REMOVE_OPTION) {
+        if (option === OPTIONS_MAP.REMOVE_OPTION) {
             props.deleteNodeAction(id);
             props.removeEntityAction(id);
             props.removeBasePropertiesAction(id);
             props.removeSpritePropertiesAction(id);
+            return;
+        }
+
+        const newID = getUID();
+        props.createNodeAction(id, newID);
+        props.initBasePropertiesAction(newID);
+
+        if (option === OPTIONS_MAP.SPRITE) {
+            props.initSpriteEntityAction(newID);
+            props.initSpritePropertiesAction(newID);
+        }
+        else if (option === OPTIONS_MAP.CONTAINER) {
+            props.initContainerEntityAction(newID);
         }
         else {
-            const newID = getUID();
-            props.createNodeAction(id, newID);
-            props.initBasePropertiesAction(newID);
-
-            if (option === ENTITY_TYPES.SPRITE) {
-                props.initSpriteEntityAction(newID);
-                props.initSpritePropertiesAction(newID);
-            }
-            else if (option === ENTITY_TYPES.CONTAINER) {
-                props.initContainerEntityAction(newID);
-            }
+            throw new Error("You forgot to add a handler")
         }
     };
 

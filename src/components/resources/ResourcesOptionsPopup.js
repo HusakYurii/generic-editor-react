@@ -3,19 +3,16 @@ import { connect } from "react-redux";
 
 import { addResourceAction, removeResourceAction } from "../../store/resources";
 import { getUID } from "../../tools/uidGenerator";
-import { createImagesLoader } from "../../tools/resourcesTools";
-import { REMOVE_OPTION, PopupWithOptions } from "../optionsPopup";
+import { createImagesLoader, exportImageFile } from "../../tools/resourcesTools";
+import { PopupWithOptions } from "../optionsPopup";
 import { pixiLoader } from "../../middlewares/pixiLoaderMiddleware";
 import store from "../../store";
 
-const OPTIONS = {
-    ADD_IMAGE: "ADD_IMAGE"
+const OPTIONS_MAP = {
+    ADD_IMAGE: "ADD_IMAGE",
+    DOWNLOAD_IMAGE: "DOWNLOAD_IMAGE",
+    REMOVE_IMAGE: "REMOVE_IMAGE",
 };
-
-const OPTIONS_MAP = [
-    { id: OPTIONS.ADD_IMAGE, option: "Add Image" }
-];
-
 
 /**
  * @typedef {{
@@ -30,13 +27,26 @@ const OPTIONS_MAP = [
  */
 const ResourcesOptionsPopupComponent = (props) => {
 
-    const optionsMap = [...OPTIONS_MAP];
+
 
     const canShowRemoveOption = (hoveredElement) => {
         /* resources-panel can't have remove option when showing the popup */
         const dataType = hoveredElement ? hoveredElement.getAttribute("data-type") : undefined;
         return dataType !== "resources-panel";
     };
+
+    const canShowDownloadOption = (hoveredElement) => {
+        /* If there is no images, we don't show the option */
+        const id = hoveredElement ? parseInt(hoveredElement.getAttribute("data-image-id")) : NaN;
+        return !Number.isNaN(id);
+    };
+
+    const optionsMap = [
+        { option: OPTIONS_MAP.ADD_IMAGE, label: "Add Image", canShow: () => true },
+        { option: OPTIONS_MAP.DOWNLOAD_IMAGE, label: "Download Image", canShow: canShowDownloadOption },
+        { option: OPTIONS_MAP.REMOVE_IMAGE, label: "Remove Image", className: "remove-option", canShow: canShowRemoveOption },
+    ];
+
 
     const canProcessContextMenu = (event) => {
         const dataType = event.target.getAttribute("data-type");
@@ -49,13 +59,7 @@ const ResourcesOptionsPopupComponent = (props) => {
 
     const processClick = (event, hoveredElement) => {
         const option = event.target.getAttribute("data-option");
-        const id = Number(hoveredElement.getAttribute("id"));
-
-        if (option === REMOVE_OPTION) {
-            pixiLoader.removeAssets(store.getState().resourcesList[id])
-            props.removeResourceAction(id);
-        }
-        else {
+        if (option && option === OPTIONS_MAP.ADD_IMAGE) {
             const onImagesLoaded = (files) => {
                 pixiLoader.loadAssets(files, () => {
                     const data = files.map((file) => ({ id: getUID(), file }));
@@ -65,6 +69,22 @@ const ResourcesOptionsPopupComponent = (props) => {
 
             const imageLoaderElement = createImagesLoader(onImagesLoaded);
             imageLoaderElement.click();
+            return;
+        }
+
+        const id = parseInt(hoveredElement.getAttribute("data-image-id"));
+
+        if (!id) {
+            return;
+        }
+
+        if (option === OPTIONS_MAP.REMOVE_IMAGE) {
+            pixiLoader.removeAssets(store.getState().resourcesList[id])
+            props.removeResourceAction(id);
+        }
+        else if (option === OPTIONS_MAP.DOWNLOAD_IMAGE) {
+            const file = store.getState().resourcesList[id];
+            exportImageFile(file, file.name);
         }
     };
 

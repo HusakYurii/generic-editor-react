@@ -113,6 +113,12 @@ export const base64ImageToFile = ({ name, url }, onComplete) => {
         .then(onComplete);
 };
 
+/**
+ * I have tested and it works with strings and Files. I think that is enough for now
+ * @param {File | string} content 
+ * @param {string} fileName 
+ * @param {string} contentType 
+ */
 const exportFile = (content, fileName, contentType) => {
     const a = document.createElement("a");
     const file = new Blob([content], { type: contentType });
@@ -121,7 +127,20 @@ const exportFile = (content, fileName, contentType) => {
     a.click();
 }
 
+/**
+ * The function will export the stringified object as text from the browser
+ * @param {sting} stringifiedContent 
+ * @param {string} fileName 
+ */
 export const exportJSONFile = (stringifiedContent, fileName) => {
     exportFile(stringifiedContent, fileName, "text/plain");
 }
 
+/**
+ * The function will export a File as an image from the browser
+ * @param {Fill} content 
+ * @param {string} fileName 
+ */
+export const exportImageFile = (content, fileName) => {
+    exportFile(content, fileName, "image/png, image/jpeg, image/jpg");
+};
