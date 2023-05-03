@@ -1,24 +1,25 @@
 import React from "react";
 import { createNode } from "../../data/NodeData";
-import { getNodeByID, getParent, isChild, isParent } from "../../tools/treeTools";
+import { getNodeByID, isChild, isParent } from "../../tools/treeTools";
 import { getPositionInTheBox, PositionsInTheBox } from "../../tools/treeUITools";
-import { Node, NODE_DATA_TYPE_ATTRIBUTE } from "./Node";
+import { Node } from "./Node";
 
 import "./tree.css";
 
 import { connect } from "react-redux";
 import { moveNodeAction, insertBeforeNodeAction, setSelectedNodeIDAction } from "../../store/tree";
+import { ROOT_NODE_ID } from "../../data/StoreData";
 
 const UI_CLASS_NAMES = {
-    center: "insert-center",
-    top: "insert-before",
-}
+    [PositionsInTheBox.CENTER]: "insert-center",
+    [PositionsInTheBox.TOP]: "insert-before",
+};
 
 const resetStyles = (nodeElement) => {
     Object.values(UI_CLASS_NAMES).forEach((className) => {
         nodeElement.classList.remove(className);
     });
-}
+};
 
 /**
  * @typedef {{
@@ -59,7 +60,7 @@ const Tree = (props) => {
             return;
         }
 
-        if (insertPosition === PositionsInTheBox.center) {
+        if (insertPosition === PositionsInTheBox.CENTER) {
             props.moveNodeAction({
                 nodeData: draggedNodeData,
                 referenceID: targetNodeData.id
@@ -83,11 +84,10 @@ const Tree = (props) => {
         const hoveredNodeData = getNodeByID(Number(event.target.getAttribute("data-id")), props.treeData);
 
         const isValid = (
+            hoveredNodeData && //  to catch the case when a hovered html element is not valid (doesn't have the node data)
             draggedNodeData.id !== hoveredNodeData.id && /* Check if the nodes are NOT the same */
             !isChild(hoveredNodeData.id, draggedNodeData) && /* Check if a hovered node is NOT a child of the dragged node */
-            !isParent(draggedNodeData.id, hoveredNodeData) && /* Check if a hovered node is NOT a parent of the dragged node */
-            //@TODO rethink this one, maybe it will be good to enable it to make it easy to move elements around
-            getParent(hoveredNodeData.id, props.treeData) !== null /* Check if a hovered node is NOT a root node */
+            !isParent(draggedNodeData.id, hoveredNodeData) /* Check if a hovered node is NOT a parent of the dragged node */
         );
 
         if (!isValid) {
@@ -104,14 +104,19 @@ const Tree = (props) => {
 
         /* Get mouse position within the element we drag over and if the mouse position is
         new, reset all of the styles and set new one */
-        const position = getPositionInTheBox(hoverNodeElement.getBoundingClientRect(), event.clientX, event.clientY);
+        let position = getPositionInTheBox(hoverNodeElement.getBoundingClientRect(), event.clientX, event.clientY);
 
         /* We don't highlight the bottom part because we cant insert node there anyway.
         We use functionality to append node which is basically the same  */
-        if (position !== PositionsInTheBox.bottom && position !== insertPosition) {
+        if (position !== PositionsInTheBox.BOTTOM && position !== insertPosition) {
             resetStyles(hoverNodeElement);
+            // we force to append a node to the PARENT node, we can't insert before it
+            if (hoveredNodeData.id === ROOT_NODE_ID) {
+                position = PositionsInTheBox.CENTER;
+            }
             insertPosition = position;
             hoverNodeElement.classList.add(UI_CLASS_NAMES[position])
+
         }
 
         targetNodeData = hoveredNodeData;
@@ -139,22 +144,17 @@ const Tree = (props) => {
 
     return (
         // @TODO test in what order events are fired in the browser
-        <div id="root-node"
+        <div id="tree-container"
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}
             onDragEnd={handleDragEnd}
             onDrop={handleDrop}
             onClick={handleClick}
         >
-            <div id="root-node-name" data-id={props.treeData.id} data-type={NODE_DATA_TYPE_ATTRIBUTE}>{props.treeData.name}</div>
-            <div id="root-node-nodes">{
-                props.treeData.nodes.map(node => (
-                    <Node
-                        key={node.id}
-                        node={node}
-                    />
-                ))
-            }</div>
+            <Node
+                key={props.treeData.id}
+                node={props.treeData}
+            />
         </div>
     );
 };

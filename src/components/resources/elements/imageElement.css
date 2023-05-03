@@ -2,9 +2,9 @@
 .image-preview {
     
     /* Crop the image to fit the div element */
-    background-size: cover;
     background-repeat: no-repeat;
-    background-size: 100px 95px;
+    background-size: 90px auto;
+    background-position: center;
     /* Set the height of the div element */
     width: 100px;
     height: 120px;
