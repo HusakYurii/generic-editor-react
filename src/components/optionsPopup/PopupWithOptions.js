@@ -16,11 +16,10 @@ import "./popupWithOptions.css";
  */
 export const PopupWithOptions = (props) => {
 
-    const [data, setData] = useState({
-        position: { top: 0, left: 0 },
-        isVisible: false,
-        hoveredElement: null
-    });
+    const [position, setPosition] = useState({ top: 0, left: 0 });
+    const [data, setData] = useState({ isVisible: false, hoveredElement: null });
+
+    const mousePosition = useRef({ x: 0, y: 0 });
     const popupRef = useRef(null);
 
     useEffect(() => {
@@ -34,23 +33,38 @@ export const PopupWithOptions = (props) => {
         return () => popupRef.current.removeEventListener("mouseleave", onMouseleave);
     }, []);
 
+    useEffect(() => {
+        if (!data.isVisible) {
+            return;
+        }
+
+        const mouseMargin = 10;
+        const { x, y } = mousePosition.current;
+        const { offsetWidth, offsetHeight } = popupRef.current;
+
+        const offsetX = (x + offsetWidth) - window.innerWidth;
+        const offsetY = (y + offsetHeight) - window.innerHeight;
+
+        const top = offsetY > 0 ? (y - offsetHeight + mouseMargin) : y - mouseMargin;
+        const left = offsetX > 0 ? (x - offsetWidth + mouseMargin) : x - mouseMargin;
+        // correct positions just in case if we are out of the bounds
+        setPosition({ top, left });
+
+    }, [data.isVisible])
+
     const onContextmenu = (event) => {
         if (!props.canProcessContextMenu(event)) { return; }
 
         const { target, clientX, clientY } = event;
-        setData({
-            position: { top: clientY - 5, left: clientX - 5 },
-            hoveredElement: target,
-            isVisible: true
-        });
+        mousePosition.current.x = clientX;
+        mousePosition.current.y = clientY;
+
+        setData({ hoveredElement: target, isVisible: true });
+        setPosition({ top: clientY, left: clientY });
     };
 
     const onMouseleave = () => {
-        setData({
-            position: { top: 0, left: 0 },
-            isVisible: false,
-            hoveredElement: null
-        });
+        setData({ isVisible: false, hoveredElement: null });
     };
 
     const onClick = (event) => {
@@ -65,7 +79,7 @@ export const PopupWithOptions = (props) => {
             className="options-popup"
             ref={popupRef}
             onClick={onClick}
-            style={{ ...data.position, display: data.isVisible ? "block" : "none" }}
+            style={{ ...position, display: data.isVisible ? "block" : "none" }}
         >
             {props.optionsMap.map((params, index) => {
                 const { option, label, canShow, className = "" } = params;

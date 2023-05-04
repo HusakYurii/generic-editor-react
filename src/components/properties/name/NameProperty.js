@@ -20,6 +20,7 @@ const NamePropertyComponent = (props) => {
     const inputRef = useRef(null);
     const node = getNodeByID(props.selectedNodeID, props.treeData);
 
+    // update the name value of the selected node
     const onChange = (event) => {
         props.updateNodeNameAction({ nodeID: props.selectedNodeID, name: event.target.value });
         if (event.target.value.length === 0) {
@@ -30,10 +31,19 @@ const NamePropertyComponent = (props) => {
         }
     };
 
+    // to verify the name value at the end. I must not be empty
+    const onBlur = () => {
+        let value = inputRef.current.value.trim();
+        if (value.length === 0) {
+            value = "No name";
+        }
+        props.updateNodeNameAction({ nodeID: props.selectedNodeID, name: value });
+    }
+
     return (
         <div id="name-property" className="properties">
             <span htmlFor="name">Name</span>
-            <input type="text" ref={inputRef} value={node.name} onChange={onChange}></input>
+            <input type="text" ref={inputRef} value={node.name} onBlur={onBlur} onChange={onChange}></input>
         </div>
     )
 }

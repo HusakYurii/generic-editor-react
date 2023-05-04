@@ -37,7 +37,7 @@ export const Node = ({ node }) => {
             {node.nodes.length === 0 ? null : toggler}
             <div className="node-icon" style={iconStyle}></div>
             <div draggable="true" className="node-name" data-id={node.id} data-type={NODE_DATA_TYPE_ATTRIBUTE}>
-                {node.name}
+                {node.name ? node.name : "---"}
             </div>
             {collapsed ? null : nodesList}
         </div>
