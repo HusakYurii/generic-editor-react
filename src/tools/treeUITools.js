@@ -18,9 +18,9 @@ export const isInside = (bounds, x, y) => {
 };
 
 export const PositionsInTheBox = Object.freeze({
-    top: "top",
-    center: "center",
-    bottom: "bottom",
+    TOP: "top",
+    CENTER: "center",
+    BOTTOM: "bottom",
 });
 
 /**
@@ -44,7 +44,7 @@ export const getPositionInTheBox = (bounds, x, y) => {
         height: bounds.height * 0.4,
     };
 
-    if (isInside(top, x, y)) return "top";
-    if (isInside(center, x, y)) return "center";
-    else return "bottom";
+    if (isInside(top, x, y)) return PositionsInTheBox.TOP;
+    if (isInside(center, x, y)) return PositionsInTheBox.CENTER;
+    else return PositionsInTheBox.BOTTOM;
 };
