@@ -26,7 +26,9 @@ const BasePropertiesComponent = (props) => {
 
     const onChange = (event) => {
         const [groupName, valueName] = event.target.id.split("-");
-        const value = parseFloat(event.target.value) || "";
+        const parsedValue = parseFloat(event.target.value);
+        const value = !Number.isNaN(parsedValue) ? parsedValue : "";
+
         const payload = { nodeID: id };
 
         if (groupName === "position") payload[groupName] = { ...position, [valueName]: value };

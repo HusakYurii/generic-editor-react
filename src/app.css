@@ -1,3 +1,7 @@
+body {
+  overflow: hidden;
+}
+
 #root {
   position: absolute;
   z-index: 0;
