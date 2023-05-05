@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import "./header.css";
 
@@ -10,6 +10,7 @@ import { importResourcesAction } from "../../store/resources";
 import { importTreeDataAction } from "../../store/tree";
 import { importData } from "./features/importLogic";
 import { exportData } from "./features/exportLogic";
+import { ModalPopup } from "./ModalPopup";
 
 /**
  * @typedef {{
@@ -26,20 +27,24 @@ import { exportData } from "./features/exportLogic";
 * @param { HeaderComponentDependencies} props 
 */
 export const HeaderComponent = (props) => {
-
-
+    const [isModalVisible, setModalVisibility] = useState(false);
 
     return (
         <header>
             <div id="processor-options">
-                <span onClick={() => importData(props)} id="upload-option">Upload File</span>
-                <span onClick={() => exportData(store)} id="export-option">Export File</span>
+                <span>File</span>
+                <div id="options">
+                    <span onClick={() => setModalVisibility(true)}>New Project</span>
+                    <span onClick={() => importData(props)}>Import Files</span>
+                    <span onClick={() => exportData(store)}>Export Files</span>
+                </div>
             </div>
             <div>
                 <span>Docs</span>
                 <span>About</span>
                 <span>Report Bug</span>
             </div>
+            <ModalPopup isVisible={isModalVisible} onClose={() => setModalVisibility(false)} />
         </header>
     );
 };

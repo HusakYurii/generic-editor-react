@@ -1,0 +1,46 @@
+
+/* The Modal (background) */
+#modal {
+    display: none; 
+    position: fixed;
+    z-index: 20;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+  }
+
+  #modal.shown {
+    display: block; 
+  }
+  
+  /* Modal Content */
+  #modal-content {
+    background-color: #464646;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    padding: 20px;
+    width: 80%;
+  }
+  
+  /* The Close Button */
+  #close {
+    align-self: flex-end;
+    color: #aaaaaa;
+    background-color: transparent;
+    padding: 0px;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  #close:hover,
+  #close:focus {
+    color: #ffffff;
+    background-color: transparent;
+    cursor: pointer;
+  }
