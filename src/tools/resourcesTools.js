@@ -1,4 +1,6 @@
 
+//@TODO change all url: string to be data: string because it is confusing sometimes
+
 /**
  * Generic function to convert a File object
  * @param {File} file 
