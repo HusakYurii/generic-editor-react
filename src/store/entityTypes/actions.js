@@ -18,6 +18,13 @@ export const initSpriteEntityAction = (id) => {
 /**
  * @param {number} id 
  */
+export const initGraphicsEntityAction = (id) => {
+    return { type: ENTITY_TYPES_LIST_ACTIONS.INIT_GRAPHICS_ENTITY, payload: { nodeID: id } }
+};
+
+/**
+ * @param {number} id 
+ */
 export const removeEntityAction = (id) => {
     return { type: ENTITY_TYPES_LIST_ACTIONS.REMOVE_ENTITY, payload: {nodeID: id} }
 };

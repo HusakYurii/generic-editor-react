@@ -17,6 +17,7 @@ export const defaultStoreData = {
         base: {
             ...getBaseProperties(ROOT_NODE_ID)
         },
-        sprite: {}
+        sprite: {},
+        graphics: {}
     }
 }
