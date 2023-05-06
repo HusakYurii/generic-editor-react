@@ -14,6 +14,13 @@ import { GRAPHICS_PROPERTIES_ACTIONS } from "./actionTypes";
 
 /**
  * @typedef {{
+* nodeID: number;
+* type: keyof GRAPHICS_TYPES;
+* }} IChangeTypeActionPayload; 
+*/
+
+/**
+ * @typedef {{
  * nodeID: number;
  * properties: import("../../../data/StoreData").IGraphicsPropertiesCombination;
  * }} IUpdateActionPayload; 
@@ -47,15 +54,17 @@ const STATE = defaultStoreData.properties.graphics;
 /**
  * 
  * @param {IGraphicsPropertiesListState} state 
- * @param {{type: string;} & (IUpdateActionPayload | IInitActionPayload | IRemoveActionPayload) } data 
+ * @param {{type: string;} & (IUpdateActionPayload | IInitActionPayload | IRemoveActionPayload | IChangeTypeActionPayload) } data 
  * @returns {IGraphicsPropertiesListState}
  */
 export const graphicsPropertiesListReducer = (state = STATE, { type, payload }) => {
     if (type === GRAPHICS_PROPERTIES_ACTIONS.INIT_GRAPHICS_PROPERTIES) {
-        const newState = { ...state, [payload.nodeID]: getGraphicsProperties(payload.type) };
-        return newState;
+        return { ...state, [payload.nodeID]: { type: payload.type, ...getGraphicsProperties(payload.type) } };
     }
-
+    else if (type === GRAPHICS_PROPERTIES_ACTIONS.CHANGE_GRAPHICS_TYPE) {
+        // because I will use the same id, it will replace the properties for a new type
+        return { ...state, [payload.nodeID]: { type: payload.type, ...getGraphicsProperties(payload.type) } };
+    }
     else if (type === GRAPHICS_PROPERTIES_ACTIONS.REMOVE_GRAPHICS_PROPERTIES) {
         const newState = { ...state };
         delete newState[payload.nodeID];

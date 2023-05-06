@@ -59,7 +59,7 @@ const PreviewPanelComponent = ({
             <AppContext.Consumer>
                 {setApp}
             </AppContext.Consumer>
-            {createPixiTree(treeData, basePropertiesList, spritePropertiesList, entityTypesList, resourcesList)}
+            {/* {createPixiTree(treeData, basePropertiesList, spritePropertiesList, entityTypesList, resourcesList)} */}
         </Stage>
     );
 };

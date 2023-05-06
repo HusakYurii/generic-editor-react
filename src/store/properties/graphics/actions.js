@@ -24,6 +24,14 @@ export const updateGraphicsPropertiesAction = (payload) => {
 };
 
 /**
+ * @param {number} id 
+ * @param {keyof GRAPHICS_TYPES} type
+ */
+export const changeGraphicsTypeAction = (id, type) => {
+    return { type: GRAPHICS_PROPERTIES_ACTIONS.CHANGE_GRAPHICS_TYPE, payload: { nodeID: id, type } }
+};
+
+/**
  * @param {import("./reducer").IGraphicsPropertiesListState} payload 
  */
 export const importGraphicsPropertiesAction = (payload) => {
