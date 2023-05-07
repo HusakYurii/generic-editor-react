@@ -3,6 +3,7 @@ import { NameProperty } from "./name";
 import { BaseProperties } from "./base";
 import { ENTITY_TYPES } from "../../data/StoreData";
 import { GraphicsTypeSelector } from "./graphics/GraphicsTypeSelector";
+import { GraphicsProperties } from "./graphics/GraphicsProperties";
 
 /**
  * @param {number} id 
@@ -19,6 +20,7 @@ export const GraphicsEntity = () => {
             <NameProperty />
             <BaseProperties />
             <GraphicsTypeSelector />
+            <GraphicsProperties />
         </div>
     )
 }

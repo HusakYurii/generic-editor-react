@@ -1,15 +1,4 @@
 
 #graphics-types-selector {
     margin-top: 30px;
-    display: flex;
-    flex-direction: row;
-}
-
-#graphics-types-selector > p {
-    color: white;
-    width: 33%;
-}
-
-#graphics-types-selector > select {
-    width: 66%;
 }

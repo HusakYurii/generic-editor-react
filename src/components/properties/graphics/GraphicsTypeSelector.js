@@ -5,6 +5,7 @@ import "./graphicsTypeSelector.css";
 import { GRAPHICS_TYPES } from "../../../data/StoreData";
 import { changeGraphicsTypeAction } from "../../../store/properties/graphics";
 import { connect } from "react-redux";
+import { SelectorInput } from "../genericInputs/SelectorInput";
 
 const prettify = (string) => {
     string = string.toLocaleLowerCase().replace("_", " ");
@@ -24,18 +25,18 @@ const prettify = (string) => {
  */
 export const GraphicsTypeSelectorComponent = ({ selectedNodeID, graphicsList, changeGraphicsTypeAction }) => {
 
-    const entity = graphicsList[selectedNodeID];
+    const graphics = graphicsList[selectedNodeID];
 
-    const onChange = (event) => changeGraphicsTypeAction(selectedNodeID, event.target.value);
+    const onChange = (event) => {
+        if (graphics.type === event.target.value) {
+            return; // no need to change tot he same type
+        }
+        changeGraphicsTypeAction(selectedNodeID, event.target.value);
+    }
 
     return (
         <div id="graphics-types-selector" className="properties">
-            <p>Type</p>
-            <select value={entity.type} onChange={onChange}>
-                {Object.values(GRAPHICS_TYPES).map((type) => {
-                    return <option key={type} value={type}>{prettify(type)}</option>
-                })}
-            </select>
+            <SelectorInput {...{ label: "Type", selected: graphics.type, options: Object.values(GRAPHICS_TYPES), onChange }} />
         </div>
     )
 };
