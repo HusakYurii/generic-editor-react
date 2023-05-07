@@ -90,7 +90,7 @@ export const getSpriteProperties = (id) => {
 const baseGraphicsProps = {
     x: 0,
     y: 0,
-    color: 0x000000,
+    color: "0x000000",
     alpha: 1
 };
 
