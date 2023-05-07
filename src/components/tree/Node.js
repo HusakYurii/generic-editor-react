@@ -8,12 +8,14 @@ import spriteIcon from "../../assets/icons/sprite.png";
 import textIcon from "../../assets/icons/text.png";
 import nineSliceSpriteIcon from "../../assets/icons/nine-slice-sprite.png";
 import animatedSpriteIcon from "../../assets/icons/animated-sprite.png";
+import graphicsIcon from "../../assets/icons/graphics.png";
 
 export const NODE_DATA_TYPE_ATTRIBUTE = "node-element";
 
 const ICONS_TO_ENTITIES_MAP = {
     [ENTITY_TYPES.CONTAINER]: containerIcon,
-    [ENTITY_TYPES.SPRITE]: spriteIcon
+    [ENTITY_TYPES.SPRITE]: spriteIcon,
+    [ENTITY_TYPES.GRAPHICS]: graphicsIcon
 };
 
 /**

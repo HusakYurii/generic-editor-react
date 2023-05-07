@@ -28,6 +28,9 @@ export const mockStoreData = {
         },
         sprite: {
             ...getSpriteProperties(645)
+        },
+        graphics: {
+
         }
     }
 }
