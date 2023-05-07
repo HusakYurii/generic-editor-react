@@ -4,23 +4,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { updateGraphicsPropertiesAction } from "../../../../store/properties/graphics";
 import { ColorInput, NumberInput, PointInput } from "../../genericInputs";
-
-/**
- * 
- * @param {string} color 
- * @returns string
- */
-const convertColorFormat = (color) => {
-    if (color.startsWith("0x")) {
-        // convert to #00000 format
-        return "#" + color.substring(2);
-    }
-    if (color.startsWith("#")) {
-        // convert to 0x00000 format
-        return "0x" + color.substring(1);
-    }
-    return null;
-}
+import { convertColorFormat } from "../../../../tools/color";
 
 /**
  * @typedef {{
@@ -50,6 +34,9 @@ export const RectanglePropertiesComponent = ({ selectedNodeID, graphicsList, upd
         });
     };
 
+    /**
+     * @param {InputEvent} event 
+     */
     const onColorChange = (event) => {
         const key = event.target.getAttribute("data-id");
         updateGraphicsPropertiesAction({
@@ -70,9 +57,10 @@ export const RectanglePropertiesComponent = ({ selectedNodeID, graphicsList, upd
     const sizeData = {
         label: "Size",
         dataIDs: ["width", "height"],
+        min: 0,
         values: [graphics.width, graphics.height],
         onChange
-    }
+    };
     const colorData = {
         label: "Color",
         dataID: "color",
@@ -83,6 +71,8 @@ export const RectanglePropertiesComponent = ({ selectedNodeID, graphicsList, upd
         label: "Alpha",
         dataID: "alpha",
         value: graphics.alpha,
+        min: 0,
+        max: 1,
         step: 0.01,
         onChange
     };

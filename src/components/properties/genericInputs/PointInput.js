@@ -22,6 +22,8 @@ const style = {
  *  label: string;
  *  dataIDs?: [string, string];
  *  values: [number, number];
+ *  min?: number;
+ *  max?: number;
  *  step?: number;
  *  onChange: (event: InputEvent) => void;
  * }} PointInputDependencies
@@ -30,13 +32,13 @@ const style = {
 /**
  * @param {PointInputDependencies} props
  */
-export const PointInput = ({ label, values, onChange, step = 1, dataIDs = ["", ""] }) => {
+export const PointInput = ({ label, values, onChange, min = -1e6, max = 1e6, step = 0.5, dataIDs = ["", ""] }) => {
 
     return (
         <div style={{ ...style.div }}>
             <span style={{ ...style.label, ...style.element }}>{label}</span>
-            <input type="number" data-id={dataIDs[0]} step={step} value={values[0]} onChange={onChange} style={{ ...style.element }} />
-            <input type="number" data-id={dataIDs[1]} step={step} value={values[1]} onChange={onChange} style={{ ...style.element }} />
+            <input type="number" data-id={dataIDs[0]} min={min} max={max} step={step} value={values[0]} onChange={onChange} style={{ ...style.element }} />
+            <input type="number" data-id={dataIDs[1]} min={min} max={max} step={step} value={values[1]} onChange={onChange} style={{ ...style.element }} />
         </div>
     );
 }
