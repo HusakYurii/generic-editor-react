@@ -3,7 +3,7 @@ import React from "react";
 
 import { connect } from "react-redux";
 import { updateGraphicsPropertiesAction } from "../../../../store/properties/graphics";
-import { ColorInput, NumberInput, PointInput } from "../../genericInputs";
+import { ColorInput, NumberInput, PointInput, negativeNumbersMiddleware } from "../../genericInputs";
 import { convertColorFormat } from "../../../../tools/color";
 
 /**
@@ -57,6 +57,7 @@ export const CirclePropertiesComponent = ({ selectedNodeID, graphicsList, update
         dataID: "radius",
         min: 0,
         value: graphics.radius,
+        middleware: negativeNumbersMiddleware,
         onChange
     };
     const colorData = {
@@ -72,6 +73,7 @@ export const CirclePropertiesComponent = ({ selectedNodeID, graphicsList, update
         min: 0,
         max: 1,
         step: 0.01,
+        middleware: negativeNumbersMiddleware,
         onChange
     };
 

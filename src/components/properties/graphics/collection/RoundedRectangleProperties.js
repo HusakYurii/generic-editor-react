@@ -3,7 +3,7 @@ import React from "react";
 
 import { connect } from "react-redux";
 import { updateGraphicsPropertiesAction } from "../../../../store/properties/graphics";
-import { ColorInput, NumberInput, PointInput } from "../../genericInputs";
+import { ColorInput, NumberInput, PointInput, negativeNumbersMiddleware } from "../../genericInputs";
 import { convertColorFormat } from "../../../../tools/color";
 
 /**
@@ -73,6 +73,7 @@ export const RoundedRectanglePropertiesComponent = ({ selectedNodeID, graphicsLi
         min: 0,
         max: 1,
         step: 0.01,
+        middleware: negativeNumbersMiddleware,
         onChange
     };
 
@@ -81,6 +82,7 @@ export const RoundedRectanglePropertiesComponent = ({ selectedNodeID, graphicsLi
         dataID: "cornerRadius",
         value: graphics.cornerRadius,
         min: 1,
+        middleware: negativeNumbersMiddleware,
         onChange
     }
 

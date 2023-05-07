@@ -2,7 +2,7 @@
     margin-top: 30px;
 }
 
-#sprite-properties div {
+#sprite-properties > div {
     display: flex;
     flex-direction: row;
     margin-top: 4px;
@@ -10,9 +10,6 @@
 
 #sprite-properties div span {
     color: white;
-}
-
-#sprite-properties div > * {
     text-align: left;
     width: 33%;
 }

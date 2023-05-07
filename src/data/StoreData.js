@@ -99,8 +99,8 @@ const baseGraphicsProps = {
  */
 const getRectangleProperties = () => {
     return {
-        width: 10,
-        height: 10,
+        width: 100,
+        height: 100,
         ...baseGraphicsProps
     }
 };
@@ -110,9 +110,9 @@ const getRectangleProperties = () => {
  */
 const getRoundedRectangleProperties = () => {
     return {
-        width: 10,
-        height: 10,
-        cornerRadius: 2,
+        width: 100,
+        height: 100,
+        cornerRadius: 20,
         ...baseGraphicsProps
     }
 };
@@ -122,7 +122,7 @@ const getRoundedRectangleProperties = () => {
  */
 const getCircleProperties = () => {
     return {
-        radius: 5,
+        radius: 50,
         ...baseGraphicsProps
     }
 }

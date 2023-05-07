@@ -24,19 +24,25 @@ const style = {
  *  label: string;
  *  dataID?: string;
  *  value: string;
+ *  middleware?: (event: InputEvent) => InputEvent;
  *  onChange: (event: InputEvent) => void;
- * }} TextValueInputDependencies
+ * }} TextInputDependencies
  */
 
 /**
- * @param {TextValueInputDependencies} props
+ * @param {TextInputDependencies} props
  */
-export const TextValueInput = ({ label, value, onChange, dataID = "" }) => {
+export const TextInput = ({ label, value, onChange, dataID = "", middleware = (event) => event }) => {
 
     return (
         <div style={{ ...style.div }}>
             <span style={{ ...style.label, ...style.element }}>{label}</span>
-            <input type="text" data-id={dataID} value={value} onChange={onChange} style={{ ...style.element }} />
+            <input
+                type="text"
+                data-id={dataID}
+                value={value}
+                onChange={(e) => onChange(middleware(e))}
+                style={{ ...style.element }} />
         </div>
     );
 }
