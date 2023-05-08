@@ -1,11 +1,13 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 
 import { connect } from "react-redux";
 import { updateNodeNameAction } from "../../../store/tree";
 import { getNodeByID } from "../../../tools/treeTools";
 
 import "./nameProperty.css";
+import { TextInput } from "../genericInputs/TextInput";
 
+const INVALID_NAME = "No name";
 
 /**
  * @typedef {import("../../../store/tree").ITreeState & {
@@ -18,37 +20,32 @@ import "./nameProperty.css";
  */
 const NamePropertyComponent = (props) => {
     const node = getNodeByID(props.selectedNodeID, props.treeData);
+    const isInvalid = (node.name.length === 0) || (node.name === INVALID_NAME);
 
     // update the name value of the selected node
     const onChange = (event) => {
         props.updateNodeNameAction({ nodeID: props.selectedNodeID, name: event.target.value });
-        if (event.target.value.length === 0) {
-            event.target.classList.add("invalidName")
-        }
-        else {
-            event.target.classList.remove("invalidName")
-        }
     };
 
     // to verify the name value at the end. I must not be empty
     const onBlur = (event) => {
         let value = event.target.value.trim();
-        if (value.length === 0) {
-            value = "No name";
-        }
+        value = value.length === 0 ? INVALID_NAME : value;
+
         props.updateNodeNameAction({ nodeID: props.selectedNodeID, name: value });
-    }
+    };
 
     return (
-        <div className="properties flexRow">
-            <span className="colorWhite widthOneThird">Name</span>
-            <input
-                className="widthTwoThird"
-                type="text"
-                value={node.name}
-                onBlur={onBlur}
-                onChange={onChange}
-            />
+        <div className="properties">
+            <TextInput {
+                ...{
+                    label: "Name",
+                    value: node.name,
+                    className: isInvalid ? "invalidName" : "",
+                    onChange,
+                    onBlur
+                }
+            } />
         </div>
     )
 }
