@@ -1,23 +1,5 @@
 import React from "react";
 
-const style = {
-    div: {
-        display: "flex",
-        flexDirection: "row",
-        marginTop: "4px"
-    },
-
-    label: {
-        color: "white",
-        textAlign: "left",
-        width: "33%"
-
-    },
-    element: {
-        textAlign: "left",
-        width: "66%"
-    }
-};
 
 /**
  * @typedef {{
@@ -35,14 +17,15 @@ const style = {
 export const TextInput = ({ label, value, onChange, dataID = "", middleware = (event) => event }) => {
 
     return (
-        <div style={{ ...style.div }}>
-            <span style={{ ...style.label, ...style.element }}>{label}</span>
+        <div className="flexRow">
+            <span className="textLeft colorWhite widthOneThird">{label}</span>
             <input
+                className="widthTwoThird"
                 type="text"
                 data-id={dataID}
                 value={value}
                 onChange={(e) => onChange(middleware(e))}
-                style={{ ...style.element }} />
+            />
         </div>
     );
 }

@@ -1,3 +1,7 @@
 .properties {
     margin: 10px 10px;
 }
+
+.propertiesTopOffset {
+    margin-top: 30px;
+}

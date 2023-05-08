@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import store from "../../store";
 
 import "./propertiesPanel.css";
+import "./genericInputs/genericInputStyle.css";
 
 import { ContainerEntity, isContainerEntity } from "./ContainerEntity";
 import { SpriteEntity, isSpriteEntity } from "./SpriteEntity";
@@ -21,7 +22,7 @@ const PropertiesPanelComponent = (props) => {
     const entity = TYPE_TO_ENTITY_MAP.find((entity) => entity.checker(id, store.getState()));
 
     return (
-        <div>
+        <div style={{ marginTop: 20 }}>
             {entity ? entity.component : null}
         </div>
     )

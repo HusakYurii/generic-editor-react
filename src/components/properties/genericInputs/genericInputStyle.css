@@ -1,0 +1,33 @@
+.flexRow {
+    display: flex;
+    flex-direction: row;
+    margin-top: 4px;
+}
+
+.textLeft {
+    text-align:left;
+}
+
+.textRight {
+    text-align: right;
+}
+
+.colorWhite {
+    color: white;
+}
+
+.widthOneThird {
+    width: 33%;
+}
+
+.widthTwoThird {
+    width: 66%;
+}
+
+.positionRelative {
+    position: relative;
+}
+
+.positionAbsolute {
+    position: absolute;
+}

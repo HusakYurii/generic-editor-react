@@ -3,7 +3,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { updateBasePropertiesAction } from "../../../store/properties/base";
 
-import "./baseProperties.css";
 import { NumberInput, PointInput } from "../genericInputs";
 
 
@@ -71,7 +70,7 @@ const BasePropertiesComponent = ({ selectedNodeID, basePropertiesList, updateBas
     };
 
     return (
-        <div id="base-properties" className="properties">
+        <div className="properties propertiesTopOffset">
             <PointInput {...positionData} />
             <PointInput {...scaleData} />
             <NumberInput {...angleData} />

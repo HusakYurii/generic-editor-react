@@ -17,23 +17,22 @@ import "./nameProperty.css";
  * @param {NamePropertyComponentDependencies} props 
  */
 const NamePropertyComponent = (props) => {
-    const inputRef = useRef(null);
     const node = getNodeByID(props.selectedNodeID, props.treeData);
 
     // update the name value of the selected node
     const onChange = (event) => {
         props.updateNodeNameAction({ nodeID: props.selectedNodeID, name: event.target.value });
         if (event.target.value.length === 0) {
-            inputRef.current.classList.add("invalid")
+            event.target.classList.add("invalidName")
         }
         else {
-            inputRef.current.classList.remove("invalid")
+            event.target.classList.remove("invalidName")
         }
     };
 
     // to verify the name value at the end. I must not be empty
-    const onBlur = () => {
-        let value = inputRef.current.value.trim();
+    const onBlur = (event) => {
+        let value = event.target.value.trim();
         if (value.length === 0) {
             value = "No name";
         }
@@ -41,9 +40,15 @@ const NamePropertyComponent = (props) => {
     }
 
     return (
-        <div id="name-property" className="properties">
-            <span htmlFor="name">Name</span>
-            <input type="text" ref={inputRef} value={node.name} onBlur={onBlur} onChange={onChange}></input>
+        <div className="properties flexRow">
+            <span className="colorWhite widthOneThird">Name</span>
+            <input
+                className="widthTwoThird"
+                type="text"
+                value={node.name}
+                onBlur={onBlur}
+                onChange={onChange}
+            />
         </div>
     )
 }

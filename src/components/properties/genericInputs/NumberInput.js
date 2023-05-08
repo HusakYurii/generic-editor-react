@@ -1,22 +1,5 @@
 import React from "react";
 
-const style = {
-    div: {
-        display: "flex",
-        flexDirection: "row",
-        marginTop: "4px"
-    },
-
-    label: {
-        color: "white",
-
-    },
-    element: {
-        textAlign: "left",
-        width: "33%"
-    }
-};
-
 /**
  * @typedef {{
  *  label: string;
@@ -45,9 +28,10 @@ export const NumberInput = ({
 }) => {
 
     return (
-        <div style={{ ...style.div }}>
-            <span style={{ ...style.label, ...style.element }}>{label}</span>
+        <div className="flexRow">
+            <span className="textLeft colorWhite widthOneThird">{label}</span>
             <input
+                className="widthOneThird"
                 type="number"
                 data-id={dataID}
                 min={min}
@@ -55,7 +39,7 @@ export const NumberInput = ({
                 step={step}
                 value={value}
                 onChange={(e) => onChange(middleware(e))}
-                style={{ ...style.element }} />
+            />
         </div>
     );
 }

@@ -69,11 +69,11 @@ const SpritePropertiesComponent = (props) => {
     };
 
     return (
-        <div id="sprite-properties" className="properties">
-            <div>
-                <span>Texture</span>
+        <div className="properties propertiesTopOffset">
+            <div className="flexRow">
+                <span className="textLeft colorWhite widthOneThird">Texture</span>
                 <textarea
-                    id="texture"
+                    id="textureInput"
                     disabled value={resourceName}
                     onDragOver={onDragOver}
                     onDragEnter={onDragEnter}

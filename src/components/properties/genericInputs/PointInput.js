@@ -1,22 +1,5 @@
 import React from "react";
 
-const style = {
-    div: {
-        display: "flex",
-        flexDirection: "row",
-        marginTop: "4px"
-    },
-
-    label: {
-        color: "white",
-
-    },
-    element: {
-        textAlign: "left",
-        width: "33%"
-    }
-};
-
 /**
  * @typedef {{
  *  label: string;
@@ -45,9 +28,10 @@ export const PointInput = ({
 }) => {
 
     return (
-        <div style={{ ...style.div }}>
-            <span style={{ ...style.label, ...style.element }}>{label}</span>
+        <div className="flexRow">
+            <span className="textLeft colorWhite widthOneThird">{label}</span>
             <input
+                className="widthOneThird"
                 type="number"
                 data-id={dataIDs[0]}
                 min={min}
@@ -55,9 +39,10 @@ export const PointInput = ({
                 step={step}
                 value={values[0]}
                 onChange={(e) => onChange(middleware(e))}
-                style={{ ...style.element }} />
+            />
 
             <input
+                className="widthOneThird"
                 type="number"
                 data-id={dataIDs[1]}
                 min={min}
@@ -65,7 +50,7 @@ export const PointInput = ({
                 step={step}
                 value={values[1]}
                 onChange={(e) => onChange(middleware(e))}
-                style={{ ...style.element }} />
+            />
         </div>
     );
 }
