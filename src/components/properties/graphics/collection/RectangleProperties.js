@@ -52,13 +52,14 @@ export const RectanglePropertiesComponent = ({ selectedNodeID, graphicsList, upd
         label: "Origin",
         dataIDs: ["x", "y"],
         values: [graphics.x, graphics.y],
+        signs: ["X", "Y"],
         onChange
     };
     const sizeData = {
         label: "Size",
         dataIDs: ["width", "height"],
-        min: 0,
         values: [graphics.width, graphics.height],
+        signs: ["W", "H"],
         onChange
     };
     const colorData = {
@@ -71,8 +72,6 @@ export const RectanglePropertiesComponent = ({ selectedNodeID, graphicsList, upd
         label: "Alpha",
         dataID: "alpha",
         value: graphics.alpha,
-        min: 0,
-        max: 1,
         step: 0.01,
         onChange
     };

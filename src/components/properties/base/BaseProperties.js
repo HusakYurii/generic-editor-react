@@ -3,7 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { updateBasePropertiesAction } from "../../../store/properties/base";
 
-import "./baseProperties.css";
+import { NumberInput, PointInput } from "../genericInputs";
 
 
 /**
@@ -18,45 +18,65 @@ import "./baseProperties.css";
  * Each node must have base properties
  * @param { BasePropertiesComponentDependencies} props 
  */
-const BasePropertiesComponent = (props) => {
+const BasePropertiesComponent = ({ selectedNodeID, basePropertiesList, updateBasePropertiesAction }) => {
 
-    const id = props.selectedNodeID;
+    const nodeID = selectedNodeID;
+    const { scale, position, rotation } = basePropertiesList[nodeID];
 
-    const { scale, position, rotation } = props.basePropertiesList[id];
+    const onPointChange = (event) => {
+        const [groupKey, key] = event.target.getAttribute("data-id").split("-");
+        const parsedValue = parseFloat(event.target.value);
+        const value = !Number.isNaN(parsedValue) ? parsedValue : "";
+        const payload = {
+            nodeID,
+            position: { ...position },
+            scale: { ...scale },
+        };
+        payload[groupKey][key] = value;
+        updateBasePropertiesAction(payload);
+    };
 
-    const onChange = (event) => {
-        const [groupName, valueName] = event.target.id.split("-");
+    const onValueChange = (event) => {
         const parsedValue = parseFloat(event.target.value);
         const value = !Number.isNaN(parsedValue) ? parsedValue : "";
 
-        const payload = { nodeID: id };
+        const payload = {
+            nodeID,
+            rotation: value
+        };
 
-        if (groupName === "position") payload[groupName] = { ...position, [valueName]: value };
-        else if (groupName === "scale") payload[groupName] = { ...scale, [valueName]: value };
-        else payload[groupName] = value;
+        updateBasePropertiesAction(payload);
+    };
 
+    const positionData = {
+        label: "Position",
+        dataIDs: ["position-x", "position-y"],
+        values: [position.x, position.y],
+        signs: ["X", "Y"],
+        onChange: onPointChange
+    };
 
-        props.updateBasePropertiesAction(payload);
+    const scaleData = {
+        label: "Scale",
+        dataIDs: ["scale-x", "scale-y"],
+        values: [scale.x, scale.y],
+        signs: ["X", "Y"],
+        onChange: onPointChange
+    };
+
+    const angleData = {
+        label: "Rotation",
+        dataID: "rotation",
+        value: rotation,
+        sign: "DEG",
+        onChange: onValueChange
     };
 
     return (
-        <div id="base-properties" className="properties">
-            <div>
-                <span>Position</span>
-                <input type="number" id="position-x" step="1" value={position.x} onChange={onChange}></input>
-                <input type="number" id="position-y" step="1" value={position.y} onChange={onChange}></input>
-            </div>
-
-            <div>
-                <span>Scale</span>
-                <input type="number" id="scale-x" step="1" value={scale.x} onChange={onChange}></input>
-                <input type="number" id="scale-y" step="1" value={scale.y} onChange={onChange}></input>
-            </div>
-
-            <div>
-                <span>Rotation</span>
-                <input type="number" id="rotation" step="1" value={rotation} onChange={onChange}></input>
-            </div>
+        <div className="properties propertiesTopOffset">
+            <PointInput {...positionData} />
+            <PointInput {...scaleData} />
+            <NumberInput {...angleData} />
         </div>
     )
 }

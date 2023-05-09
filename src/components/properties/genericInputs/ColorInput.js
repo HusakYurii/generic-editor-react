@@ -1,22 +1,5 @@
 import React from "react";
 
-const style = {
-    div: {
-        display: "flex",
-        flexDirection: "row",
-        marginTop: "4px"
-    },
-
-    label: {
-        color: "white",
-        textAlign: "left",
-        width: "33%"
-    },
-    element: {
-        width: "66%"
-    }
-};
-
 /**
  * @typedef {{
  *  label: string;
@@ -32,9 +15,9 @@ const style = {
 export const ColorInput = ({ label, value, onChange, dataID = "" }) => {
 
     return (
-        <div style={{ ...style.div }}>
-            <span style={{ ...style.label }}>{label}</span>
-            <input type="color" data-id={dataID} value={value} onChange={onChange} style={{ ...style.element }} />
+        <div className="flexRow">
+            <span className="colorGray textLeft widthOneThird">{label}</span>
+            <input className="widthTwoThird" type="color" data-id={dataID} value={value} onChange={onChange} />
         </div>
     );
 }

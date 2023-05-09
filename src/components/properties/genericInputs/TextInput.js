@@ -1,42 +1,42 @@
 import React from "react";
 
-const style = {
-    div: {
-        display: "flex",
-        flexDirection: "row",
-        marginTop: "4px"
-    },
-
-    label: {
-        color: "white",
-        textAlign: "left",
-        width: "33%"
-
-    },
-    element: {
-        textAlign: "left",
-        width: "66%"
-    }
-};
 
 /**
  * @typedef {{
  *  label: string;
  *  dataID?: string;
  *  value: string;
+ *  className?: string;
+ *  middleware?: (event: InputEvent) => InputEvent;
+ *  onBlur?: (event: InputEvent) => InputEvent;
  *  onChange: (event: InputEvent) => void;
- * }} TextValueInputDependencies
+ * }} TextInputDependencies
  */
 
 /**
- * @param {TextValueInputDependencies} props
+ * @param {TextInputDependencies} props
  */
-export const TextValueInput = ({ label, value, onChange, dataID = "" }) => {
+export const TextInput = ({
+    label,
+    value,
+    onChange,
+    dataID = "",
+    className = "",
+    onBlur = (e) => e,
+    middleware = (e) => e
+}) => {
 
     return (
-        <div style={{ ...style.div }}>
-            <span style={{ ...style.label, ...style.element }}>{label}</span>
-            <input type="text" data-id={dataID} value={value} onChange={onChange} style={{ ...style.element }} />
+        <div className="flexRow">
+            <span className="textLeft colorGray widthOneThird">{label}</span>
+            <input
+                className={`widthTwoThird ${className}`}
+                type="text"
+                data-id={dataID}
+                value={value}
+                onBlur={onBlur}
+                onChange={(e) => onChange(middleware(e))}
+            />
         </div>
     );
 }

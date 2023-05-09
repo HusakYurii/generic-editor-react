@@ -1,0 +1,106 @@
+.flexRow {
+    display: flex;
+    flex-direction: row;
+    margin-top: 4px;
+    justify-content: space-between
+}
+
+.textLeft {
+    text-align:left;
+}
+
+.textRight {
+    text-align: right;
+}
+
+.colorWhite {
+    color: white;
+}
+
+.colorGray {
+    color: #98bbbd;
+}
+
+.widthFull {
+    width: 100%;
+}
+
+.widthOneThird {
+    width: 32%;
+}
+
+.widthTwoThird {
+    width: 66%;
+}
+
+.positionRelative {
+    position: relative;
+}
+
+.positionAbsolute {
+    position: absolute;
+}
+
+span {
+    font-size: 16px;
+}
+
+textarea, input { 
+    border: none;
+    border-color: transparent;
+    outline: none;
+    background-color: #2c393c;
+    color: #bbd2d4;
+    font-size: 14px;
+}
+
+select {
+    border: none;
+    border-color: transparent;
+    outline: none;
+    background-color: #2c393c;
+    color: #bbd2d4;
+    font-size: 14px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+textarea::-webkit-scrollbar {
+    display: none;
+}
+
+input[type=number],
+input[type=text] {
+    padding: 2px 25px 2px 4px;
+}
+textarea {
+    padding: 2px;
+}
+
+.inputAfterElement::after {
+    top: calc(100% / 2);
+    transform: translate(0px, -50%);
+    position: absolute;
+    color: #bbd2d4;
+    text-align: left;
+    right: 4px;
+    font-size: 12px;
+    content: attr(data-sign);
+}
+
+.indicator {
+    padding-right: 2px;
+    height: 19px;
+    right: 0;    
+    text-align: center;
+}

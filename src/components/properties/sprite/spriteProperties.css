@@ -1,29 +1,9 @@
-#sprite-properties {
-    margin-top: 30px;
-}
-
-#sprite-properties div {
-    display: flex;
-    flex-direction: row;
-    margin-top: 4px;
-}
-
-#sprite-properties div span {
-    color: white;
-}
-
-#sprite-properties div > * {
-    text-align: left;
-    width: 33%;
-}
-
-#sprite-properties textarea {
+#textureInput {
     width: 66%;
     height: 19px;
     resize: none;
-    background-color: white;
 }
 
-#sprite-properties textarea.dragOver {
+#textureInput.dragOver {
     background-color: rgb(243, 123, 62);
 }

@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { updateSpritePropertiesAction } from "../../../store/properties/sprite";
 
 import "./spriteProperties.css";
+import { PointInput } from "../genericInputs/PointInput";
 
 
 /**
@@ -35,12 +36,12 @@ const SpritePropertiesComponent = (props) => {
     }, [resource]);
 
     const onInputChange = (event) => {
-        const [groupName, valueName] = event.target.id.split("-");
+        const [groupKey, key] = event.target.getAttribute("data-id").split("-");
         const parsedValue = parseFloat(event.target.value);
         const value = !Number.isNaN(parsedValue) ? parsedValue : "";
 
         const payload = { nodeID: id, anchor: { ...anchor } };
-        payload[groupName][valueName] = value;
+        payload[groupKey][key] = value;
 
         props.updateSpritePropertiesAction(payload);
     };
@@ -60,12 +61,20 @@ const SpritePropertiesComponent = (props) => {
         window["__RESOURCE_ID"] = undefined;
     };
 
+    const anchorData = {
+        label: "Anchor",
+        dataIDs: ["anchor-x", "anchor-y"],
+        values: [anchor.x, anchor.y],
+        signs: ["X", "Y"],
+        onChange: onInputChange
+    };
+
     return (
-        <div id="sprite-properties" className="properties">
-            <div>
-                <span>Texture</span>
+        <div className="properties propertiesTopOffset">
+            <div className="flexRow">
+                <span className="textLeft colorGray widthOneThird">Texture</span>
                 <textarea
-                    id="texture"
+                    id="textureInput"
                     disabled value={resourceName}
                     onDragOver={onDragOver}
                     onDragEnter={onDragEnter}
@@ -73,11 +82,7 @@ const SpritePropertiesComponent = (props) => {
                     onDrop={onDrop}
                 ></textarea>
             </div>
-            <div>
-                <span>Anchor</span>
-                <input type="number" id="anchor-x" step="0.01" value={anchor.x} onChange={onInputChange}></input>
-                <input type="number" id="anchor-y" step="0.01" value={anchor.y} onChange={onInputChange}></input>
-            </div>
+            <PointInput {...anchorData} />
         </div>
     )
 }
