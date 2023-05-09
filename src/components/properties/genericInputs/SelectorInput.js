@@ -16,7 +16,7 @@ export const SelectorInput = ({ label, selected, options, onChange }) => {
 
     return (
         <div className="flexRow">
-            <span className="textLeft colorWhite widthOneThird">{label}</span>
+            <span className="textLeft colorGray widthOneThird">{label}</span>
             <select value={selected} onChange={onChange} className="widthTwoThird">
                 {options.map((option) => {
                     return <option key={option} value={option}>{option}</option>

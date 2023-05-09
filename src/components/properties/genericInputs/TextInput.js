@@ -28,7 +28,7 @@ export const TextInput = ({
 
     return (
         <div className="flexRow">
-            <span className="textLeft colorWhite widthOneThird">{label}</span>
+            <span className="textLeft colorGray widthOneThird">{label}</span>
             <input
                 className={`widthTwoThird ${className}`}
                 type="text"

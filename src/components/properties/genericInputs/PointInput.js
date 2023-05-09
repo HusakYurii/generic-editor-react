@@ -29,7 +29,7 @@ export const PointInput = ({
 
     return (
         <div className="flexRow">
-            <span className="textLeft colorWhite widthOneThird">{label}</span>
+            <span className="textLeft colorGray widthOneThird">{label}</span>
             <input
                 className="widthOneThird"
                 type="number"

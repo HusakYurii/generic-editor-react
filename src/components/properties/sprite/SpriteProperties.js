@@ -71,7 +71,7 @@ const SpritePropertiesComponent = (props) => {
     return (
         <div className="properties propertiesTopOffset">
             <div className="flexRow">
-                <span className="textLeft colorWhite widthOneThird">Texture</span>
+                <span className="textLeft colorGray widthOneThird">Texture</span>
                 <textarea
                     id="textureInput"
                     disabled value={resourceName}

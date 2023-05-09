@@ -16,7 +16,7 @@ export const ColorInput = ({ label, value, onChange, dataID = "" }) => {
 
     return (
         <div className="flexRow">
-            <span className="colorWhite textLeft widthOneThird">{label}</span>
+            <span className="colorGray textLeft widthOneThird">{label}</span>
             <input className="widthTwoThird" type="color" data-id={dataID} value={value} onChange={onChange} />
         </div>
     );
