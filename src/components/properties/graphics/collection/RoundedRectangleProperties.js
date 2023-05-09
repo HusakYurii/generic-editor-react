@@ -51,13 +51,14 @@ export const RoundedRectanglePropertiesComponent = ({ selectedNodeID, graphicsLi
         label: "Origin",
         dataIDs: ["x", "y"],
         values: [graphics.x, graphics.y],
+        signs: ["X", "Y"],
         onChange
     };
     const sizeData = {
         label: "Size",
         dataIDs: ["width", "height"],
-        min: 0,
         values: [graphics.width, graphics.height],
+        signs: ["W", "H"],
         onChange
     };
     const colorData = {
@@ -70,8 +71,6 @@ export const RoundedRectanglePropertiesComponent = ({ selectedNodeID, graphicsLi
         label: "Alpha",
         dataID: "alpha",
         value: graphics.alpha,
-        min: 0,
-        max: 1,
         step: 0.01,
         middleware: negativeNumbersMiddleware,
         onChange
@@ -81,7 +80,7 @@ export const RoundedRectanglePropertiesComponent = ({ selectedNodeID, graphicsLi
         label: "Corner",
         dataID: "cornerRadius",
         value: graphics.cornerRadius,
-        min: 1,
+        sign: "R",
         middleware: negativeNumbersMiddleware,
         onChange
     }

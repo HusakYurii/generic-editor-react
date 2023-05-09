@@ -65,6 +65,7 @@ const SpritePropertiesComponent = (props) => {
         label: "Anchor",
         dataIDs: ["anchor-x", "anchor-y"],
         values: [anchor.x, anchor.y],
+        signs: ["X", "Y"],
         onChange: onInputChange
     };
 

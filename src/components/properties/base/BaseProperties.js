@@ -52,6 +52,7 @@ const BasePropertiesComponent = ({ selectedNodeID, basePropertiesList, updateBas
         label: "Position",
         dataIDs: ["position-x", "position-y"],
         values: [position.x, position.y],
+        signs: ["X", "Y"],
         onChange: onPointChange
     };
 
@@ -59,6 +60,7 @@ const BasePropertiesComponent = ({ selectedNodeID, basePropertiesList, updateBas
         label: "Scale",
         dataIDs: ["scale-x", "scale-y"],
         values: [scale.x, scale.y],
+        signs: ["X", "Y"],
         onChange: onPointChange
     };
 
@@ -66,6 +68,7 @@ const BasePropertiesComponent = ({ selectedNodeID, basePropertiesList, updateBas
         label: "Rotation",
         dataID: "rotation",
         value: rotation,
+        sign: "DEG",
         onChange: onValueChange
     };
 

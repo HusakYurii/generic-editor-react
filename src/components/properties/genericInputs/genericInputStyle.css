@@ -20,9 +20,11 @@
 .colorGray {
     color: #98bbbd;
 }
-.widthZero {
-    width: 0;
+
+.widthFull {
+    width: 100%;
 }
+
 .widthOneThird {
     width: 32%;
 }
@@ -84,8 +86,16 @@ textarea {
     padding: 2px;
 }
 
-
-
+.inputAfterElement::after {
+    top: calc(100% / 2);
+    transform: translate(0px, -50%);
+    position: absolute;
+    color: #bbd2d4;
+    text-align: left;
+    right: 4px;
+    font-size: 12px;
+    content: attr(data-sign);
+}
 
 .indicator {
     padding-right: 2px;

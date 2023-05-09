@@ -50,13 +50,14 @@ export const CirclePropertiesComponent = ({ selectedNodeID, graphicsList, update
         label: "Origin",
         dataIDs: ["x", "y"],
         values: [graphics.x, graphics.y],
+        signs: ["X", "Y"],
         onChange
     };
     const radiusData = {
         label: "Radius",
         dataID: "radius",
-        min: 0,
         value: graphics.radius,
+        sign: "R",
         middleware: negativeNumbersMiddleware,
         onChange
     };
@@ -70,8 +71,6 @@ export const CirclePropertiesComponent = ({ selectedNodeID, graphicsList, update
         label: "Alpha",
         dataID: "alpha",
         value: graphics.alpha,
-        min: 0,
-        max: 1,
         step: 0.01,
         middleware: negativeNumbersMiddleware,
         onChange

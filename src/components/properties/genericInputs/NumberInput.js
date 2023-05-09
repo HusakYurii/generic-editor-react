@@ -5,8 +5,7 @@ import React from "react";
  *  label: string;
  *  dataID?: string;
  *  step?: number;
- *  min?: number;
- *  max?: number;
+ *  sign? : sting; // is used for UI to
  *  value: number;
  *  middleware?: (event: InputEvent) => InputEvent;
  *  onChange: (event: InputEvent) => void;
@@ -20,26 +19,26 @@ export const NumberInput = ({
     label,
     value,
     onChange,
-    min = -1e6,
-    max = 1e6,
     step = 0.5,
     dataID = "",
+    sign = "",
     middleware = (event) => event
 }) => {
 
     return (
         <div className="flexRow">
             <span className="textLeft colorGray widthOneThird">{label}</span>
-            <input
-                className="widthOneThird"
-                type="number"
-                data-id={dataID}
-                min={min}
-                max={max}
-                step={step}
-                value={value}
-                onChange={(e) => onChange(middleware(e))}
-            />
+            <div data-sign={sign} className="widthOneThird positionRelative inputAfterElement">
+                <input
+                    className="widthFull"
+                    type="number"
+                    data-id={dataID}
+                    step={step}
+                    value={value}
+                    onChange={(e) => onChange(middleware(e))}
+                />
+            </div>
+
             {/* placeholder to make it aligned with the other elements */}
             <span className="widthOneThird"></span>
         </div>
