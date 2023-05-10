@@ -14,6 +14,8 @@ const importMainFile = (convertedFiles, actions) => {
     if (mainDataFile) {
         actions.importBasePropertiesAction(mainDataFile.basePropertiesList);
         actions.importSpritePropertiesAction(mainDataFile.spritePropertiesList);
+        actions.importNineSliceSpritePropertiesAction(mainDataFile.nineSliceSpritePropertiesList);
+        actions.importGraphicsPropertiesAction(mainDataFile.graphicsList);
         actions.importEntityDataAction(mainDataFile.entityTypesList);
         actions.importTreeDataAction(mainDataFile.treeData);
     }
@@ -50,6 +52,7 @@ const importResources = (convertedFiles, actions, onFinish) => {
  */
 const parseAndImportFiles = (files, actions) => {
 
+    /** */
     const onFilesConverted = (convertedFiles) => {
         convertedFiles = convertedFiles.map((file) => JSON.parse(file.url));
         // first we must import all the resources and then data
