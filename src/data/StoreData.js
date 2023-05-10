@@ -9,7 +9,8 @@ export const AVAILABLE_COMPONENTS = Object.freeze({
 export const ENTITY_TYPES = Object.freeze({
     CONTAINER: "CONTAINER",
     SPRITE: "SPRITE",
-    GRAPHICS: "GRAPHICS"
+    GRAPHICS: "GRAPHICS",
+    NINE_SLICE_SPRITE: "NINE_SLICE_SPRITE"
 
 
     // TEXT: "TEXT",
@@ -144,7 +145,7 @@ export const getGraphicsProperties = (type) => {
  * corners: { A: number; B: number; C: number; D: number};
  * anchor: { x: number; y: number };
  * size: { width: number; height: number; };
- * textureID: number | null;
+ * resourceID: number | null;
  * }} INineSliceSpriteProperties
  */
 
@@ -156,6 +157,6 @@ export const getNineSliceSpriteProperties = () => {
         corners: { A: 5, B: 5, C: 5, D: 5 },
         size: { width: 20, height: 20 },
         anchor: { x: 0, y: 0 },
-        textureID: null
+        resourceID: null
     }
 }

@@ -1,26 +1,14 @@
+import { ENTITY_TYPES } from "../../data/StoreData";
 import { ENTITY_TYPES_LIST_ACTIONS } from "./actionTypes"
 
 
 /**
  * @param {number} id 
+ * @param {ENTITY_TYPES[keyof ENTITY_TYPES]} entityType 
  */
-export const initContainerEntityAction = (id) => {
-    return { type: ENTITY_TYPES_LIST_ACTIONS.INIT_CONTAINER_ENTITY, payload: { nodeID: id } }
-};
-
-/**
- * @param {number} id 
- */
-export const initSpriteEntityAction = (id) => {
-    return { type: ENTITY_TYPES_LIST_ACTIONS.INIT_SPRITE_ENTITY, payload: { nodeID: id } }
-};
-
-/**
- * @param {number} id 
- */
-export const initGraphicsEntityAction = (id) => {
-    return { type: ENTITY_TYPES_LIST_ACTIONS.INIT_GRAPHICS_ENTITY, payload: { nodeID: id } }
-};
+export const initEntityAction = (id, entityType) => {
+    return {type: ENTITY_TYPES_LIST_ACTIONS.INIT_ENTITY, payload: {nodeID: id, entityType}};
+}
 
 /**
  * @param {number} id 

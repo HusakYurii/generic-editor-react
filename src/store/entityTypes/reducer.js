@@ -26,14 +26,8 @@ const STATE = defaultStoreData.entitiesList;
  */
 export const entityTypesListReducer = (state = STATE, { type, payload }) => {
 
-    if (type === ENTITY_TYPES_LIST_ACTIONS.INIT_CONTAINER_ENTITY) {
-        return { ...state, ...getEntityType(payload.nodeID, ENTITY_TYPES.CONTAINER, []) };
-    }
-    else if (type === ENTITY_TYPES_LIST_ACTIONS.INIT_SPRITE_ENTITY) {
-        return { ...state, ...getEntityType(payload.nodeID, ENTITY_TYPES.SPRITE, []) };
-    }
-    else if (type === ENTITY_TYPES_LIST_ACTIONS.INIT_GRAPHICS_ENTITY) {
-        return { ...state, ...getEntityType(payload.nodeID, ENTITY_TYPES.GRAPHICS, []) };
+    if (type === ENTITY_TYPES_LIST_ACTIONS.INIT_ENTITY) {
+        return { ...state, ...getEntityType(payload.nodeID, payload.entityType, []) };
     }
     else if (type === ENTITY_TYPES_LIST_ACTIONS.IMPORT_ENTITY_DATA) {
         return { ...payload };

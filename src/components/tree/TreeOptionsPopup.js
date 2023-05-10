@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { NODE_DATA_TYPE_ATTRIBUTE } from ".";
 
 import { createNodeAction, deleteNodeAction } from "../../store/tree";
-import { initContainerEntityAction, initSpriteEntityAction, initGraphicsEntityAction, removeEntityAction } from "../../store/entityTypes";
+import { initEntityAction, removeEntityAction } from "../../store/entityTypes";
 import { initBasePropertiesAction, removeBasePropertiesAction } from "../../store/properties/base";
 import { initSpritePropertiesAction, removeSpritePropertiesAction } from "../../store/properties/sprite";
 import { initGraphicsPropertiesAction, removeGraphicsPropertiesAction } from "../../store/properties/graphics";
@@ -22,9 +22,7 @@ const OPTIONS_MAP = {
  * @typedef {{
  * createNodeAction: typeof createNodeAction;
  * deleteNodeAction: typeof deleteNodeAction;
- * initContainerEntityAction: typeof initContainerEntityAction;
- * initSpriteEntityAction: typeof  initSpriteEntityAction;
- * initGraphicsEntityAction: typeof initGraphicsEntityAction;
+ * initEntityAction: typeof  initEntityAction;
  * removeEntityAction: typeof  removeEntityAction;
  * initBasePropertiesAction: typeof  initBasePropertiesAction;
  * removeBasePropertiesAction: typeof  removeBasePropertiesAction;
@@ -75,7 +73,8 @@ const TreeOptionsPopupComponent = (props) => {
             props.removeEntityAction(id);
             props.removeBasePropertiesAction(id);
 
-            if (entity.type === ENTITY_TYPES.SPRITE) { props.removeSpritePropertiesAction(id); }
+            if (entity.type === ENTITY_TYPES.CONTAINER) {/* Already done by code above */ }
+            else if (entity.type === ENTITY_TYPES.SPRITE) { props.removeSpritePropertiesAction(id); }
             else if (entity.type === ENTITY_TYPES.GRAPHICS) { props.removeGraphicsPropertiesAction(id); }
             else { throw new Error("You forgot to add a handler for REMOVE option"); }
             return;
@@ -86,14 +85,14 @@ const TreeOptionsPopupComponent = (props) => {
         props.initBasePropertiesAction(newID);
 
         if (option === OPTIONS_MAP.SPRITE) {
-            props.initSpriteEntityAction(newID);
+            props.initEntityAction(newID, ENTITY_TYPES.SPRITE);
             props.initSpritePropertiesAction(newID);
         }
         else if (option === OPTIONS_MAP.CONTAINER) {
-            props.initContainerEntityAction(newID);
+            props.initEntityAction(newID, ENTITY_TYPES.CONTAINER);
         }
         else if (option === OPTIONS_MAP.GRAPHICS) {
-            props.initGraphicsEntityAction(newID);
+            props.initEntityAction(newID, ENTITY_TYPES.GRAPHICS);
             props.initGraphicsPropertiesAction(newID, GRAPHICS_TYPES.RECTANGLE);
         }
         else {
@@ -121,9 +120,7 @@ export const TreeOptionsPopup = connect(
     {
         createNodeAction,
         deleteNodeAction,
-        initContainerEntityAction,
-        initSpriteEntityAction,
-        initGraphicsEntityAction,
+        initEntityAction,
         removeEntityAction,
         initBasePropertiesAction,
         removeBasePropertiesAction,
