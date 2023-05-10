@@ -21,55 +21,40 @@ import { NumberInput, PointInput } from "../genericInputs";
 const BasePropertiesComponent = ({ selectedNodeID, basePropertiesList, updateBasePropertiesAction }) => {
 
     const nodeID = selectedNodeID;
-    const { scale, position, rotation } = basePropertiesList[nodeID];
+    const baseProperty = basePropertiesList[nodeID];
 
-    const onPointChange = (event) => {
-        const [groupKey, key] = event.target.getAttribute("data-id").split("-");
+    const onChange = (event) => {
+        const key = event.target.getAttribute("data-id");
         const parsedValue = parseFloat(event.target.value);
         const value = !Number.isNaN(parsedValue) ? parsedValue : "";
-        const payload = {
+        updateBasePropertiesAction({
             nodeID,
-            position: { ...position },
-            scale: { ...scale },
-        };
-        payload[groupKey][key] = value;
-        updateBasePropertiesAction(payload);
-    };
-
-    const onValueChange = (event) => {
-        const parsedValue = parseFloat(event.target.value);
-        const value = !Number.isNaN(parsedValue) ? parsedValue : "";
-
-        const payload = {
-            nodeID,
-            rotation: value
-        };
-
-        updateBasePropertiesAction(payload);
+            properties: { ...baseProperty, [key]: value }
+        });
     };
 
     const positionData = {
         label: "Position",
-        dataIDs: ["position-x", "position-y"],
-        values: [position.x, position.y],
+        dataIDs: ["positionX", "positionY"],
+        values: [baseProperty.positionX, baseProperty.positionY],
         signs: ["X", "Y"],
-        onChange: onPointChange
+        onChange
     };
 
     const scaleData = {
         label: "Scale",
-        dataIDs: ["scale-x", "scale-y"],
-        values: [scale.x, scale.y],
+        dataIDs: ["scaleX", "scaleY"],
+        values: [baseProperty.scaleX, baseProperty.scaleY],
         signs: ["X", "Y"],
-        onChange: onPointChange
+        onChange
     };
 
     const angleData = {
         label: "Rotation",
         dataID: "rotation",
-        value: rotation,
+        value: baseProperty.rotation,
         sign: "DEG",
-        onChange: onValueChange
+        onChange
     };
 
     return (

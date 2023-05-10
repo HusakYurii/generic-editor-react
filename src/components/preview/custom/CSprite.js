@@ -6,12 +6,14 @@ import { toRadians } from "../../../tools/math";
 export const behavior = {
     customDisplayObject: () => new Sprite(),
     customApplyProps: (instance, oldProps, newProps) => {
-        const { position, scale, rotation, anchor, texture } = newProps;
-        instance.texture = texture;
-        instance.position.set(position.x, position.y);
-        instance.scale.set(scale.x, scale.y);
-        instance.anchor.set(anchor.x, anchor.y);
-        instance.rotation = toRadians(rotation);
+
+        instance.texture = newProps.texture;
+
+        instance.position.set(newProps.positionX, newProps.positionY);
+        instance.scale.set(newProps.scaleX, newProps.scaleY);
+        instance.anchor.set(newProps.anchorX, newProps.anchorY);
+        instance.rotation = toRadians(newProps.rotation);
+
     }
 };
 export const CSprite = CustomPIXIComponent(behavior, "CSprite");

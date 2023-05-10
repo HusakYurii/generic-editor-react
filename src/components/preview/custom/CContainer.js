@@ -6,10 +6,9 @@ import { toRadians } from "../../../tools/math";
 export const behavior = {
     customDisplayObject: () => new Container(),
     customApplyProps: (instance, oldProps, newProps) => {
-        const { position, scale, rotation } = newProps;
-        instance.position.set(position.x, position.y);
-        instance.scale.set(scale.x, scale.y);
-        instance.rotation = toRadians(rotation);
+        instance.position.set(newProps.positionX, newProps.positionY);
+        instance.scale.set(newProps.scaleX, newProps.scaleY);
+        instance.rotation = toRadians(newProps.rotation);
     }
 };
 export const CContainer = CustomPIXIComponent(behavior, "CContainer");

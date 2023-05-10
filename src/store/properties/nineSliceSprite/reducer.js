@@ -4,7 +4,7 @@ import { getNineSliceSpriteProperties } from "../../../data/StoreData";
 import { NINE_SLICE_SPRITE_PROPERTIES_ACTIONS } from "./actionTypes";
 
 /**
- * @typedef {{ nodeID: number;} & Partial<import("../../../data/StoreData").INineSliceSpriteProperties>} IActionPayload 
+ * @typedef {{ nodeID: number;} & {properties: Partial<import("../../../data/StoreData").INineSliceSpriteProperties>}} IActionPayload 
  */
 
 /**
@@ -34,7 +34,7 @@ export const nineSliceSpritePropertiesListReducer = (state = STATE, { type, payl
         return newState;
     }
     else if (type === NINE_SLICE_SPRITE_PROPERTIES_ACTIONS.UPDATE_NINE_SLICE_SPRITE_PROPERTIES) {
-        const { nodeID, ...properties } = payload;
+        const { nodeID, properties } = payload;
         const newState = { ...state };
         const newNodeProps = { ...newState[nodeID], ...properties };
         newState[nodeID] = newNodeProps;

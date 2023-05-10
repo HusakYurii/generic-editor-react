@@ -28,14 +28,14 @@ export const importEntityDataAction = (payload) => {
    
 
 // /**
-//  * @param {import("./reducer").IActionPayload} payload 
+//  * 
 //  */
 // export const addEntityPropsAction = (payload) => {
 //     return { type: ENTITY_TYPES_LIST_ACTIONS.ADD_EXTRA_ENTITY_COMPONENTS, payload }
 // };
 
 // /**
-//  * @param {import("./reducer").IActionPayload} payload 
+//  * 
 //  */
 // export const removeEntityPropsAction = (payload) => {
 //     return { type: ENTITY_TYPES_LIST_ACTIONS.REMOVE_EXTRA_ENTITY_COMPONENTS, payload }

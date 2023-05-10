@@ -30,29 +30,29 @@ const NineSliceSpritePropertiesComponent = ({
 
     const id = selectedNodeID;
 
-    const { anchor, size, corners, resourceID } = nineSliceSpritePropertiesList[id];
+    const spriteProperties = nineSliceSpritePropertiesList[id];
 
-    const resource = resourcesList[resourceID];
+    const resource = resourcesList[spriteProperties.resourceID];
     const resourceName = resource ? resource.name : "";
 
     useEffect(() => {
         // Edge case when a resource get's removed from resources but the id is still in the sprite property
-        if (resourceID && !resource) updateNineSliceSpritePropertiesAction({ nodeID: id, resourceID: null });
+        if (spriteProperties.resourceID && !resource) updateNineSliceSpritePropertiesAction({ nodeID: id, resourceID: null });
     }, [resource]);
 
     const onInputChange = (event) => {
-        const [groupKey, key] = event.target.getAttribute("data-id").split("-");
+        const key = event.target.getAttribute("data-id");
         const parsedValue = parseFloat(event.target.value);
         const value = !Number.isNaN(parsedValue) ? parsedValue : "";
 
-        const payload = { nodeID: id, anchor: { ...anchor } };
-        payload[groupKey][key] = value;
-
-        updateNineSliceSpritePropertiesAction(payload);
+        updateNineSliceSpritePropertiesAction({
+            nodeID: id,
+            properties: { ...spriteProperties, [key]: value }
+        });
     };
 
     const onTextureAdded = (resourceID) => {
-        updateNineSliceSpritePropertiesAction({ nodeID: id, resourceID });
+        updateNineSliceSpritePropertiesAction({ nodeID: id, properties: { resourceID } });
     };
 
     const textureData = {
@@ -64,7 +64,7 @@ const NineSliceSpritePropertiesComponent = ({
     const cornersABData = {
         label: "Corners",
         dataIDs: ["A", "B"],
-        values: [corners.A, corners.B],
+        values: [spriteProperties.A, spriteProperties.B],
         signs: ["A", "B"],
         onChange: () => { },
     };
@@ -72,15 +72,15 @@ const NineSliceSpritePropertiesComponent = ({
     const cornersCDData = {
         label: "",
         dataIDs: ["C", "D"],
-        values: [corners.C, corners.D],
+        values: [spriteProperties.C, spriteProperties.D],
         signs: ["C", "D"],
         onChange: () => { },
     };
 
     const anchorData = {
         label: "Anchor",
-        dataIDs: ["anchor-x", "anchor-y"],
-        values: [anchor.x, anchor.y],
+        dataIDs: ["anchorX", "anchorY"],
+        values: [spriteProperties.anchorX, spriteProperties.anchorY],
         signs: ["X", "Y"],
         onChange: onInputChange
     };
@@ -88,7 +88,7 @@ const NineSliceSpritePropertiesComponent = ({
     const sizeData = {
         label: "Size",
         dataIDs: ["width", "height"],
-        values: [size.width, size.height],
+        values: [spriteProperties.width, spriteProperties.height],
         signs: ["W", "H"],
         onChange: onInputChange
     };

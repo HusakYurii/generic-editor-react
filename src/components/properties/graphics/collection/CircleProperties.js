@@ -30,7 +30,7 @@ export const CirclePropertiesComponent = ({ selectedNodeID, graphicsList, update
         const value = !Number.isNaN(parsedValue) ? parsedValue : "";
         updateGraphicsPropertiesAction({
             nodeID: selectedNodeID,
-            properties: { ...graphics, ...{ [key]: value } }
+            properties: { ...graphics, [key]: value }
         });
     };
 

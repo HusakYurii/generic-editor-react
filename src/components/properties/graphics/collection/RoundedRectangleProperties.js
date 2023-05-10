@@ -29,7 +29,7 @@ export const RoundedRectanglePropertiesComponent = ({ selectedNodeID, graphicsLi
         const value = !Number.isNaN(parsedValue) ? parsedValue : "";
         updateGraphicsPropertiesAction({
             nodeID: selectedNodeID,
-            properties: { ...graphics, ...{ [key]: value } }
+            properties: { ...graphics, [key]: value }
         });
     };
 
@@ -40,7 +40,7 @@ export const RoundedRectanglePropertiesComponent = ({ selectedNodeID, graphicsLi
         const key = event.target.getAttribute("data-id");
         updateGraphicsPropertiesAction({
             nodeID: selectedNodeID,
-            properties: { ...graphics, ...{ [key]: convertColorFormat(event.target.value) } }
+            properties: { ...graphics, [key]: convertColorFormat(event.target.value) }
         });
     };
 

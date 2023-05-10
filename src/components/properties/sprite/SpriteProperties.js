@@ -30,7 +30,7 @@ const SpritePropertiesComponent = ({
 
     const id = selectedNodeID;
 
-    const { anchor, resourceID } = spritePropertiesList[id];
+    const { anchorX, anchorY, resourceID } = spritePropertiesList[id];
 
     const resource = resourcesList[resourceID];
     const resourceName = resource ? resource.name : "";
@@ -41,18 +41,18 @@ const SpritePropertiesComponent = ({
     }, [resource]);
 
     const onInputChange = (event) => {
-        const [groupKey, key] = event.target.getAttribute("data-id").split("-");
+        const key = event.target.getAttribute("data-id");
         const parsedValue = parseFloat(event.target.value);
         const value = !Number.isNaN(parsedValue) ? parsedValue : "";
 
-        const payload = { nodeID: id, anchor: { ...anchor } };
-        payload[groupKey][key] = value;
-
-        updateSpritePropertiesAction(payload);
+        updateSpritePropertiesAction({
+            nodeID: id,
+            properties: { ...spritePropertiesList[id], [key]: value }
+        });
     };
 
     const onTextureAdded = (resourceID) => {
-        updateSpritePropertiesAction({ nodeID: id, resourceID });
+        updateSpritePropertiesAction({ nodeID: id, properties: { resourceID } });
     };
 
     const textureData = {
@@ -63,8 +63,8 @@ const SpritePropertiesComponent = ({
 
     const anchorData = {
         label: "Anchor",
-        dataIDs: ["anchor-x", "anchor-y"],
-        values: [anchor.x, anchor.y],
+        dataIDs: ["anchorX", "anchorY"],
+        values: [anchorX, anchorY],
         signs: ["X", "Y"],
         onChange: onInputChange
     };

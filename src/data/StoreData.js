@@ -23,38 +23,65 @@ export const GRAPHICS_TYPES = Object.freeze({
     CIRCLE: "CIRCLE"
 });
 
-// @TODO remove the id from each property, it is an overhead
 /**
- * 
- * @param {number} id 
- * @param {keyof ENTITY_TYPES} type 
- * @param {Array<keyof AVAILABLE_COMPONENTS>} properties 
+ * @typedef {{
+ *  type: ENTITY_TYPES[keyof ENTITY_TYPES];
+ *  components: Array<keyof AVAILABLE_COMPONENTS>
+ * }} IEntityData
  */
-export const getEntityType = (id, type, components = []) => {
+
+/**
+ * @param {keyof ENTITY_TYPES} type 
+ * @param {Array<keyof AVAILABLE_COMPONENTS>} properties
+ * 
+ * @returns IEntityData 
+ */
+export const getEntityType = (type, components = []) => {
     return {
-        [id]: {
-            type,
-            components
-        }
+        type,
+        components
     }
 }
 
-export const getBaseProperties = (id) => {
+/**
+ * @typedef {{
+ * positionX: number;
+ * positionY: number;
+ * scaleX: number;
+ * scaleY: number;
+ * rotation: number;
+ * }} IBasePropertyData
+ */
+
+/**
+ * @returns IBasePropertyData
+ */
+export const getBaseProperties = () => {
     return {
-        [id]: {
-            position: { x: 0, y: 0 },
-            scale: { x: 1, y: 1 },
-            rotation: 0,
-        }
+        positionX: 0,
+        positionY: 0,
+        scaleX: 1,
+        scaleY: 1,
+        rotation: 0
     }
 };
 
-export const getSpriteProperties = (id) => {
+/**
+ * @typedef {{
+ * anchorX: number; 
+ * anchorY: number;
+ * resourceID: number | null;
+ * }} ISpriteProperties
+ */
+
+/**
+ * @returns ISpriteProperties
+ */
+export const getSpriteProperties = () => {
     return {
-        [id]: {
-            anchor: { x: 0, y: 0 },
-            resourceID: null
-        }
+        anchorX: 0,
+        anchorY: 0,
+        resourceID: null
     }
 };
 
@@ -142,9 +169,14 @@ export const getGraphicsProperties = (type) => {
 
 /**
  * @typedef {{
- * corners: { A: number; B: number; C: number; D: number};
- * anchor: { x: number; y: number };
- * size: { width: number; height: number; };
+ * A: number; 
+ * B: number; 
+ * C: number; 
+ * D: number;
+ * anchorX: number; 
+ * anchorY: number;
+ * width: number; 
+ * height: number;
  * resourceID: number | null;
  * }} INineSliceSpriteProperties
  */
@@ -154,9 +186,14 @@ export const getGraphicsProperties = (type) => {
  */
 export const getNineSliceSpriteProperties = () => {
     return {
-        corners: { A: 5, B: 5, C: 5, D: 5 },
-        size: { width: 20, height: 20 },
-        anchor: { x: 0, y: 0 },
+        A: 5,
+        B: 5,
+        C: 5,
+        D: 5,
+        anchorX: 0,
+        anchorY: 0,
+        width: 50,
+        height: 50,
         resourceID: null
     }
 }

@@ -19,31 +19,30 @@ export const createPixiTree = (nodeData, dependencies) => {
 
     const entity = entityTypesList[nodeData.id];
 
-    const { position, scale, rotation } = basePropertiesList[nodeData.id];
+    const baseProps = basePropertiesList[nodeData.id];
 
     if (entity.type === ENTITY_TYPES.CONTAINER) {
         return (
-            <CContainer key={nodeData.id} {...{ position, scale, rotation }}>
+            <CContainer key={nodeData.id} {...baseProps}>
                 {nodeData.nodes.map((node) => createPixiTree(node, dependencies))}
             </CContainer>
         );
     }
     if (entity.type === ENTITY_TYPES.SPRITE) {
-        const { anchor, resourceID } = spritePropertiesList[nodeData.id];
-        const resource = resourcesList[resourceID];
-
+        const spriteProps = spritePropertiesList[nodeData.id];
+        const resource = resourcesList[spriteProps.resourceID];
         const texture = resource ? Texture.from(resource.name) : Texture.EMPTY;
 
         return (
-            <CSprite key={nodeData.id} {...{ texture, position, scale, anchor, rotation }}>
+            <CSprite key={nodeData.id} {...{ texture, ...baseProps, ...spriteProps }}>
                 {nodeData.nodes.map((node) => createPixiTree(node, dependencies))}
             </CSprite>
         );
     }
     if (entity.type === ENTITY_TYPES.GRAPHICS) {
-        const { type, ...graphicsData } = graphicsList[nodeData.id];
+        const graphicsProps = graphicsList[nodeData.id];
         return (
-            <CGraphics key={nodeData.id} {...{ position, scale, rotation, type, graphicsData }}>
+            <CGraphics key={nodeData.id} {...{ ...baseProps, ...graphicsProps }}>
                 {nodeData.nodes.map((node) => createPixiTree(node, dependencies))}
             </CGraphics>
         );
