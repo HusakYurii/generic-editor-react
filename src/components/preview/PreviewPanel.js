@@ -9,6 +9,7 @@ import { ResizeController } from "./ResizeContoller";
  * treeData:  import("../../data/NodeData").INodeData;
  * basePropertiesList: import("../../store/properties/base").IBasePropertiesListState;
  * spritePropertiesList: import("../../store/properties/sprite").ISpritePropertiesListState;
+ * nineSliceSpritePropertiesList: import("../../store/properties/nineSliceSprite").INineSliceSpritePropertiesListState;
  * graphicsList: import("../../store/properties/graphics").IGraphicsPropertiesListState;
  * entityTypesList: import("../../store/entityTypes").IEntityTypesListState;
  * resourcesList: import("../../store/resources").IResourcesListState;
@@ -18,14 +19,7 @@ import { ResizeController } from "./ResizeContoller";
 /**
  * @param { PreviewPanelComponentDependencies} props 
  */
-const PreviewPanelComponent = ({
-    treeData,
-    basePropertiesList,
-    spritePropertiesList,
-    entityTypesList,
-    resourcesList,
-    graphicsList
-}) => {
+const PreviewPanelComponent = ({ treeData, ...dependencies }) => {
 
     const pixiApp = useRef(null);
 
@@ -61,7 +55,7 @@ const PreviewPanelComponent = ({
             <AppContext.Consumer>
                 {setApp}
             </AppContext.Consumer>
-            {createPixiTree(treeData, { basePropertiesList, spritePropertiesList, entityTypesList, resourcesList, graphicsList })}
+            {createPixiTree(treeData, dependencies)}
         </Stage>
     );
 };
@@ -69,14 +63,15 @@ const PreviewPanelComponent = ({
 /**
  * @param {import("../../store").IStore} data 
  */
-const mapStateToProps = ({ tree, resourcesList, basePropertiesList, spritePropertiesList, entityTypesList, graphicsList }) => {
+const mapStateToProps = (store) => {
     return {
-        treeData: tree.treeData,
-        basePropertiesList,
-        spritePropertiesList,
-        entityTypesList,
-        resourcesList,
-        graphicsList
+        treeData: store.tree.treeData,
+        basePropertiesList: store.basePropertiesList,
+        spritePropertiesList: store.spritePropertiesList,
+        nineSliceSpritePropertiesList: store.nineSliceSpritePropertiesList,
+        entityTypesList: store.entityTypesList,
+        resourcesList: store.resourcesList,
+        graphicsList: store.graphicsList
     };
 };
 

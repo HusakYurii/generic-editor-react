@@ -1,2 +1,1 @@
-export * from "./CComponent";
-export * from "./CSprite";
+export { createPixiTree } from "./createPixiTree";

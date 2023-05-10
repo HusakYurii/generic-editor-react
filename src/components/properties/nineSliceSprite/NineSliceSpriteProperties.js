@@ -63,18 +63,18 @@ const NineSliceSpritePropertiesComponent = ({
 
     const cornersABData = {
         label: "Corners",
-        dataIDs: ["A", "B"],
-        values: [spriteProperties.A, spriteProperties.B],
-        signs: ["A", "B"],
-        onChange: () => { },
+        dataIDs: ["A", "C"],
+        values: [spriteProperties.A, spriteProperties.C],
+        signs: ["A", "C"],
+        onChange: onInputChange,
     };
 
     const cornersCDData = {
         label: "",
-        dataIDs: ["C", "D"],
-        values: [spriteProperties.C, spriteProperties.D],
-        signs: ["C", "D"],
-        onChange: () => { },
+        dataIDs: ["B", "D"],
+        values: [spriteProperties.B, spriteProperties.D],
+        signs: ["B", "D"],
+        onChange: onInputChange,
     };
 
     const anchorData = {

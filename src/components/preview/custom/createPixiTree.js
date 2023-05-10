@@ -3,6 +3,7 @@ import { ENTITY_TYPES } from "../../../data/StoreData";
 import { CContainer } from "./CContainer";
 import { CSprite } from "./CSprite";
 import { CGraphics } from "./CGraphics";
+import { CNineSlicePlane } from "./CNineSlicePlane";
 import { Texture } from "pixi.js";
 
 /**
@@ -10,15 +11,22 @@ import { Texture } from "pixi.js";
  * @param {import("../../../data/NodeData").INodeData} nodeData
  * @param {import("../../../store/properties/base").IBasePropertiesListState} basePropertiesList
  * @param {import("../../../store/properties/sprite").ISpritePropertiesListState} spritePropertiesList
+ * @param {import("../../../store/properties/nineSliceSprite").INineSliceSpritePropertiesListState} nineSliceSpritePropertiesList
  * @param {import("../../../store/entityTypes").IEntityTypesListState} entityTypesList
  * @param {import("../../../store/resources").IResourcesListState} resourcesList
  * @param {import("../../../store/properties/graphics").IGraphicsPropertiesListState} graphicsList
  */
 export const createPixiTree = (nodeData, dependencies) => {
-    const { basePropertiesList, spritePropertiesList, entityTypesList, resourcesList, graphicsList } = dependencies;
+    const {
+        basePropertiesList,
+        spritePropertiesList,
+        entityTypesList,
+        resourcesList,
+        graphicsList,
+        nineSliceSpritePropertiesList
+    } = dependencies;
 
     const entity = entityTypesList[nodeData.id];
-
     const baseProps = basePropertiesList[nodeData.id];
 
     if (entity.type === ENTITY_TYPES.CONTAINER) {
@@ -45,6 +53,17 @@ export const createPixiTree = (nodeData, dependencies) => {
             <CGraphics key={nodeData.id} {...{ ...baseProps, ...graphicsProps }}>
                 {nodeData.nodes.map((node) => createPixiTree(node, dependencies))}
             </CGraphics>
+        );
+    }
+    if (entity.type === ENTITY_TYPES.NINE_SLICE_SPRITE) {
+        const nineSliceProps = nineSliceSpritePropertiesList[nodeData.id];
+        const resource = resourcesList[nineSliceProps.resourceID];
+        const texture = resource ? Texture.from(resource.name) : Texture.EMPTY;
+
+        return (
+            <CNineSlicePlane key={nodeData.id} {...{ texture, ...baseProps, ...nineSliceProps }}>
+                {nodeData.nodes.map((node) => createPixiTree(node, dependencies))}
+            </CNineSlicePlane>
         );
     }
 }
