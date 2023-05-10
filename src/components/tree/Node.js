@@ -15,7 +15,8 @@ export const NODE_DATA_TYPE_ATTRIBUTE = "node-element";
 const ICONS_TO_ENTITIES_MAP = {
     [ENTITY_TYPES.CONTAINER]: containerIcon,
     [ENTITY_TYPES.SPRITE]: spriteIcon,
-    [ENTITY_TYPES.GRAPHICS]: graphicsIcon
+    [ENTITY_TYPES.GRAPHICS]: graphicsIcon,
+    [ENTITY_TYPES.NINE_SLICE_SPRITE]: nineSliceSpriteIcon,
 };
 
 /**

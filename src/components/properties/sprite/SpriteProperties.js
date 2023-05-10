@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { updateSpritePropertiesAction } from "../../../store/properties/sprite";
 
 import { PointInput } from "../genericInputs/PointInput";
-import { TextureInput } from "../genericInputs/TextureInput";
+import { TextureInput } from "../genericInputs";
 
 
 /**

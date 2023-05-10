@@ -1,14 +1,14 @@
 import { NINE_SLICE_SPRITE_PROPERTIES_ACTIONS } from "./actionTypes"
 
 /**
- * @param {id} id
+ * @param {number} id
  */
 export const initNineSliceSpritePropertiesAction = (id) => {
     return { type: NINE_SLICE_SPRITE_PROPERTIES_ACTIONS.INIT_NINE_SLICE_SPRITE_PROPERTIES, payload: { nodeID: id } }
 };
 
 /**
- * @param {id} id
+ * @param {number} id
  */
 export const removeNineSliceSpritePropertiesAction = (id) => {
     return { type: NINE_SLICE_SPRITE_PROPERTIES_ACTIONS.REMOVE_NINE_SLICE_SPRITE_PROPERTIES, payload: { nodeID: id } }
