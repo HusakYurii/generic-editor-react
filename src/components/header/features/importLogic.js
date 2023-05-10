@@ -1,5 +1,7 @@
 import { pixiLoader } from "../../../middlewares/pixiLoaderMiddleware";
 import { base64ImageToFile, convertJSONFilesToText, createJSONLoader } from "../../../tools/resourcesTools";
+import { collectAllIds } from "../../../tools/treeTools";
+import { recordUsedUIDs } from "../../../tools/uidGenerator";
 import { convertResourcesRecursively } from "./common";
 import { FILE_TYPES } from "./exportLogic";
 
@@ -12,6 +14,9 @@ const importMainFile = (convertedFiles, actions) => {
     const mainDataFile = convertedFiles.find(({ meta }) => meta.type === FILE_TYPES.MAIN);
 
     if (mainDataFile) {
+
+        recordUsedUIDs(collectAllIds(mainDataFile.treeData, []));
+
         actions.importBasePropertiesAction(mainDataFile.basePropertiesList);
         actions.importSpritePropertiesAction(mainDataFile.spritePropertiesList);
         actions.importNineSliceSpritePropertiesAction(mainDataFile.nineSliceSpritePropertiesList);
@@ -31,7 +36,14 @@ const importResources = (convertedFiles, actions, onFinish) => {
     const resourcesDataFile = convertedFiles.find(({ meta }) => meta.type === FILE_TYPES.RESOURCES);
 
     if (resourcesDataFile) {
+        /**
+         * 
+         * @param {{[id: string]: { name: string; url: string;}}} convertedResources 
+         */
         const onResourcesConverted = (convertedResources) => {
+
+            recordUsedUIDs(Object.keys(convertedResources));
+
             pixiLoader.loadAssets(Object.values(convertedResources), () => {
                 actions.importResourcesAction(convertedResources);
                 onFinish();
