@@ -136,3 +136,26 @@ export const getGraphicsProperties = (type) => {
     if (type === GRAPHICS_TYPES.CIRCLE) { return getCircleProperties(); }
     throw new Error("Graphics type is not found: " + type);
 }
+
+// 9 SLICE SPRITE ==============================
+
+/**
+ * @typedef {{
+ * corners: { A: number; B: number; C: number; D: number};
+ * anchor: { x: number; y: number };
+ * size: { width: number; height: number; };
+ * textureID: number | null;
+ * }} INineSliceSpriteProperties
+ */
+
+/**
+ * @returns INineSliceSpriteProperties
+ */
+export const getNineSliceSpriteProperties = () => {
+    return {
+        corners: { A: 5, B: 5, C: 5, D: 5 },
+        size: { width: 20, height: 20 },
+        anchor: { x: 0, y: 0 },
+        textureID: null
+    }
+}

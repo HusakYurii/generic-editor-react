@@ -18,6 +18,7 @@ export const defaultStoreData = {
             ...getBaseProperties(ROOT_NODE_ID)
         },
         sprite: {},
+        nineSliceSprite: {},
         graphics: {}
     }
 }

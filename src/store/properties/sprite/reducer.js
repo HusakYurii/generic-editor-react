@@ -6,7 +6,7 @@ import { SPRITE_PROPERTIES_ACTIONS } from "./actionTypes";
 /**
  * @typedef {{
  * anchor: { x: number; y: number; }
- * resourceID: number;
+ * resourceID: number | null;
  * }} ISpriteProperties;
  */
 
