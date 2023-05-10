@@ -1,23 +1,18 @@
 import { defaultStoreData } from "../../../data/DefaultStoreData";
 import { mockStoreData } from "../../../data/MockStreData";
-import { ROOT_NODE_ID, getBaseProperties } from "../../../data/StoreData";
+import { getBaseProperties } from "../../../data/StoreData";
 import { BASE_PROPERTIES_ACTIONS } from "./actionTypes";
 
 /**
- * @typedef {{
- * position: { x: number; y: number; };
- * scale: { x: number; y: number; };
- * rotation: number;
- * }} IBaseProperties;
- */
-
-/**
- * @typedef {{ nodeID: number; } & Partial<IBaseProperties>} IActionPayload 
+ * @typedef {{ 
+ *  nodeID: number;
+ *  properties: Partial<import("../../../data/StoreData").IBasePropertyData>
+ * }} IActionPayload 
  */
 
 
 /**
- * @typedef {{ [nodeID: number]: IBaseProperties }} IBasePropertiesListState;
+ * @typedef {{ [nodeID: number]: import("../../../data/StoreData").IBasePropertyData }} IBasePropertiesListState;
  */
 
 
@@ -31,12 +26,12 @@ const STATE = defaultStoreData.properties.base;
 /**
  * 
  * @param {IBasePropertiesListState} state 
- * @param {{type: string; payload: IActionPayload}} data 
+ * @param {{type: string; payload: { nodeID: id } | IActionPayload | IBasePropertiesListState}} data 
  * @returns {IBasePropertiesListState}
  */
 export const basePropertiesListReducer = (state = STATE, { type, payload }) => {
     if (type === BASE_PROPERTIES_ACTIONS.INIT_BASE_PROPERTIES) {
-        const newState = { ...state, ...getBaseProperties(payload.nodeID) };
+        const newState = { ...state, [payload.nodeID]: getBaseProperties() };
         return newState;
     }
 
@@ -47,7 +42,7 @@ export const basePropertiesListReducer = (state = STATE, { type, payload }) => {
     }
 
     else if (type === BASE_PROPERTIES_ACTIONS.UPDATE_BASE_PROPERTIES) {
-        const { nodeID, ...properties } = payload;
+        const { nodeID, properties } = payload;
         const newState = { ...state };
         const newNodeProps = { ...newState[nodeID], ...properties };
         newState[nodeID] = newNodeProps;

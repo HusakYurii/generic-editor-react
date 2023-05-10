@@ -3,6 +3,7 @@ import { ENTITY_TYPES } from "../../../data/StoreData";
 import { CContainer } from "./CContainer";
 import { CSprite } from "./CSprite";
 import { CGraphics } from "./CGraphics";
+import { CNineSlicePlane } from "./CNineSlicePlane";
 import { Texture } from "pixi.js";
 
 /**
@@ -10,42 +11,59 @@ import { Texture } from "pixi.js";
  * @param {import("../../../data/NodeData").INodeData} nodeData
  * @param {import("../../../store/properties/base").IBasePropertiesListState} basePropertiesList
  * @param {import("../../../store/properties/sprite").ISpritePropertiesListState} spritePropertiesList
+ * @param {import("../../../store/properties/nineSliceSprite").INineSliceSpritePropertiesListState} nineSliceSpritePropertiesList
  * @param {import("../../../store/entityTypes").IEntityTypesListState} entityTypesList
  * @param {import("../../../store/resources").IResourcesListState} resourcesList
  * @param {import("../../../store/properties/graphics").IGraphicsPropertiesListState} graphicsList
  */
 export const createPixiTree = (nodeData, dependencies) => {
-    const { basePropertiesList, spritePropertiesList, entityTypesList, resourcesList, graphicsList } = dependencies;
+    const {
+        basePropertiesList,
+        spritePropertiesList,
+        entityTypesList,
+        resourcesList,
+        graphicsList,
+        nineSliceSpritePropertiesList
+    } = dependencies;
 
     const entity = entityTypesList[nodeData.id];
-
-    const { position, scale, rotation } = basePropertiesList[nodeData.id];
+    const baseProps = basePropertiesList[nodeData.id];
 
     if (entity.type === ENTITY_TYPES.CONTAINER) {
         return (
-            <CContainer key={nodeData.id} {...{ position, scale, rotation }}>
+            <CContainer key={nodeData.id} {...baseProps}>
                 {nodeData.nodes.map((node) => createPixiTree(node, dependencies))}
             </CContainer>
         );
     }
     if (entity.type === ENTITY_TYPES.SPRITE) {
-        const { anchor, resourceID } = spritePropertiesList[nodeData.id];
-        const resource = resourcesList[resourceID];
-
+        const spriteProps = spritePropertiesList[nodeData.id];
+        const resource = resourcesList[spriteProps.resourceID];
         const texture = resource ? Texture.from(resource.name) : Texture.EMPTY;
 
         return (
-            <CSprite key={nodeData.id} {...{ texture, position, scale, anchor, rotation }}>
+            <CSprite key={nodeData.id} {...{ texture, ...baseProps, ...spriteProps }}>
                 {nodeData.nodes.map((node) => createPixiTree(node, dependencies))}
             </CSprite>
         );
     }
     if (entity.type === ENTITY_TYPES.GRAPHICS) {
-        const { type, ...graphicsData } = graphicsList[nodeData.id];
+        const graphicsProps = graphicsList[nodeData.id];
         return (
-            <CGraphics key={nodeData.id} {...{ position, scale, rotation, type, graphicsData }}>
+            <CGraphics key={nodeData.id} {...{ ...baseProps, ...graphicsProps }}>
                 {nodeData.nodes.map((node) => createPixiTree(node, dependencies))}
             </CGraphics>
+        );
+    }
+    if (entity.type === ENTITY_TYPES.NINE_SLICE_SPRITE) {
+        const nineSliceProps = nineSliceSpritePropertiesList[nodeData.id];
+        const resource = resourcesList[nineSliceProps.resourceID];
+        const texture = resource ? Texture.from(resource.name) : Texture.EMPTY;
+
+        return (
+            <CNineSlicePlane key={nodeData.id} {...{ texture, ...baseProps, ...nineSliceProps }}>
+                {nodeData.nodes.map((node) => createPixiTree(node, dependencies))}
+            </CNineSlicePlane>
         );
     }
 }

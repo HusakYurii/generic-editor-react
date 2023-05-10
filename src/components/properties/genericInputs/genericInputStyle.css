@@ -104,3 +104,13 @@ textarea {
     right: 0;    
     text-align: center;
 }
+
+.textureInput {
+    width: 66%;
+    height: 19px;
+    resize: none;
+}
+
+.textureInput.dragOver {
+    background-color: rgb(243, 123, 62);
+}

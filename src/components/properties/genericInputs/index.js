@@ -3,6 +3,7 @@ export * from "./PointInput";
 export * from "./SelectorInput";
 export * from "./TextInput";
 export * from "./ColorInput";
+export * from "./TextureInput";
 
 /**
  * Prevents negative numbers

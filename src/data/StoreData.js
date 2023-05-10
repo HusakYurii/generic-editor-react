@@ -9,7 +9,8 @@ export const AVAILABLE_COMPONENTS = Object.freeze({
 export const ENTITY_TYPES = Object.freeze({
     CONTAINER: "CONTAINER",
     SPRITE: "SPRITE",
-    GRAPHICS: "GRAPHICS"
+    GRAPHICS: "GRAPHICS",
+    NINE_SLICE_SPRITE: "NINE_SLICE_SPRITE"
 
 
     // TEXT: "TEXT",
@@ -22,38 +23,65 @@ export const GRAPHICS_TYPES = Object.freeze({
     CIRCLE: "CIRCLE"
 });
 
-// @TODO remove the id from each property, it is an overhead
 /**
- * 
- * @param {number} id 
- * @param {keyof ENTITY_TYPES} type 
- * @param {Array<keyof AVAILABLE_COMPONENTS>} properties 
+ * @typedef {{
+ *  type: ENTITY_TYPES[keyof ENTITY_TYPES];
+ *  components: Array<keyof AVAILABLE_COMPONENTS>
+ * }} IEntityData
  */
-export const getEntityType = (id, type, components = []) => {
+
+/**
+ * @param {keyof ENTITY_TYPES} type 
+ * @param {Array<keyof AVAILABLE_COMPONENTS>} properties
+ * 
+ * @returns IEntityData 
+ */
+export const getEntityType = (type, components = []) => {
     return {
-        [id]: {
-            type,
-            components
-        }
+        type,
+        components
     }
 }
 
-export const getBaseProperties = (id) => {
+/**
+ * @typedef {{
+ * positionX: number;
+ * positionY: number;
+ * scaleX: number;
+ * scaleY: number;
+ * rotation: number;
+ * }} IBasePropertyData
+ */
+
+/**
+ * @returns IBasePropertyData
+ */
+export const getBaseProperties = () => {
     return {
-        [id]: {
-            position: { x: 0, y: 0 },
-            scale: { x: 1, y: 1 },
-            rotation: 0,
-        }
+        positionX: 0,
+        positionY: 0,
+        scaleX: 1,
+        scaleY: 1,
+        rotation: 0
     }
 };
 
-export const getSpriteProperties = (id) => {
+/**
+ * @typedef {{
+ * anchorX: number; 
+ * anchorY: number;
+ * resourceID: number | null;
+ * }} ISpriteProperties
+ */
+
+/**
+ * @returns ISpriteProperties
+ */
+export const getSpriteProperties = () => {
     return {
-        [id]: {
-            anchor: { x: 0, y: 0 },
-            resourceID: null
-        }
+        anchorX: 0,
+        anchorY: 0,
+        resourceID: null
     }
 };
 
@@ -135,4 +163,37 @@ export const getGraphicsProperties = (type) => {
     if (type === GRAPHICS_TYPES.ROUNDED_RECTANGLE) { return getRoundedRectangleProperties(); }
     if (type === GRAPHICS_TYPES.CIRCLE) { return getCircleProperties(); }
     throw new Error("Graphics type is not found: " + type);
+}
+
+// 9 SLICE SPRITE ==============================
+
+/**
+ * @typedef {{
+ * A: number; 
+ * B: number; 
+ * C: number; 
+ * D: number;
+ * anchorX: number; 
+ * anchorY: number;
+ * width: number; 
+ * height: number;
+ * resourceID: number | null;
+ * }} INineSliceSpriteProperties
+ */
+
+/**
+ * @returns INineSliceSpriteProperties
+ */
+export const getNineSliceSpriteProperties = () => {
+    return {
+        A: 5,
+        B: 5,
+        C: 5,
+        D: 5,
+        anchorX: 0,
+        anchorY: 0,
+        width: 50,
+        height: 50,
+        resourceID: null
+    }
 }

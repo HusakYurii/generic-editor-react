@@ -1,14 +1,14 @@
 import { SPRITE_PROPERTIES_ACTIONS } from "./actionTypes"
 
 /**
- * @param {id} id
+ * @param {number} id
  */
 export const initSpritePropertiesAction = (id) => {
     return { type: SPRITE_PROPERTIES_ACTIONS.INIT_SPRITE_PROPERTIES, payload: { nodeID: id } }
 };
 
 /**
- * @param {id} id
+ * @param {number} id
  */
 export const removeSpritePropertiesAction = (id) => {
     return { type: SPRITE_PROPERTIES_ACTIONS.REMOVE_SPRITE_PROPERTIES, payload: { nodeID: id } }

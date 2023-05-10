@@ -11,13 +11,14 @@ export const defaultStoreData = {
         selectedNodeID: null
     },
     entitiesList: {
-        ...getEntityType(ROOT_NODE_ID, ENTITY_TYPES.CONTAINER, [])
+        [ROOT_NODE_ID]: getEntityType(ENTITY_TYPES.CONTAINER, [])
     },
     properties: {
         base: {
-            ...getBaseProperties(ROOT_NODE_ID)
+            [ROOT_NODE_ID]: getBaseProperties()
         },
         sprite: {},
+        nineSliceSprite: {},
         graphics: {}
     }
 }

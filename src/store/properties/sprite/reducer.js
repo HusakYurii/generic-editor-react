@@ -3,20 +3,14 @@ import { mockStoreData } from "../../../data/MockStreData";
 import { getSpriteProperties } from "../../../data/StoreData";
 import { SPRITE_PROPERTIES_ACTIONS } from "./actionTypes";
 
-/**
- * @typedef {{
- * anchor: { x: number; y: number; }
- * resourceID: number;
- * }} ISpriteProperties;
- */
 
 /**
- * @typedef {{ nodeID: number;} & Partial<ISpriteProperties>} IActionPayload 
+ * @typedef {{ nodeID: number;} & { properties: Partial<import("../../../data/StoreData").ISpriteProperties>}} IActionPayload 
  */
 
 
 /**
- * @typedef {{ [nodeID: number]: ISpriteProperties }} ISpritePropertiesListState;
+ * @typedef {{ [nodeID: number]: import("../../../data/StoreData").ISpriteProperties }} ISpritePropertiesListState;
  */
 
 
@@ -29,12 +23,12 @@ const STATE = defaultStoreData.properties.sprite;
 /**
  * 
  * @param {ISpritePropertiesListState} state 
- * @param {{type: string; payload: IActionPayload}} data 
+ * @param {{type: string; payload: { nodeID: id } | IActionPayload | ISpritePropertiesListState}} data 
  * @returns {ISpritePropertiesListState}
  */
 export const spritePropertiesListReducer = (state = STATE, { type, payload }) => {
     if (type === SPRITE_PROPERTIES_ACTIONS.INIT_SPRITE_PROPERTIES) {
-        const newState = { ...state, ...getSpriteProperties(payload.nodeID) };
+        const newState = { ...state, [payload.nodeID]: getSpriteProperties() };
         return newState;
     }
     else if (type === SPRITE_PROPERTIES_ACTIONS.REMOVE_SPRITE_PROPERTIES) {
@@ -43,7 +37,7 @@ export const spritePropertiesListReducer = (state = STATE, { type, payload }) =>
         return newState;
     }
     else if (type === SPRITE_PROPERTIES_ACTIONS.UPDATE_SPRITE_PROPERTIES) {
-        const { nodeID, ...properties } = payload;
+        const { nodeID, properties } = payload;
         const newState = { ...state };
         const newNodeProps = { ...newState[nodeID], ...properties };
         newState[nodeID] = newNodeProps;

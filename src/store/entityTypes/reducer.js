@@ -1,14 +1,14 @@
 import { defaultStoreData } from "../../data/DefaultStoreData";
 import { mockStoreData } from "../../data/MockStreData";
-import { AVAILABLE_COMPONENTS, ENTITY_TYPES, getEntityType } from "../../data/StoreData";
+import { ENTITY_TYPES, getEntityType } from "../../data/StoreData";
 import { ENTITY_TYPES_LIST_ACTIONS } from "./actionTypes";
 
 /**
- * @typedef {{ nodeID: number; property: keyof AVAILABLE_COMPONENTS; }} IActionPayload 
+ * @typedef {{nodeID: number; entityType: ENTITY_TYPES[keyof ENTITY_TYPES]}} IActionPayload 
  */
 
 /**
- * @typedef {{ [nodeID: number]: {type: keyof ENTITY_TYPES, properties: Array<keyof AVAILABLE_COMPONENTS> } }} IEntityTypesListState;
+ * @typedef {{ [nodeID: number]: import("../../data/StoreData").IEntityData }} IEntityTypesListState;
  */
 
 
@@ -21,19 +21,13 @@ const STATE = defaultStoreData.entitiesList;
 /**
  * 
  * @param {IEntityTypesListState} state 
- * @param {{type: string; payload: IActionPayload}} data 
+ * @param {{type: string; payload: {nodeID: id} | IActionPayload | }} data 
  * @returns {IEntityTypesListState}
  */
 export const entityTypesListReducer = (state = STATE, { type, payload }) => {
 
-    if (type === ENTITY_TYPES_LIST_ACTIONS.INIT_CONTAINER_ENTITY) {
-        return { ...state, ...getEntityType(payload.nodeID, ENTITY_TYPES.CONTAINER, []) };
-    }
-    else if (type === ENTITY_TYPES_LIST_ACTIONS.INIT_SPRITE_ENTITY) {
-        return { ...state, ...getEntityType(payload.nodeID, ENTITY_TYPES.SPRITE, []) };
-    }
-    else if (type === ENTITY_TYPES_LIST_ACTIONS.INIT_GRAPHICS_ENTITY) {
-        return { ...state, ...getEntityType(payload.nodeID, ENTITY_TYPES.GRAPHICS, []) };
+    if (type === ENTITY_TYPES_LIST_ACTIONS.INIT_ENTITY) {
+        return { ...state, [payload.nodeID]: getEntityType(payload.entityType, []) };
     }
     else if (type === ENTITY_TYPES_LIST_ACTIONS.IMPORT_ENTITY_DATA) {
         return { ...payload };

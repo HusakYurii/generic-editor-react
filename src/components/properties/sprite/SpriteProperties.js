@@ -3,8 +3,8 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { updateSpritePropertiesAction } from "../../../store/properties/sprite";
 
-import "./spriteProperties.css";
 import { PointInput } from "../genericInputs/PointInput";
+import { TextureInput } from "../genericInputs";
 
 
 /**
@@ -21,67 +21,57 @@ import { PointInput } from "../genericInputs/PointInput";
  * @param { SpritePropertiesComponentDependencies} props 
  * @returns
  */
-const SpritePropertiesComponent = (props) => {
+const SpritePropertiesComponent = ({
+    selectedNodeID,
+    resourcesList,
+    spritePropertiesList,
+    updateSpritePropertiesAction
+}) => {
 
-    const id = props.selectedNodeID;
+    const id = selectedNodeID;
 
-    const { anchor, resourceID } = props.spritePropertiesList[id];
+    const { anchorX, anchorY, resourceID } = spritePropertiesList[id];
 
-    const resource = props.resourcesList[resourceID];
+    const resource = resourcesList[resourceID];
     const resourceName = resource ? resource.name : "";
 
     useEffect(() => {
         // Edge case when a resource get's removed from resources but the id is still in the sprite property
-        if (resourceID && !resource) props.updateSpritePropertiesAction({ nodeID: id, resourceID: null });
+        if (resourceID && !resource) updateSpritePropertiesAction({ nodeID: id, resourceID: null });
     }, [resource]);
 
     const onInputChange = (event) => {
-        const [groupKey, key] = event.target.getAttribute("data-id").split("-");
+        const key = event.target.getAttribute("data-id");
         const parsedValue = parseFloat(event.target.value);
         const value = !Number.isNaN(parsedValue) ? parsedValue : "";
 
-        const payload = { nodeID: id, anchor: { ...anchor } };
-        payload[groupKey][key] = value;
-
-        props.updateSpritePropertiesAction(payload);
+        updateSpritePropertiesAction({
+            nodeID: id,
+            properties: { ...spritePropertiesList[id], [key]: value }
+        });
     };
 
-    /* for some reason preventDefault() has to be used otherwise onDrop event will not work */
-    const onDragOver = (event) => event.preventDefault();
-    const onDragEnter = ({ target }) => target.classList.add("dragOver");
-    const onDragLeave = ({ target }) => target.classList.remove("dragOver");
+    const onTextureAdded = (resourceID) => {
+        updateSpritePropertiesAction({ nodeID: id, properties: { resourceID } });
+    };
 
-    const onDrop = (event) => {
-        onDragLeave(event);
-
-        // @TODO find another way of doing it. I tried to add it to the dataTransfer.items, but it didn't work
-        if (!window["__RESOURCE_ID"]) { return; }
-
-        props.updateSpritePropertiesAction({ nodeID: id, resourceID: window["__RESOURCE_ID"] });
-        window["__RESOURCE_ID"] = undefined;
+    const textureData = {
+        label: "Texture",
+        value: resourceName,
+        onChange: onTextureAdded,
     };
 
     const anchorData = {
         label: "Anchor",
-        dataIDs: ["anchor-x", "anchor-y"],
-        values: [anchor.x, anchor.y],
+        dataIDs: ["anchorX", "anchorY"],
+        values: [anchorX, anchorY],
         signs: ["X", "Y"],
         onChange: onInputChange
     };
 
     return (
         <div className="properties propertiesTopOffset">
-            <div className="flexRow">
-                <span className="textLeft colorGray widthOneThird">Texture</span>
-                <textarea
-                    id="textureInput"
-                    disabled value={resourceName}
-                    onDragOver={onDragOver}
-                    onDragEnter={onDragEnter}
-                    onDragLeave={onDragLeave}
-                    onDrop={onDrop}
-                ></textarea>
-            </div>
+            <TextureInput {...textureData} />
             <PointInput {...anchorData} />
         </div>
     )

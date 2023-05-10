@@ -8,11 +8,13 @@ import "./genericInputs/genericInputStyle.css";
 import { ContainerEntity, isContainerEntity } from "./ContainerEntity";
 import { SpriteEntity, isSpriteEntity } from "./SpriteEntity";
 import { GraphicsEntity, isGraphicsEntity } from "./GraphicsEntity";
+import { NineSliceSpriteEntity, isNineSliceSpriteEntity } from "./NineSliceSpriteEntity";
 
 const TYPE_TO_ENTITY_MAP = [
     { checker: isContainerEntity, component: <ContainerEntity /> },
     { checker: isSpriteEntity, component: <SpriteEntity /> },
     { checker: isGraphicsEntity, component: <GraphicsEntity /> },
+    { checker: isNineSliceSpriteEntity, component: <NineSliceSpriteEntity /> },
 ]
 
 const PropertiesPanelComponent = (props) => {
