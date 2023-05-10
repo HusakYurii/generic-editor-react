@@ -1,5 +1,18 @@
 /**
  * 
+ * @param {import("../data/NodeData").INodeData} tree 
+ * @returns {number[]}
+ */
+export const collectAllIds = (tree, memo = []) => {
+
+    memo.push(tree.id);
+    tree.nodes.forEach((node) => collectAllIds(node, memo));
+
+    return memo;
+};
+
+/**
+ * 
  * @param {number} childId 
  * @param {import("../data/NodeData").INodeData} tree - can be a node or an entire tree
  * @returns {import("../data/NodeData").INodeData | null} 

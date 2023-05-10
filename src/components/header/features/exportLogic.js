@@ -31,6 +31,9 @@ const exportResourcesAsBase64 = (store) => {
             return acc;
         }, []);
 
+    /**
+     * @param {{[id: string]: { name: string; url: string;}}} resources 
+     */
     const onResourcesConverted = (resources) => {
         exportJSONFile(
             JSON.stringify({
@@ -53,7 +56,14 @@ const exportResourcesAsBase64 = (store) => {
  * @param {import("../../../store").IStore} store 
  */
 const exportMainData = (store) => {
-    const { tree, entityTypesList, basePropertiesList, spritePropertiesList } = store.getState();
+    const {
+        tree,
+        entityTypesList,
+        basePropertiesList,
+        spritePropertiesList,
+        nineSliceSpritePropertiesList,
+        graphicsList
+    } = store.getState();
 
     exportJSONFile(
         JSON.stringify({
@@ -65,7 +75,9 @@ const exportMainData = (store) => {
             treeData: tree.treeData,
             entityTypesList,
             basePropertiesList,
-            spritePropertiesList
+            spritePropertiesList,
+            nineSliceSpritePropertiesList,
+            graphicsList
         }, null, 2),
         FILE_NAMES.MAIN
     );
