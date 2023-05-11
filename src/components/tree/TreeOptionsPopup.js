@@ -9,6 +9,7 @@ import { initBasePropertiesAction, removeBasePropertiesAction } from "../../stor
 import { initSpritePropertiesAction, removeSpritePropertiesAction } from "../../store/properties/sprite";
 import { initNineSliceSpritePropertiesAction, removeNineSliceSpritePropertiesAction } from "../../store/properties/nineSliceSprite";
 import { initGraphicsPropertiesAction, removeGraphicsPropertiesAction } from "../../store/properties/graphics";
+import { initTextPropertiesAction, removeTextPropertiesAction } from "../../store/properties/text";
 import { ENTITY_TYPES, GRAPHICS_TYPES, ROOT_NODE_ID } from "../../data/StoreData";
 import { getUID } from "../../tools/uidGenerator";
 import { PopupWithOptions } from "../optionsPopup";
@@ -33,6 +34,8 @@ const OPTIONS_MAP = {
  * removeGraphicsPropertiesAction: typeof removeGraphicsPropertiesAction;
  * initNineSliceSpritePropertiesAction: typeof initNineSliceSpritePropertiesAction;
  * removeNineSliceSpritePropertiesAction: typeof removeNineSliceSpritePropertiesAction;
+ * initTextPropertiesAction: typeof initTextPropertiesAction;
+ * removeTextPropertiesAction: typeof removeTextPropertiesAction;
  * }} TreeOptionsPopupComponentDependencies
  */
 
@@ -53,6 +56,7 @@ const TreeOptionsPopupComponent = (props) => {
         { option: OPTIONS_MAP.SPRITE, label: "Add Sprite", canShow: () => true },
         { option: OPTIONS_MAP.NINE_SLICE_SPRITE, label: "Add 9 Slice Sprite", canShow: () => true },
         { option: OPTIONS_MAP.GRAPHICS, label: "Add Graphics", canShow: () => true },
+        { option: OPTIONS_MAP.TEXT, label: "Add Text", canShow: () => true },
         { option: OPTIONS_MAP.REMOVE_OPTION, label: "Remove", className: "remove-option", canShow: canShowRemoveOption },
     ];
 
@@ -81,6 +85,7 @@ const TreeOptionsPopupComponent = (props) => {
             else if (entity.type === ENTITY_TYPES.SPRITE) { props.removeSpritePropertiesAction(id); }
             else if (entity.type === ENTITY_TYPES.GRAPHICS) { props.removeGraphicsPropertiesAction(id); }
             else if (entity.type === ENTITY_TYPES.NINE_SLICE_SPRITE) { props.removeNineSliceSpritePropertiesAction(id); }
+            else if (entity.type === ENTITY_TYPES.TEXT) { props.removeTextPropertiesAction(id); }
             else { throw new Error("You forgot to add a handler for REMOVE option"); }
             return;
         }
@@ -103,6 +108,10 @@ const TreeOptionsPopupComponent = (props) => {
         else if (option === OPTIONS_MAP.NINE_SLICE_SPRITE) {
             props.initEntityAction(newID, ENTITY_TYPES.NINE_SLICE_SPRITE);
             props.initNineSliceSpritePropertiesAction(newID);
+        }
+        else if (option === OPTIONS_MAP.TEXT) {
+            props.initEntityAction(newID, ENTITY_TYPES.TEXT);
+            props.initTextPropertiesAction(newID);
         }
         else {
             throw new Error("You forgot to add a handler for ADD option")
@@ -138,6 +147,8 @@ export const TreeOptionsPopup = connect(
         initGraphicsPropertiesAction,
         removeGraphicsPropertiesAction,
         initNineSliceSpritePropertiesAction,
-        removeNineSliceSpritePropertiesAction
+        removeNineSliceSpritePropertiesAction,
+        initTextPropertiesAction,
+        removeTextPropertiesAction
     }
-)(TreeOptionsPopupComponent)
+)(TreeOptionsPopupComponent);

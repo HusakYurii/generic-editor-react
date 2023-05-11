@@ -34,6 +34,9 @@ export const mockStoreData = {
         },
         graphics: {
 
+        },
+        text: {
+
         }
     }
 }

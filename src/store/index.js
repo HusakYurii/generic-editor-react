@@ -6,6 +6,7 @@ import { entityTypesListReducer } from "./entityTypes";
 import { resourcesListReducer } from "./resources";
 import { graphicsPropertiesListReducer } from './properties/graphics';
 import { nineSliceSpritePropertiesListReducer } from './properties/nineSliceSprite';
+import { textPropertiesListReducer } from './properties/text';
 
 /**
  * @typedef {{
@@ -14,6 +15,7 @@ import { nineSliceSpritePropertiesListReducer } from './properties/nineSliceSpri
  * spritePropertiesList: import("./properties/sprite").ISpritePropertiesListState;
  * nineSliceSpritePropertiesList: import("./properties/nineSliceSprite").INineSliceSpritePropertiesListState
  * graphicsList: import("./properties/graphics").IGraphicsPropertiesListState;
+ * text: import("./properties/text").ITextPropertiesListState;
  * entityTypesList: import("./entityTypes").IEntityTypesListState;
  * resourcesList: import("./resources").IResourcesListState;
  * }} IStore
@@ -35,6 +37,8 @@ const store = createStore(combineReducers({
     nineSliceSpritePropertiesList: nineSliceSpritePropertiesListReducer,
     // all graphics data
     graphicsList: graphicsPropertiesListReducer,
+    //
+    text: textPropertiesListReducer,
     // all the Files loaded by a user
     resourcesList: resourcesListReducer
 }));

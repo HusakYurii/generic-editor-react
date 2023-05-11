@@ -10,10 +10,10 @@ export const ENTITY_TYPES = Object.freeze({
     CONTAINER: "CONTAINER",
     SPRITE: "SPRITE",
     GRAPHICS: "GRAPHICS",
-    NINE_SLICE_SPRITE: "NINE_SLICE_SPRITE"
+    NINE_SLICE_SPRITE: "NINE_SLICE_SPRITE",
+    TEXT: "TEXT"
 
 
-    // TEXT: "TEXT",
     // ANIMATED_SPRITE: "ANIMATED_SPRITE",
 });
 
@@ -21,6 +21,19 @@ export const GRAPHICS_TYPES = Object.freeze({
     RECTANGLE: "RECTANGLE",
     ROUNDED_RECTANGLE: "ROUNDED_RECTANGLE",
     CIRCLE: "CIRCLE"
+});
+
+export const FONT_FAMILIES = Object.freeze({
+    ARIAL: "Arial",
+    ARIAL_BLACK: "Arial Black",
+    COMIC_SANS_MS: "Comic Sans MS",
+    COURIER_NEW: "Courier New",
+    GEORGIA: "Georgia",
+    HELVETICA: "Helvetica",
+    IMPACT: "Impact",
+    TAHOMA: "Tahoma",
+    TIMES_NEW_ROMAN: "Times New Roman",
+    VERDANA: "Verdana",
 });
 
 /**
@@ -85,6 +98,29 @@ export const getSpriteProperties = () => {
     }
 };
 
+// TEXT ================================
+
+/**
+ * @typedef {{
+ *  anchorX: number;
+ *  anchorY: number;
+ *  fill:  string;
+ *  text: string;
+ *  fontFamily: sting;
+ *  fontSize: number;
+ * }} ITextProperties;
+ */
+
+export const getTextProperties = () => {
+    return {
+        anchorX: 0,
+        anchorY: 0,
+        text: "No text",
+        fill: "#000000",
+        fontFamily: FONT_FAMILIES.ARIAL,
+        fontSize: 12
+    };
+};
 
 // GRAPHICS ================================== 
 /**
