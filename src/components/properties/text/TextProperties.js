@@ -27,45 +27,29 @@ const TextPropertiesComponent = ({ selectedNodeID, textPropertiesList, updateTex
     const [useMultiLine, toggleMultiLineProps] = useState(false);
 
     const id = selectedNodeID;
-    const textProperties = textPropertiesList[id];
+
     const {
         text, color, anchorY, anchorX,
-        fontFamily, fontStyle, fontVariant, fontWeight,
-        fontSize,
+        fontFamily, fontStyle, fontVariant, fontWeight, fontSize,
         // stroke properties are optional and may not exist in the data if disabled
         stroke = "#ffffff", strokeThickness = 1, miterLimit = 10, lineJoin = FONT_LINE_JOINT.MITER,
         // shadow props are optional and may NOT exist in the data if disabled
-        dropShadowAlpha = 1, dropShadowAngle = 0, dropShadowBlur = 0, dropShadowColor = "#ffffff", dropShadowDistance = 0,
+        dropShadowAlpha = 1, dropShadowAngle = 0, dropShadowBlur = 0, dropShadowColor = "#ffffff",
+        dropShadowDistance = 0,
         // multi-line props are optional and may NOT exist in the data if disabled
-        wordWrap = true,
-        breakWords = false,
-        leading = 0,
-        lineHeight = 0,
-        wordWrapWidth = 200,
-        align = TEXT_ALIGN.LEFT,
-        whiteSpace = TEXT_WHITE_SPACE.PRE,
-
-    } = textProperties;
+        wordWrap = true, breakWords = false, leading = 0, lineHeight = 0, wordWrapWidth = 200,
+        align = TEXT_ALIGN.LEFT, whiteSpace = TEXT_WHITE_SPACE.PRE,
+    } = textPropertiesList[id];;
 
     // if booleans are not provided it means that the callback is called from the input
-    const onInputChange = (key, value, isStroke = useStroke, isShadow = useShadow, isMultiLine = useMultiLine) => {
+    const onChange = (key, value, isStroke = useStroke, isShadow = useShadow, isMultiLine = useMultiLine) => {
         let properties = {
             text, color, anchorY, anchorX,
-            fontFamily, fontStyle, fontVariant, fontWeight,
-            fontSize
+            fontFamily, fontStyle, fontVariant, fontWeight, fontSize,
+            ...(isStroke ? { stroke, strokeThickness, miterLimit, lineJoin } : {}),
+            ...(isShadow ? { dropShadowAlpha, dropShadowAngle, dropShadowBlur, dropShadowColor, dropShadowDistance } : {}),
+            ...(isMultiLine ? { wordWrap, breakWords, leading, lineHeight, wordWrapWidth, align, whiteSpace } : {}),
         };
-
-        if (isStroke) {
-            properties = { ...properties, stroke, strokeThickness, miterLimit, lineJoin };
-        };
-
-        if (isShadow) {
-            properties = { ...properties, dropShadowAlpha, dropShadowAngle, dropShadowBlur, dropShadowColor, dropShadowDistance };
-        }
-
-        if (isMultiLine) {
-            properties = { ...properties, wordWrap, breakWords, leading, lineHeight, wordWrapWidth, align, whiteSpace };
-        }
 
         properties[key] = value;
 
@@ -73,27 +57,27 @@ const TextPropertiesComponent = ({ selectedNodeID, textPropertiesList, updateTex
     };
 
     // essential style values
-    const textData = { label: "Text", dataID: "text", value: text, onChange: onInputChange };
-    const anchorData = { label: "Anchor", dataIDs: ["anchorX", "anchorY"], values: [anchorX, anchorY], signs: ["X", "Y"], onChange: onInputChange };
-    const colorData = { label: "Color", dataID: "color", value: color, onChange: onInputChange };
-    const fontFamilyData = { label: "Font Family", dataID: "fontFamily", selected: fontFamily, options: Object.values(FONT_FAMILIES), onChange: onInputChange };
-    const fontStyleData = { label: "Font Style", dataID: "fontStyle", selected: fontStyle, options: Object.values(FONT_STYLE), onChange: onInputChange };
-    const fontVariantData = { label: "Font Variant", dataID: "fontVariant", selected: fontVariant, options: Object.values(FONT_VARIANT), onChange: onInputChange };
-    const fontWeightData = { label: "Font Weight", dataID: "fontWeight", selected: fontWeight, options: Object.values(FONT_WEIGHT), onChange: onInputChange };
-    const fontSizeData = { label: "Size", dataID: "fontSize", value: fontSize, sign: "Px", onChange: onInputChange };
-    // stroke properties are optional and may not exist in the data if disabled
+    const textData = { label: "Text", dataID: "text", value: text, onChange };
+    const anchorData = { label: "Anchor", dataIDs: ["anchorX", "anchorY"], values: [anchorX, anchorY], signs: ["X", "Y"], onChange };
+    const colorData = { label: "Color", dataID: "color", value: color, onChange };
+    const fontFamilyData = { label: "Font Family", dataID: "fontFamily", selected: fontFamily, options: Object.values(FONT_FAMILIES), onChange };
+    const fontStyleData = { label: "Font Style", dataID: "fontStyle", selected: fontStyle, options: Object.values(FONT_STYLE), onChange };
+    const fontVariantData = { label: "Font Variant", dataID: "fontVariant", selected: fontVariant, options: Object.values(FONT_VARIANT), onChange };
+    const fontWeightData = { label: "Font Weight", dataID: "fontWeight", selected: fontWeight, options: Object.values(FONT_WEIGHT), onChange };
+    const fontSizeData = { label: "Size", dataID: "fontSize", value: fontSize, sign: "Px", onChange };
 
+    // stroke properties are optional and may not exist in the data if disabled
     const onStrokeToggled = (key, value) => {
         // those two calls will make the component to rerender but I am sure React will make one repaint because of batching
-        onInputChange("", "", value, useShadow, useMultiLine);
+        onChange("", "", value, useShadow, useMultiLine);
         toggleStrokeProps(value);
     };
 
     const showStrokeProperties = () => {
-        const strokeColorData = { label: "Color", dataID: "stroke", value: stroke, onChange: onInputChange };
-        const strokeLineJoinData = { label: "Line Join", dataID: "lineJoin", selected: lineJoin, options: Object.values(FONT_LINE_JOINT), onChange: onInputChange };
-        const strokeThicknessData = { label: "Thickness", dataID: "strokeThickness", value: strokeThickness, sign: "Px", onChange: onInputChange };
-        const strokeMiterLimitData = { label: "Miter Limit", dataID: "miterLimit", value: miterLimit, sign: "Px", onChange: onInputChange };
+        const strokeColorData = { label: "Color", dataID: "stroke", value: stroke, onChange };
+        const strokeLineJoinData = { label: "Line Join", dataID: "lineJoin", selected: lineJoin, options: Object.values(FONT_LINE_JOINT), onChange };
+        const strokeThicknessData = { label: "Thickness", dataID: "strokeThickness", value: strokeThickness, sign: "Px", onChange };
+        const strokeMiterLimitData = { label: "Miter Limit", dataID: "miterLimit", value: miterLimit, sign: "Px", onChange };
 
         return (
             <>
@@ -106,16 +90,16 @@ const TextPropertiesComponent = ({ selectedNodeID, textPropertiesList, updateTex
     };
 
     const onShadowToggled = (key, value) => {
-        onInputChange("", "", useStroke, value, useMultiLine);
+        onChange("", "", useStroke, value, useMultiLine);
         toggleShadowProps(value);
     };
 
     const showShadowProperties = () => {
-        const dropShadowColorData = { label: "Color", dataID: "dropShadowColor", value: dropShadowColor, onChange: onInputChange };
-        const dropShadowAlphaData = { label: "Alpha", dataID: "dropShadowAlpha", value: dropShadowAlpha, onChange: onInputChange };
-        const dropShadowAngleData = { label: "Angle", dataID: "dropShadowAngle", value: dropShadowAngle, sign: "DEG", onChange: onInputChange };
-        const dropShadowBlurData = { label: "Blur", dataID: "dropShadowBlur", value: dropShadowBlur, sign: "Px", onChange: onInputChange };
-        const dropShadowDistanceData = { label: "Distance", dataID: "dropShadowDistance", value: dropShadowDistance, sign: "Px", onChange: onInputChange };
+        const dropShadowColorData = { label: "Color", dataID: "dropShadowColor", value: dropShadowColor, onChange };
+        const dropShadowAlphaData = { label: "Alpha", dataID: "dropShadowAlpha", value: dropShadowAlpha, onChange };
+        const dropShadowAngleData = { label: "Angle", dataID: "dropShadowAngle", value: dropShadowAngle, sign: "DEG", onChange };
+        const dropShadowBlurData = { label: "Blur", dataID: "dropShadowBlur", value: dropShadowBlur, sign: "Px", onChange };
+        const dropShadowDistanceData = { label: "Distance", dataID: "dropShadowDistance", value: dropShadowDistance, sign: "Px", onChange };
 
         return (
             <>
@@ -128,19 +112,18 @@ const TextPropertiesComponent = ({ selectedNodeID, textPropertiesList, updateTex
         )
     };
 
-
     const onMultiLineToggled = (key, value) => {
-        onInputChange("", "", useStroke, useShadow, value);
+        onChange("", "", useStroke, useShadow, value);
         toggleMultiLineProps(value);
     };
 
     const showMultiLineProperties = () => {
-        const breakWordsData = { label: "Break Words", dataID: "breakWords", value: breakWords, onChange: onInputChange };
-        const alignData = { label: "Align", dataID: "align", selected: align, options: Object.values(TEXT_ALIGN), onChange: onInputChange };
-        const whiteSpaceData = { label: "White Space", dataID: "whiteSpace", selected: whiteSpace, options: Object.values(TEXT_WHITE_SPACE), onChange: onInputChange };
-        const wordWrapWidthData = { label: "Wrap Width", dataID: "wordWrapWidth", value: wordWrapWidth, sign: "Px", onChange: onInputChange };
-        const lineHeightData = { label: "Line Height", dataID: "lineHeight", value: lineHeight, sign: "Px", onChange: onInputChange };
-        const leadingData = { label: "Leading", dataID: "leading", value: leading, sign: "Px", onChange: onInputChange };
+        const breakWordsData = { label: "Break Words", dataID: "breakWords", value: breakWords, onChange };
+        const alignData = { label: "Align", dataID: "align", selected: align, options: Object.values(TEXT_ALIGN), onChange };
+        const whiteSpaceData = { label: "White Space", dataID: "whiteSpace", selected: whiteSpace, options: Object.values(TEXT_WHITE_SPACE), onChange };
+        const wordWrapWidthData = { label: "Wrap Width", dataID: "wordWrapWidth", value: wordWrapWidth, sign: "Px", onChange };
+        const lineHeightData = { label: "Line Height", dataID: "lineHeight", value: lineHeight, sign: "Px", onChange };
+        const leadingData = { label: "Leading", dataID: "leading", value: leading, sign: "Px", onChange };
 
         return (
             <>

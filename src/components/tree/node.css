@@ -1,6 +1,5 @@
 .node {
   margin: 0 0 0 20px;
-  user-select: none;
   position: relative;
   cursor: default;
 }
