@@ -5,7 +5,7 @@ import { updateTextPropertiesAction } from "../../../store/properties/text";
 
 import { PointInput } from "../genericInputs/PointInput";
 import { ColorInput, NumberInput, SelectorInput, TextInput } from "../genericInputs";
-import { FONT_FAMILIES } from "../../../data/StoreData";
+import { FONT_FAMILIES, FONT_STYLE, FONT_VARIANT, FONT_WEIGHT } from "../../../data/StoreData";
 
 
 /**
@@ -45,50 +45,27 @@ const TextPropertiesComponent = ({ selectedNodeID, textPropertiesList, updateTex
         });
     };
 
-    const textData = {
-        label: "Text",
-        dataID: "text",
-        value: textProperties.text,
-        onChange: onStringValueChanged
-    };
 
-    const anchorData = {
-        label: "Anchor",
-        dataIDs: ["anchorX", "anchorY"],
-        values: [textProperties.anchorX, textProperties.anchorY],
-        signs: ["X", "Y"],
-        onChange: onNumberValueChanged
-    };
+    const textData = { label: "Text", dataID: "text", value: textProperties.text, onChange: onStringValueChanged };
+    const colorData = { label: "Color", dataID: "color", value: textProperties.color, onChange: onStringValueChanged };
+    const fontFamilyData = { label: "Font Family", dataID: "fontFamily", selected: textProperties.fontFamily, options: Object.values(FONT_FAMILIES), onChange: onStringValueChanged };
+    const fontStyleData = { label: "Font Style", dataID: "fontStyle", selected: textProperties.fontStyle, options: Object.values(FONT_STYLE), onChange: onStringValueChanged };
+    const fontVariantData = { label: "Font Variant", dataID: "fontVariant", selected: textProperties.fontVariant, options: Object.values(FONT_VARIANT), onChange: onStringValueChanged };
+    const fontWeightData = { label: "Font Weight", dataID: "fontWeight", selected: textProperties.fontWeight, options: Object.values(FONT_WEIGHT), onChange: onStringValueChanged };
+    const fontSizeData = { label: "Size", dataID: "fontSize", value: textProperties.fontSize, sign: "Px", onChange: onNumberValueChanged };
 
-    const colorData = {
-        label: "Color",
-        dataID: "color",
-        value: textProperties.color,
-        onChange: onStringValueChanged
-    };
-
-    const fontSizeData = {
-        label: "Size",
-        dataID: "fontSize",
-        value: textProperties.fontSize,
-        sign: "Px",
-        onChange: onNumberValueChanged
-    };
-
-    const fontFamilyData = {
-        label: "Font",
-        dataID: "fontFamily",
-        selected: textProperties.fontFamily,
-        options: Object.values(FONT_FAMILIES),
-        onChange: onStringValueChanged
-    };
+    const anchorData = { label: "Anchor", dataIDs: ["anchorX", "anchorY"], values: [textProperties.anchorX, textProperties.anchorY], signs: ["X", "Y"], onChange: onNumberValueChanged };
 
     return (
         <div className="properties propertiesTopOffset">
             <TextInput {...textData} />
-            <SelectorInput {...fontFamilyData} />
             <ColorInput {...colorData} />
+            <SelectorInput {...fontFamilyData} />
+            <SelectorInput {...fontStyleData} />
+            <SelectorInput {...fontVariantData} />
+            <SelectorInput {...fontWeightData} />
             <NumberInput {...fontSizeData} />
+            <br></br>
             <PointInput {...anchorData} />
         </div>
     )

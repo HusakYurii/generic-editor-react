@@ -17,25 +17,6 @@ export const ENTITY_TYPES = Object.freeze({
     // ANIMATED_SPRITE: "ANIMATED_SPRITE",
 });
 
-export const GRAPHICS_TYPES = Object.freeze({
-    RECTANGLE: "RECTANGLE",
-    ROUNDED_RECTANGLE: "ROUNDED_RECTANGLE",
-    CIRCLE: "CIRCLE"
-});
-
-export const FONT_FAMILIES = Object.freeze({
-    ARIAL: "Arial",
-    ARIAL_BLACK: "Arial Black",
-    COMIC_SANS_MS: "Comic Sans MS",
-    COURIER_NEW: "Courier New",
-    GEORGIA: "Georgia",
-    HELVETICA: "Helvetica",
-    IMPACT: "Impact",
-    TAHOMA: "Tahoma",
-    TIMES_NEW_ROMAN: "Times New Roman",
-    VERDANA: "Verdana",
-});
-
 /**
  * @typedef {{
  *  type: ENTITY_TYPES[keyof ENTITY_TYPES];
@@ -100,6 +81,47 @@ export const getSpriteProperties = () => {
 
 // TEXT ================================
 
+export const FONT_FAMILIES = Object.freeze({
+    ARIAL: "Arial",
+    ARIAL_BLACK: "Arial Black",
+    COMIC_SANS_MS: "Comic Sans MS",
+    COURIER_NEW: "Courier New",
+    GEORGIA: "Georgia",
+    HELVETICA: "Helvetica",
+    IMPACT: "Impact",
+    TAHOMA: "Tahoma",
+    TIMES_NEW_ROMAN: "Times New Roman",
+    VERDANA: "Verdana",
+});
+
+export const FONT_STYLE = Object.freeze({
+    NORMAL: "normal",
+    ITALIC: "italic",
+    OBLIQUE: "oblique",
+});
+
+export const FONT_VARIANT = Object.freeze({
+    NORMAL: "normal",
+    SMALL_CAPS: "small-caps",
+});
+
+export const FONT_WEIGHT = Object.freeze({
+    NORMAL: "normal",
+    BOLD: "bold",
+    BOLDER: "bolder",
+    LIGHTER: "lighter",
+    WEIGHT_100: 100,
+    WEIGHT_200: 200,
+    WEIGHT_300: 300,
+    WEIGHT_400: 400,
+    WEIGHT_500: 500,
+    WEIGHT_600: 600,
+    WEIGHT_700: 700,
+    WEIGHT_800: 800,
+    WEIGHT_900: 900,
+});
+
+
 /**
  * @typedef {{
  *  anchorX: number;
@@ -108,6 +130,9 @@ export const getSpriteProperties = () => {
  *  text: string;
  *  fontFamily: sting;
  *  fontSize: number;
+ *  fontStyle : string;
+ *  fontVariant : string;
+ *  fontWeight : string | number;
  * }} ITextProperties;
  */
 
@@ -118,11 +143,22 @@ export const getTextProperties = () => {
         text: "No text",
         color: "#000000",
         fontFamily: FONT_FAMILIES.ARIAL,
+        fontStyle: FONT_STYLE.NORMAL,
+        fontVariant: FONT_VARIANT.NORMAL,
+        fontWeight: FONT_WEIGHT.NORMAL,
         fontSize: 12
     };
 };
 
 // GRAPHICS ================================== 
+
+export const GRAPHICS_TYPES = Object.freeze({
+    RECTANGLE: "RECTANGLE",
+    ROUNDED_RECTANGLE: "ROUNDED_RECTANGLE",
+    CIRCLE: "CIRCLE"
+});
+
+
 /**
  * @typedef {{ 
  * x: number;
