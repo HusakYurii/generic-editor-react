@@ -22,16 +22,16 @@ export const GraphicsTypeSelectorComponent = ({ selectedNodeID, graphicsList, ch
 
     const graphics = graphicsList[selectedNodeID];
 
-    const onChange = (event) => {
-        if (graphics.type === event.target.value) {
+    const onChange = (key, value) => {
+        if (graphics.type === value) {
             return; // no need to change tot he same type
         }
-        changeGraphicsTypeAction(selectedNodeID, event.target.value);
+        changeGraphicsTypeAction(selectedNodeID, value);
     }
 
     return (
         <div className="properties propertiesTopOffset">
-            <SelectorInput {...{ label: "Type", selected: graphics.type, options: Object.values(GRAPHICS_TYPES), onChange }} />
+            <SelectorInput {...{ label: "Type", dataID: "graphicsType", selected: graphics.type, options: Object.values(GRAPHICS_TYPES), onChange }} />
         </div>
     )
 };

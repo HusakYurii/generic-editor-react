@@ -23,10 +23,7 @@ const BasePropertiesComponent = ({ selectedNodeID, basePropertiesList, updateBas
     const nodeID = selectedNodeID;
     const baseProperty = basePropertiesList[nodeID];
 
-    const onChange = (event) => {
-        const key = event.target.getAttribute("data-id");
-        const parsedValue = parseFloat(event.target.value);
-        const value = !Number.isNaN(parsedValue) ? parsedValue : "";
+    const onChange = (key, value) => {
         updateBasePropertiesAction({
             nodeID,
             properties: { ...baseProperty, [key]: value }

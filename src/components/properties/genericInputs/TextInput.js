@@ -4,12 +4,12 @@ import React from "react";
 /**
  * @typedef {{
  *  label: string;
- *  dataID?: string;
+ *  dataID: string;
  *  value: string;
  *  className?: string;
  *  middleware?: (event: InputEvent) => InputEvent;
  *  onBlur?: (event: InputEvent) => InputEvent;
- *  onChange: (event: InputEvent) => void;
+ *  onChange: (dataID: string, value: number | string) => void;
  * }} TextInputDependencies
  */
 
@@ -20,11 +20,16 @@ export const TextInput = ({
     label,
     value,
     onChange,
-    dataID = "",
+    dataID,
     className = "",
     onBlur = (e) => e,
     middleware = (e) => e
 }) => {
+
+    const onInputChange = (event) => {
+        event = middleware(event);
+        onChange(dataID, event.target.value);
+    };
 
     return (
         <div className="flexRow">
@@ -35,7 +40,7 @@ export const TextInput = ({
                 data-id={dataID}
                 value={value}
                 onBlur={onBlur}
-                onChange={(e) => onChange(middleware(e))}
+                onChange={onInputChange}
             />
         </div>
     );

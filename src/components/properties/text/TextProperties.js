@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 
 import { connect } from "react-redux";
 import { updateTextPropertiesAction } from "../../../store/properties/text";
@@ -21,40 +21,27 @@ import { FONT_FAMILIES, FONT_STYLE, FONT_VARIANT, FONT_WEIGHT } from "../../../d
  */
 const TextPropertiesComponent = ({ selectedNodeID, textPropertiesList, updateTextPropertiesAction }) => {
 
+    const inputsRef = useRef([]);
+
     const id = selectedNodeID;
     const textProperties = textPropertiesList[id];
 
-    const onNumberValueChanged = (event) => {
-        const key = event.target.getAttribute("data-id");
-        const parsedValue = parseFloat(event.target.value);
-        const value = !Number.isNaN(parsedValue) ? parsedValue : "";
-
+    const onInputChange = (key, value) => {
         updateTextPropertiesAction({
             nodeID: id,
             properties: { ...textProperties, [key]: value }
         });
     };
 
-    const onStringValueChanged = (event) => {
-        const key = event.target.getAttribute("data-id");
-        const value = event.target.value;
+    const textData = { label: "Text", dataID: "text", value: textProperties.text, onChange: onInputChange };
+    const colorData = { label: "Color", dataID: "color", value: textProperties.color, onChange: onInputChange };
+    const fontFamilyData = { label: "Font Family", dataID: "fontFamily", selected: textProperties.fontFamily, options: Object.values(FONT_FAMILIES), onChange: onInputChange };
+    const fontStyleData = { label: "Font Style", dataID: "fontStyle", selected: textProperties.fontStyle, options: Object.values(FONT_STYLE), onChange: onInputChange };
+    const fontVariantData = { label: "Font Variant", dataID: "fontVariant", selected: textProperties.fontVariant, options: Object.values(FONT_VARIANT), onChange: onInputChange };
+    const fontWeightData = { label: "Font Weight", dataID: "fontWeight", selected: textProperties.fontWeight, options: Object.values(FONT_WEIGHT), onChange: onInputChange };
+    const fontSizeData = { label: "Size", dataID: "fontSize", value: textProperties.fontSize, sign: "Px", onChange: onInputChange };
 
-        updateTextPropertiesAction({
-            nodeID: id,
-            properties: { ...textProperties, [key]: value }
-        });
-    };
-
-
-    const textData = { label: "Text", dataID: "text", value: textProperties.text, onChange: onStringValueChanged };
-    const colorData = { label: "Color", dataID: "color", value: textProperties.color, onChange: onStringValueChanged };
-    const fontFamilyData = { label: "Font Family", dataID: "fontFamily", selected: textProperties.fontFamily, options: Object.values(FONT_FAMILIES), onChange: onStringValueChanged };
-    const fontStyleData = { label: "Font Style", dataID: "fontStyle", selected: textProperties.fontStyle, options: Object.values(FONT_STYLE), onChange: onStringValueChanged };
-    const fontVariantData = { label: "Font Variant", dataID: "fontVariant", selected: textProperties.fontVariant, options: Object.values(FONT_VARIANT), onChange: onStringValueChanged };
-    const fontWeightData = { label: "Font Weight", dataID: "fontWeight", selected: textProperties.fontWeight, options: Object.values(FONT_WEIGHT), onChange: onStringValueChanged };
-    const fontSizeData = { label: "Size", dataID: "fontSize", value: textProperties.fontSize, sign: "Px", onChange: onNumberValueChanged };
-
-    const anchorData = { label: "Anchor", dataIDs: ["anchorX", "anchorY"], values: [textProperties.anchorX, textProperties.anchorY], signs: ["X", "Y"], onChange: onNumberValueChanged };
+    const anchorData = { label: "Anchor", dataIDs: ["anchorX", "anchorY"], values: [textProperties.anchorX, textProperties.anchorY], signs: ["X", "Y"], onChange: onInputChange };
 
     return (
         <div className="properties propertiesTopOffset">

@@ -4,8 +4,8 @@ import React from "react";
  * @typedef {{
  *  label: string;
  *  value: string;
- *  dataID?: string;
- *  onChange: (resourceID: number) => void;
+ *  dataID: string;
+ *  onChange: (dataID: strung, resourceID: number) => void;
  * }} TextureInputDependencies
  */
 
@@ -17,7 +17,7 @@ export const TextureInput = ({
     label,
     value,
     onChange,
-    dataID = "",
+    dataID,
 }) => {
 
     /* for some reason preventDefault() has to be used otherwise onDrop event will not work */
@@ -33,7 +33,7 @@ export const TextureInput = ({
         const resourceID = window["__RESOURCE_ID"];
         delete window["__RESOURCE_ID"];
 
-        onChange(resourceID);
+        onChange(dataID, resourceID);
     };
 
     return (

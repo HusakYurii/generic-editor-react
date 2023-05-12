@@ -40,23 +40,20 @@ const NineSliceSpritePropertiesComponent = ({
         if (spriteProperties.resourceID && !resource) updateNineSliceSpritePropertiesAction({ nodeID: id, resourceID: null });
     }, [resource]);
 
-    const onInputChange = (event) => {
-        const key = event.target.getAttribute("data-id");
-        const parsedValue = parseFloat(event.target.value);
-        const value = !Number.isNaN(parsedValue) ? parsedValue : "";
-
+    const onInputChange = (key, value) => {
         updateNineSliceSpritePropertiesAction({
             nodeID: id,
             properties: { ...spriteProperties, [key]: value }
         });
     };
 
-    const onTextureAdded = (resourceID) => {
-        updateNineSliceSpritePropertiesAction({ nodeID: id, properties: { resourceID } });
+    const onTextureAdded = (key, value) => {
+        updateNineSliceSpritePropertiesAction({ nodeID: id, properties: { resourceID: value } });
     };
 
     const textureData = {
         label: "Texture",
+        dataID: "texture",
         value: resourceName,
         onChange: onTextureAdded,
     };
