@@ -7,7 +7,7 @@ import "./popupWithOptions.css";
  *  canProcessContextMenu: (event: MouseEvent) => boolean;
  *  canProcessClick: (event: MouseEvent) => boolean;
  *  processClick: (event: MouseEvent) => boolean;
- *  optionsMap: Array<{option: string, label: string, className?: sting; canShow: (target: HTMLElement) => boolean}>;
+ *  optionsMap: Array<{option: string, label: string, className?: sting; isAvailable: (target: HTMLElement) => boolean}>;
  * }} PopupWithOptionsDependencies
  */
 
@@ -82,13 +82,13 @@ export const PopupWithOptions = (props) => {
             style={{ ...position, display: data.isVisible ? "block" : "none" }}
         >
             {props.optionsMap.map((params, index) => {
-                const { option, label, canShow, className = "" } = params;
+                const { option, label, isAvailable, className = "" } = params;
 
                 return <div
                     key={index}
                     data-option={option}
                     className={className}
-                    style={{ display: canShow(data.hoveredElement) ? "block" : "none" }}
+                    style={{ display: isAvailable(data.hoveredElement) ? "block" : "none" }}
                 >{label}</div>
             })}
         </div>

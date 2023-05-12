@@ -53,7 +53,7 @@ const exportResourcesAsBase64 = (store) => {
 
 /**
  * To make a bundle with all the data and save it as json file
- * @param {import("../../../store").IStore} store 
+ * @param {{getState: () => import("../../../store").IStore} } store 
  */
 const exportMainData = (store) => {
     const {
@@ -62,7 +62,8 @@ const exportMainData = (store) => {
         basePropertiesList,
         spritePropertiesList,
         nineSliceSpritePropertiesList,
-        graphicsList
+        graphicsList,
+        textPropertiesList
     } = store.getState();
 
     exportJSONFile(
@@ -77,7 +78,8 @@ const exportMainData = (store) => {
             basePropertiesList,
             spritePropertiesList,
             nineSliceSpritePropertiesList,
-            graphicsList
+            graphicsList,
+            textPropertiesList
         }, null, 2),
         FILE_NAMES.MAIN
     );

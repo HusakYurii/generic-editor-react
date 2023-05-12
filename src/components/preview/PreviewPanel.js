@@ -11,6 +11,7 @@ import { ResizeController } from "./ResizeContoller";
  * spritePropertiesList: import("../../store/properties/sprite").ISpritePropertiesListState;
  * nineSliceSpritePropertiesList: import("../../store/properties/nineSliceSprite").INineSliceSpritePropertiesListState;
  * graphicsList: import("../../store/properties/graphics").IGraphicsPropertiesListState;
+ * textPropertiesList: import("../../store/properties/text").ITextPropertiesListState;
  * entityTypesList: import("../../store/entityTypes").IEntityTypesListState;
  * resourcesList: import("../../store/resources").IResourcesListState;
  * }} PreviewPanelComponentDependencies
@@ -71,7 +72,8 @@ const mapStateToProps = (store) => {
         nineSliceSpritePropertiesList: store.nineSliceSpritePropertiesList,
         entityTypesList: store.entityTypesList,
         resourcesList: store.resourcesList,
-        graphicsList: store.graphicsList
+        graphicsList: store.graphicsList,
+        textPropertiesList: store.textPropertiesList
     };
 };
 

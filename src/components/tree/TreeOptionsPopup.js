@@ -18,7 +18,7 @@ import store from "../../store";
 const OPTIONS_MAP = {
     ...ENTITY_TYPES,
     REMOVE_OPTION: "REMOVE_OPTION"
-}
+};
 
 /**
  * @typedef {{
@@ -52,12 +52,12 @@ const TreeOptionsPopupComponent = (props) => {
     };
 
     const optionsMap = [
-        { option: OPTIONS_MAP.CONTAINER, label: "Add Container", canShow: () => true },
-        { option: OPTIONS_MAP.SPRITE, label: "Add Sprite", canShow: () => true },
-        { option: OPTIONS_MAP.NINE_SLICE_SPRITE, label: "Add 9 Slice Sprite", canShow: () => true },
-        { option: OPTIONS_MAP.GRAPHICS, label: "Add Graphics", canShow: () => true },
-        { option: OPTIONS_MAP.TEXT, label: "Add Text", canShow: () => true },
-        { option: OPTIONS_MAP.REMOVE_OPTION, label: "Remove", className: "remove-option", canShow: canShowRemoveOption },
+        { option: OPTIONS_MAP.CONTAINER, label: "Add Container", isAvailable: () => true },
+        { option: OPTIONS_MAP.SPRITE, label: "Add Sprite", isAvailable: () => true },
+        { option: OPTIONS_MAP.NINE_SLICE_SPRITE, label: "Add 9 Slice Sprite", isAvailable: () => true },
+        { option: OPTIONS_MAP.GRAPHICS, label: "Add Graphics", isAvailable: () => true },
+        { option: OPTIONS_MAP.TEXT, label: "Add Text", isAvailable: () => true },
+        { option: OPTIONS_MAP.REMOVE_OPTION, label: "Remove", className: "remove-option", isAvailable: canShowRemoveOption },
     ];
 
     const canProcessContextMenu = (event) => {

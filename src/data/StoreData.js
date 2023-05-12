@@ -161,6 +161,7 @@ export const TEXT_WHITE_SPACE = Object.freeze({
  *  strokeThickness?: number;
  * 
  *  // shadow props are optional and may NOT exist in the data if disabled
+ *  dropShadow: boolean;
  *  dropShadowAlpha?: number;
  *  dropShadowAngle?: number;
  *  dropShadowBlur?: number;

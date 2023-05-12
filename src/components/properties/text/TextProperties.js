@@ -37,8 +37,8 @@ const TextPropertiesComponent = ({ selectedNodeID, textPropertiesList, updateTex
         dropShadowAlpha = 1, dropShadowAngle = 0, dropShadowBlur = 0, dropShadowColor = "#ffffff",
         dropShadowDistance = 0,
         // multi-line props are optional and may NOT exist in the data if disabled
-        wordWrap = true, breakWords = false, leading = 0, lineHeight = 0, wordWrapWidth = 200,
-        align = TEXT_ALIGN.LEFT, whiteSpace = TEXT_WHITE_SPACE.PRE,
+        breakWords = false, leading = 0, lineHeight = 0, wordWrapWidth = 200, align = TEXT_ALIGN.LEFT,
+        whiteSpace = TEXT_WHITE_SPACE.PRE,
     } = textPropertiesList[id];;
 
     // if booleans are not provided it means that the callback is called from the input
@@ -47,8 +47,8 @@ const TextPropertiesComponent = ({ selectedNodeID, textPropertiesList, updateTex
             text, color, anchorY, anchorX,
             fontFamily, fontStyle, fontVariant, fontWeight, fontSize,
             ...(isStroke ? { stroke, strokeThickness, miterLimit, lineJoin } : {}),
-            ...(isShadow ? { dropShadowAlpha, dropShadowAngle, dropShadowBlur, dropShadowColor, dropShadowDistance } : {}),
-            ...(isMultiLine ? { wordWrap, breakWords, leading, lineHeight, wordWrapWidth, align, whiteSpace } : {}),
+            ...(isShadow ? { dropShadow: true, dropShadowAlpha, dropShadowAngle, dropShadowBlur, dropShadowColor, dropShadowDistance } : {}),
+            ...(isMultiLine ? { wordWrap: true, breakWords, leading, lineHeight, wordWrapWidth, align, whiteSpace } : {}),
         };
 
         properties[key] = value;
