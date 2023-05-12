@@ -104,7 +104,7 @@ export const getSpriteProperties = () => {
  * @typedef {{
  *  anchorX: number;
  *  anchorY: number;
- *  fill:  string;
+ *  color:  string;
  *  text: string;
  *  fontFamily: sting;
  *  fontSize: number;
@@ -116,7 +116,7 @@ export const getTextProperties = () => {
         anchorX: 0,
         anchorY: 0,
         text: "No text",
-        fill: "#000000",
+        color: "#000000",
         fontFamily: FONT_FAMILIES.ARIAL,
         fontSize: 12
     };

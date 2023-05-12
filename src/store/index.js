@@ -15,7 +15,7 @@ import { textPropertiesListReducer } from './properties/text';
  * spritePropertiesList: import("./properties/sprite").ISpritePropertiesListState;
  * nineSliceSpritePropertiesList: import("./properties/nineSliceSprite").INineSliceSpritePropertiesListState
  * graphicsList: import("./properties/graphics").IGraphicsPropertiesListState;
- * text: import("./properties/text").ITextPropertiesListState;
+ * textPropertiesList: import("./properties/text").ITextPropertiesListState;
  * entityTypesList: import("./entityTypes").IEntityTypesListState;
  * resourcesList: import("./resources").IResourcesListState;
  * }} IStore
@@ -38,7 +38,7 @@ const store = createStore(combineReducers({
     // all graphics data
     graphicsList: graphicsPropertiesListReducer,
     //
-    text: textPropertiesListReducer,
+    textPropertiesList: textPropertiesListReducer,
     // all the Files loaded by a user
     resourcesList: resourcesListReducer
 }));
