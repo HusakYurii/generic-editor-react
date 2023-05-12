@@ -6,6 +6,10 @@
     align-items: center;
 }
 
+.justifyContentStart {
+    justify-content: start;
+}
+
 .textLeft {
     text-align:left;
 }
@@ -88,10 +92,15 @@ input[type=text] {
     padding: 2px 25px 2px 4px;
 }
 
+input[type=checkbox] {
+    margin-left: 10px;
+}
+
 input[type="color"] {
     -webkit-appearance: none;
     border: none;
 }
+
 input[type="color"]::-webkit-color-swatch-wrapper {
     padding: 0;
 }

@@ -121,6 +121,26 @@ export const FONT_WEIGHT = Object.freeze({
     WEIGHT_900: 900,
 });
 
+export const FONT_LINE_JOINT = Object.freeze({
+    MITER: "miter",
+    ROUND: "round",
+    BEVEL: "bevel"
+});
+
+export const TEXT_ALIGN = Object.freeze({
+    LEFT: "left",
+    CENTER: "center",
+    RIGHT: "right"
+});
+
+export const TEXT_WHITE_SPACE = Object.freeze({
+    NORMAL: "normal",
+    PRE: "pre",
+    PRE_LINE: "pre-line",
+});
+
+
+
 
 /**
  * @typedef {{
@@ -133,6 +153,29 @@ export const FONT_WEIGHT = Object.freeze({
  *  fontStyle : string;
  *  fontVariant : string;
  *  fontWeight : string | number;
+ * 
+ *  // stroke properties are optional and may not exist in the data if disabled
+ *  lineJoin?: string;
+ *  miterLimit?: number;
+ *  stroke?: string;
+ *  strokeThickness?: number;
+ * 
+ *  // shadow props are optional and may NOT exist in the data if disabled
+ *  dropShadowAlpha?: number;
+ *  dropShadowAngle?: number;
+ *  dropShadowBlur?: number;
+ *  dropShadowColor?: string;
+ *  dropShadowDistance?: number;
+ * 
+ *  // multi-line props are optional and may NOT exist in the data if disabled
+ *  align?: string;
+ *  wordWrap?: boolean;
+ *  breakWords?: boolean;
+ *  leading?: number;
+ *  lineHeight?: number;
+ *  wordWrapWidth?: number
+ *  whiteSpace?: string;
+ * 
  * }} ITextProperties;
  */
 
