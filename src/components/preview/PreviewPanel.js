@@ -52,7 +52,7 @@ const PreviewPanelComponent = ({ treeData, ...dependencies }) => {
     }
 
     return (
-        <Stage options={{ backgroundColor: 0xc2c2c2 }}>
+        <Stage options={{ backgroundColor: 0xffffff }}>
             <AppContext.Consumer>
                 {setApp}
             </AppContext.Consumer>
