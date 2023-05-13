@@ -1,8 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
-import { Stage, AppContext } from 'react-pixi-fiber';
+import { Stage, AppContext, Container } from 'react-pixi-fiber';
 import { createPixiTree } from "./custom/createPixiTree";
 import { ResizeController } from "./ResizeContoller";
+import { CameraController } from "./CameraController";
+import { CGrid } from "./custom/CGrid";
 
 /**
  * @typedef {{
@@ -22,14 +24,23 @@ import { ResizeController } from "./ResizeContoller";
  */
 const PreviewPanelComponent = ({ treeData, ...dependencies }) => {
 
+    const [position, setPosition] = useState({ x: 0, y: 0 });
+    const [scale, setScale] = useState({ x: 1, y: 1 });
+
     const pixiApp = useRef(null);
+    // for grid graphics
+    const cellSize = 50;
+    const gridSize = 100;
 
     useEffect(() => {
         const stage = pixiApp.current.stage;
+        const view = pixiApp.current.view;
+        const ticker = pixiApp.current.ticker;
         const renderer = pixiApp.current.renderer;
-        const parentDivElement = pixiApp.current.view.parentElement;
+        const parentDivElement = view.parentElement;
 
         const resizeController = new ResizeController(renderer, { width: 1280, height: 1280 });
+        const cameraController = new CameraController(view, ticker, { min: 1, max: 3 }, { setPosition, setScale });
 
         const observer = new ResizeObserver(() => {
             resizeController.resize({ width: parentDivElement.offsetWidth, height: parentDivElement.offsetHeight });
@@ -39,7 +50,10 @@ const PreviewPanelComponent = ({ treeData, ...dependencies }) => {
 
         observer.observe(parentDivElement);
 
-        return () => observer.unobserve(parentDivElement);
+        return () => {
+            observer.unobserve(parentDivElement);
+            cameraController.destroy();
+        };
     }, []);
 
     // This is a small workaround to get the instance of the pixi app avoiding different issues
@@ -56,7 +70,10 @@ const PreviewPanelComponent = ({ treeData, ...dependencies }) => {
             <AppContext.Consumer>
                 {setApp}
             </AppContext.Consumer>
-            {createPixiTree(treeData, dependencies)}
+            <Container x={position.x} y={position.y} scale={scale}>
+                <CGrid {...{ cellSize, gridSize, color: 0xc2c2c2, lineWidth: 2 }} />
+                {createPixiTree(treeData, dependencies)}
+            </Container>
         </Stage>
     );
 };
