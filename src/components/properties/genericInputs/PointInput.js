@@ -1,14 +1,15 @@
 import React from "react";
+import { parseNumberMiddleware } from ".";
 
 /**
  * @typedef {{
  *  label: string;
- *  dataIDs?: [string, string];
+ *  dataIDs: [string, string];
  *  values: [number, number];
  *  step?: number;
  *  signs? : string[]; // are  used for UI
  *  middleware?: (event: InputEvent) => InputEvent;
- *  onChange: (event: InputEvent) => void;
+ *  onChange: (dataID: string, value: number | string) => void;
  * }} PointInputDependencies
  */
 
@@ -19,11 +20,17 @@ export const PointInput = ({
     label,
     values,
     onChange,
+    dataIDs,
     step = 0.5,
     signs = ["", ""],
-    dataIDs = ["", ""],
     middleware = (event) => event
 }) => {
+
+    const onInputChange = (event) => {
+        event = middleware(event);
+        const [key, value] = parseNumberMiddleware(event);
+        onChange(key, value)
+    };
 
     return (
         <div className="flexRow">
@@ -36,7 +43,7 @@ export const PointInput = ({
                         data-id={dataIDs[i]}
                         step={step}
                         value={values[i]}
-                        onChange={(e) => onChange(middleware(e))}
+                        onChange={onInputChange}
                     />
                 </div>)
             })}

@@ -23,8 +23,8 @@ const NamePropertyComponent = (props) => {
     const isInvalid = (node.name.length === 0) || (node.name === INVALID_NAME);
 
     // update the name value of the selected node
-    const onChange = (event) => {
-        props.updateNodeNameAction({ nodeID: props.selectedNodeID, name: event.target.value });
+    const onChange = (key, value) => {
+        props.updateNodeNameAction({ nodeID: props.selectedNodeID, name: value });
     };
 
     // to verify the name value at the end. I must not be empty
@@ -40,6 +40,7 @@ const NamePropertyComponent = (props) => {
             <TextInput {
                 ...{
                     label: "Name",
+                    dataID: "name",
                     value: node.name,
                     className: isInvalid ? "invalidName" : "",
                     onChange,

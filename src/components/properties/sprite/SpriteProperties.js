@@ -40,23 +40,20 @@ const SpritePropertiesComponent = ({
         if (resourceID && !resource) updateSpritePropertiesAction({ nodeID: id, resourceID: null });
     }, [resource]);
 
-    const onInputChange = (event) => {
-        const key = event.target.getAttribute("data-id");
-        const parsedValue = parseFloat(event.target.value);
-        const value = !Number.isNaN(parsedValue) ? parsedValue : "";
-
+    const onInputChange = (key, value) => {
         updateSpritePropertiesAction({
             nodeID: id,
             properties: { ...spritePropertiesList[id], [key]: value }
         });
     };
 
-    const onTextureAdded = (resourceID) => {
-        updateSpritePropertiesAction({ nodeID: id, properties: { resourceID } });
+    const onTextureAdded = (key, value) => {
+        updateSpritePropertiesAction({ nodeID: id, properties: { resourceID: value } });
     };
 
     const textureData = {
         label: "Texture",
+        dataID: "texture",
         value: resourceName,
         onChange: onTextureAdded,
     };

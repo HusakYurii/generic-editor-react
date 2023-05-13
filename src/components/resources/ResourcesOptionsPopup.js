@@ -42,9 +42,9 @@ const ResourcesOptionsPopupComponent = (props) => {
     };
 
     const optionsMap = [
-        { option: OPTIONS_MAP.ADD_IMAGE, label: "Add Image", canShow: () => true },
-        { option: OPTIONS_MAP.DOWNLOAD_IMAGE, label: "Download Image", canShow: canShowDownloadOption },
-        { option: OPTIONS_MAP.REMOVE_IMAGE, label: "Remove Image", className: "remove-option", canShow: canShowRemoveOption },
+        { option: OPTIONS_MAP.ADD_IMAGE, label: "Add Image", isAvailable: () => true },
+        { option: OPTIONS_MAP.DOWNLOAD_IMAGE, label: "Download Image", isAvailable: canShowDownloadOption },
+        { option: OPTIONS_MAP.REMOVE_IMAGE, label: "Remove Image", className: "remove-option", isAvailable: canShowRemoveOption },
     ];
 
 

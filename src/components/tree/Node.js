@@ -17,6 +17,7 @@ const ICONS_TO_ENTITIES_MAP = {
     [ENTITY_TYPES.SPRITE]: spriteIcon,
     [ENTITY_TYPES.GRAPHICS]: graphicsIcon,
     [ENTITY_TYPES.NINE_SLICE_SPRITE]: nineSliceSpriteIcon,
+    [ENTITY_TYPES.TEXT]: textIcon,
 };
 
 /**

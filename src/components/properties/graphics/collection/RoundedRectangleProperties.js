@@ -20,27 +20,17 @@ import { convertColorFormat } from "../../../../tools/color";
 export const RoundedRectanglePropertiesComponent = ({ selectedNodeID, graphicsList, updateGraphicsPropertiesAction }) => {
     const graphics = graphicsList[selectedNodeID];
 
-    /**
-     * @param {InputEvent} event 
-     */
-    const onChange = (event) => {
-        const key = event.target.getAttribute("data-id");
-        const parsedValue = parseFloat(event.target.value);
-        const value = !Number.isNaN(parsedValue) ? parsedValue : "";
+    const onChange = (key, value) => {
         updateGraphicsPropertiesAction({
             nodeID: selectedNodeID,
             properties: { ...graphics, [key]: value }
         });
     };
 
-    /**
-     * @param {InputEvent} event 
-     */
-    const onColorChange = (event) => {
-        const key = event.target.getAttribute("data-id");
+    const onColorChange = (key, value) => {
         updateGraphicsPropertiesAction({
             nodeID: selectedNodeID,
-            properties: { ...graphics, [key]: convertColorFormat(event.target.value) }
+            properties: { ...graphics, [key]: convertColorFormat(value) }
         });
     };
 

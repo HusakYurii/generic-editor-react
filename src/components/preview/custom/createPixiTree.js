@@ -5,6 +5,7 @@ import { CSprite } from "./CSprite";
 import { CGraphics } from "./CGraphics";
 import { CNineSlicePlane } from "./CNineSlicePlane";
 import { Texture } from "pixi.js";
+import { CText } from "./CText";
 
 /**
  *
@@ -23,7 +24,8 @@ export const createPixiTree = (nodeData, dependencies) => {
         entityTypesList,
         resourcesList,
         graphicsList,
-        nineSliceSpritePropertiesList
+        nineSliceSpritePropertiesList,
+        textPropertiesList
     } = dependencies;
 
     const entity = entityTypesList[nodeData.id];
@@ -64,6 +66,15 @@ export const createPixiTree = (nodeData, dependencies) => {
             <CNineSlicePlane key={nodeData.id} {...{ texture, ...baseProps, ...nineSliceProps }}>
                 {nodeData.nodes.map((node) => createPixiTree(node, dependencies))}
             </CNineSlicePlane>
+        );
+    }
+    if (entity.type === ENTITY_TYPES.TEXT) {
+        const textProps = textPropertiesList[nodeData.id];
+
+        return (
+            <CText key={nodeData.id} {...{ baseProps, textProps }}>
+                {nodeData.nodes.map((node) => createPixiTree(node, dependencies))}
+            </CText>
         );
     }
 }

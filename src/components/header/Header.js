@@ -8,6 +8,7 @@ import { importBasePropertiesAction } from "../../store/properties/base";
 import { importSpritePropertiesAction } from "../../store/properties/sprite";
 import { importNineSliceSpritePropertiesAction } from "../../store/properties/nineSliceSprite";
 import { importGraphicsPropertiesAction } from "../../store/properties/graphics";
+import { importTextPropertiesAction } from "../../store/properties/text";
 import { importResourcesAction } from "../../store/resources";
 import { importTreeDataAction } from "../../store/tree";
 import { importData } from "./features/importLogic";
@@ -23,6 +24,7 @@ import { ModalPopup } from "./ModalPopup";
  * importTreeDataAction: typeof importTreeDataAction;
  * importNineSliceSpritePropertiesAction: typeof importNineSliceSpritePropertiesAction;
  * importGraphicsPropertiesAction: typeof importGraphicsPropertiesAction;
+ * importTextPropertiesAction: typeof importTextPropertiesAction;
  * }} HeaderComponentDependencies
  */
 
@@ -67,6 +69,7 @@ export const Header = connect(
         importResourcesAction,
         importTreeDataAction,
         importNineSliceSpritePropertiesAction,
-        importGraphicsPropertiesAction
+        importGraphicsPropertiesAction,
+        importTextPropertiesAction
     }
 )(HeaderComponent)

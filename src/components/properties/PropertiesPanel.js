@@ -9,19 +9,21 @@ import { ContainerEntity, isContainerEntity } from "./ContainerEntity";
 import { SpriteEntity, isSpriteEntity } from "./SpriteEntity";
 import { GraphicsEntity, isGraphicsEntity } from "./GraphicsEntity";
 import { NineSliceSpriteEntity, isNineSliceSpriteEntity } from "./NineSliceSpriteEntity";
+import { TextEntity, isTextEntity } from "./TextEntity";
 
-const TYPE_TO_ENTITY_MAP = [
+const ENTITY_TYPES_TO_COMPONENTS_MAP = [
     { checker: isContainerEntity, component: <ContainerEntity /> },
     { checker: isSpriteEntity, component: <SpriteEntity /> },
     { checker: isGraphicsEntity, component: <GraphicsEntity /> },
     { checker: isNineSliceSpriteEntity, component: <NineSliceSpriteEntity /> },
+    { checker: isTextEntity, component: <TextEntity /> },
 ]
 
 const PropertiesPanelComponent = (props) => {
     const id = props.selectedNodeID;
 
 
-    const entity = TYPE_TO_ENTITY_MAP.find((entity) => entity.checker(id, store.getState()));
+    const entity = ENTITY_TYPES_TO_COMPONENTS_MAP.find((entity) => entity.checker(id, store.getState()));
 
     return (
         <div style={{ marginTop: 20 }}>

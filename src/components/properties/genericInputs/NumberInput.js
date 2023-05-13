@@ -1,14 +1,15 @@
 import React from "react";
+import { parseNumberMiddleware } from ".";
 
 /**
  * @typedef {{
  *  label: string;
- *  dataID?: string;
+ *  dataID: string;
  *  step?: number;
  *  sign? : sting; // is used for UI to
  *  value: number;
  *  middleware?: (event: InputEvent) => InputEvent;
- *  onChange: (event: InputEvent) => void;
+ *  onChange: (dataID: string, value: number | string) => void;
  * }} NumberInputDependencies
  */
 
@@ -19,11 +20,17 @@ export const NumberInput = ({
     label,
     value,
     onChange,
+    dataID,
     step = 0.5,
-    dataID = "",
     sign = "",
     middleware = (event) => event
 }) => {
+
+    const onInputChange = (event) => {
+        event = middleware(event);
+        const [key, value] = parseNumberMiddleware(event);
+        onChange(key, value);
+    };
 
     return (
         <div className="flexRow">
@@ -35,7 +42,7 @@ export const NumberInput = ({
                     data-id={dataID}
                     step={step}
                     value={value}
-                    onChange={(e) => onChange(middleware(e))}
+                    onChange={onInputChange}
                 />
             </div>
 

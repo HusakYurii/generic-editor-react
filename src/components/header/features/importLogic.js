@@ -21,6 +21,7 @@ const importMainFile = (convertedFiles, actions) => {
         actions.importSpritePropertiesAction(mainDataFile.spritePropertiesList);
         actions.importNineSliceSpritePropertiesAction(mainDataFile.nineSliceSpritePropertiesList);
         actions.importGraphicsPropertiesAction(mainDataFile.graphicsList);
+        actions.importTextPropertiesAction(mainDataFile.textPropertiesList);
         actions.importEntityDataAction(mainDataFile.entityTypesList);
         actions.importTreeDataAction(mainDataFile.treeData);
     }

@@ -7,7 +7,9 @@ import { TreeElement, TreeOptionsPopup } from "./components/tree";
 import { PropertiesPanel } from "./components/properties";
 import { ResourcesPanel, ResourcesOptionsPopup } from "./components/resources";
 import { PreviewPanel } from "./components/preview";
+import store from "./store";
 
+window["__store"] = store;
 
 export const App = () => {
   window.addEventListener("contextmenu", (event) => event.preventDefault());
