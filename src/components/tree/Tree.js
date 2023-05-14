@@ -23,7 +23,7 @@ const resetStyles = (nodeElement) => {
 
 /**
  * @typedef {{
-* treeData:  import("../../data/NodeData").INodeData;
+* treeData:  import("../../store/tree").ITreeState["treeData"];
 * moveNodeAction: typeof moveNodeAction;
 * insertBeforeNodeAction: typeof insertBeforeNodeAction;
 * setSelectedNodeIDAction: typeof setSelectedNodeIDAction;
@@ -151,10 +151,7 @@ const Tree = (props) => {
             onDrop={handleDrop}
             onClick={handleClick}
         >
-            <Node
-                key={props.treeData.id}
-                node={props.treeData}
-            />
+            {props.treeData ? <Node key={props.treeData.id} node={props.treeData} /> : null}
         </div>
     );
 };

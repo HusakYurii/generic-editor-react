@@ -25,11 +25,19 @@
     flex-direction: column;
     margin: auto;
     padding: 20px;
-    width: 80%;
+    height: 250px;
+    width: 350px;
+    justify-content: space-between;
   }
   
+  .modalMessage {
+    text-align: center;
+    font-family:Arial;
+    font-size:18px;
+  }
+
   /* The Close Button */
-  #close {
+  .closeCrossButton {
     align-self: flex-end;
     color: #aaaaaa;
     background-color: transparent;
@@ -38,9 +46,60 @@
     font-weight: bold;
   }
   
-  #close:hover,
-  #close:focus {
+  .closeCrossButton:hover,
+  .closeCrossButton:focus {
     color: #ffffff;
     background-color: transparent;
     cursor: pointer;
   }
+
+  #modal-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+  }
+
+  #modal-buttons .confirmButton {
+    box-shadow:inset 0px 1px 3px 0px #91b8b3;
+    background:linear-gradient(to bottom, #768d87 5%, #6c7c7c 100%);
+    background-color:#768d87;
+    border-radius:5px;
+    border:1px solid #566963;
+    display:inline-block;
+    cursor:pointer;
+    color:#ffffff;
+    font-family:Arial;
+    font-size:14px;
+    font-weight:bold;
+    padding:5px 15px;
+    text-decoration:none;
+    text-shadow:0px -1px 0px #2b665e;
+    margin: 5px;
+  
+  }
+
+  #modal-buttons .confirmButton:hover {
+    background:linear-gradient(to bottom, #6c7c7c 5%, #768d87 100%);
+    background-color:#6c7c7c;
+  }
+
+  #modal-buttons .cancelButton {
+    box-shadow:inset 0px 39px 0px -24px #e67a73;
+    background-color:#e4685d;
+    border-radius:4px;
+    border:1px solid #ffffff;
+    display:inline-block;
+    cursor:pointer;
+    color:#ffffff;
+    font-family:Arial;
+    font-size:14px;
+    font-weight:bold;
+    padding:5px 15px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #b23e35;
+    margin: 5px;
+  }
+  #modal-buttons .cancelButton:hover {
+    background-color:#eb675e;
+  }
+ 

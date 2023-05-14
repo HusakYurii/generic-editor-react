@@ -11,11 +11,17 @@ export const recordUsedUIDs = (ids) => {
     ids.forEach((id) => UIDStore[id] = true);
 }
 
+export const cleanUpUsedUIDsMap = () => {
+    for (const key in UIDStore) {
+        delete UIDStore[key];
+    }
+}
+
 export const getUID = function () {
     let id = getRndInteger(10000, 99990);
 
     while (UIDStore[id]) {
-        id = Math.ceil(Math.random() * 10000);
+        id = getRndInteger(10000, 99990);
     }
     UIDStore[id] = true;
 

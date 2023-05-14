@@ -14,6 +14,7 @@ import { importTreeDataAction } from "../../store/tree";
 import { importData } from "./features/importLogic";
 import { exportData } from "./features/exportLogic";
 import { ModalPopup } from "./ModalPopup";
+import { createNewProject, exportDataAndCreateNew } from "./features/createNewProjectLogic";
 
 /**
  * @typedef {{
@@ -50,7 +51,18 @@ export const HeaderComponent = (props) => {
                 <span>About</span>
                 <span>Report Bug</span>
             </div>
-            <ModalPopup isVisible={isModalVisible} onClose={() => setModalVisibility(false)} />
+            <ModalPopup
+                isVisible={isModalVisible}
+                onClose={() => setModalVisibility(false)}
+                onConfirm={() => {
+                    setModalVisibility(false);
+                    exportDataAndCreateNew(store, props);
+                }}
+                onReject={() => {
+                    setModalVisibility(false);
+                    createNewProject(props);
+                }}
+            />
         </header>
     );
 };

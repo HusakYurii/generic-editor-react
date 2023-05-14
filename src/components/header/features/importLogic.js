@@ -5,6 +5,22 @@ import { recordUsedUIDs } from "../../../tools/uidGenerator";
 import { convertResourcesRecursively } from "./common";
 import { FILE_TYPES } from "./exportLogic";
 
+export const importMainDataInStrictOrder = (data, actions) => {
+    // @TODO fix the data structure to avoid issues like one described below
+    // I have to set the tree data to null first so the other components like PreviewPanel doesn't trow errors
+    // when creating the UI. It does it because it depends of the tree to recursively build the UI
+    // At the end I set the tree data
+
+    actions.importTreeDataAction(null);
+    actions.importEntityDataAction(data.entityTypesList);
+    actions.importBasePropertiesAction(data.basePropertiesList);
+    actions.importSpritePropertiesAction(data.spritePropertiesList);
+    actions.importNineSliceSpritePropertiesAction(data.nineSliceSpritePropertiesList);
+    actions.importGraphicsPropertiesAction(data.graphicsList);
+    actions.importTextPropertiesAction(data.textPropertiesList);
+    actions.importTreeDataAction(data.treeData);
+};
+
 /**
  * 
  * @param {*} dataFiles 
@@ -14,16 +30,8 @@ const importMainFile = (convertedFiles, actions) => {
     const mainDataFile = convertedFiles.find(({ meta }) => meta.type === FILE_TYPES.MAIN);
 
     if (mainDataFile) {
-
         recordUsedUIDs(collectAllIds(mainDataFile.treeData, []));
-
-        actions.importBasePropertiesAction(mainDataFile.basePropertiesList);
-        actions.importSpritePropertiesAction(mainDataFile.spritePropertiesList);
-        actions.importNineSliceSpritePropertiesAction(mainDataFile.nineSliceSpritePropertiesList);
-        actions.importGraphicsPropertiesAction(mainDataFile.graphicsList);
-        actions.importTextPropertiesAction(mainDataFile.textPropertiesList);
-        actions.importEntityDataAction(mainDataFile.entityTypesList);
-        actions.importTreeDataAction(mainDataFile.treeData);
+        importMainDataInStrictOrder(mainDataFile, actions);
     }
 };
 

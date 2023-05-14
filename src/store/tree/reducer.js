@@ -6,7 +6,7 @@ import { mockStoreData } from "../../data/MockStreData";
 
 /**
  * @typedef {{
- * treeData: import("../../data/NodeData").INodeData;
+ * treeData: import("../../data/NodeData").INodeData | null;
  * selectedNodeID: null | number;
  * }} ITreeState;
  */
