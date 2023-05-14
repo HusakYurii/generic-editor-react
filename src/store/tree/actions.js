@@ -69,7 +69,7 @@ export const createNodeAction = (parentID, id) => {
 };
 
 /**
- * @param {import("./reducer").ITreeState} parentID the parent's node ID we need to append a new node to
+ * @param {import("../../data/NodeData").INodeData | null} treeData the parent's node ID we need to append a new node to
  */
 export const importTreeDataAction = (treeData) => {
     return { type: TREE_ACTIONS.IMPORT_TREE_DATA, payload: { treeData, selectedNodeID: null } }

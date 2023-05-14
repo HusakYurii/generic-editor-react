@@ -1,6 +1,7 @@
 import { VERSION } from "../../../VERSION";
 import { convertImageFileToBase64, exportJSONFile } from "../../../tools/resourcesTools";
 import { convertResourcesRecursively } from "./common";
+import { after } from "lodash"
 
 export const FILE_TYPES = {
     MAIN: "data-main",
@@ -21,8 +22,9 @@ const FILE_NAMES = {
 /**
  * To save resources which are used and export them in the map in base 64 format
  * @param {import("../../store").IStore} store 
+ * @param {() => void} onFinish 
  */
-const exportResourcesAsBase64 = (store) => {
+const exportResourcesAsBase64 = (store, onFinish) => {
     const { resourcesList, spritePropertiesList } = store.getState();
 
     const resourcesToExport = Object.values(spritePropertiesList)
@@ -46,6 +48,7 @@ const exportResourcesAsBase64 = (store) => {
             }, null, 2),
             FILE_NAMES.RESOURCES
         );
+        onFinish();
     };
 
     convertResourcesRecursively(resourcesToExport, {}, convertImageFileToBase64, onResourcesConverted);
@@ -54,8 +57,9 @@ const exportResourcesAsBase64 = (store) => {
 /**
  * To make a bundle with all the data and save it as json file
  * @param {{getState: () => import("../../../store").IStore} } store 
+ * @param {() => void} onFinish
  */
-const exportMainData = (store) => {
+const exportMainData = (store, onFinish) => {
     const {
         tree,
         entityTypesList,
@@ -83,12 +87,18 @@ const exportMainData = (store) => {
         }, null, 2),
         FILE_NAMES.MAIN
     );
+
+    onFinish();
 };
 
 /**
  * @param {import("../../../store").IStore} store 
+ * @param {() => void} [onFinish]
  */
-export const exportData = (store) => {
-    exportMainData(store);
-    exportResourcesAsBase64(store);
+export const exportData = (store, onFinish = () => { }) => {
+
+    const callback = after(2, onFinish)
+
+    exportMainData(store, callback);
+    exportResourcesAsBase64(store, callback);
 }

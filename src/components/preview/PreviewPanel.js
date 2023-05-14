@@ -8,7 +8,7 @@ import { CGrid } from "./custom/CGrid";
 
 /**
  * @typedef {{
- * treeData:  import("../../data/NodeData").INodeData;
+ * treeData: import("../../store/tree").ITreeState["treeData"];
  * basePropertiesList: import("../../store/properties/base").IBasePropertiesListState;
  * spritePropertiesList: import("../../store/properties/sprite").ISpritePropertiesListState;
  * nineSliceSpritePropertiesList: import("../../store/properties/nineSliceSprite").INineSliceSpritePropertiesListState;
@@ -72,14 +72,14 @@ const PreviewPanelComponent = ({ treeData, ...dependencies }) => {
             </AppContext.Consumer>
             <Container x={position.x} y={position.y} scale={scale}>
                 <CGrid {...{ cellSize, gridSize, color: 0xc2c2c2, lineWidth: 2 }} />
-                {createPixiTree(treeData, dependencies)}
+                {treeData ? createPixiTree(treeData, dependencies) : null}
             </Container>
         </Stage>
     );
 };
 
 /**
- * @param {import("../../store").IStore} data 
+ * @param {import("../../store").IStore} store 
  */
 const mapStateToProps = (store) => {
     return {
