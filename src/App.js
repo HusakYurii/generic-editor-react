@@ -2,6 +2,8 @@
 import React from "react";
 import "./app.css";
 
+import { Stage } from 'react-pixi-fiber';
+
 import { Header } from "./components/header";
 import { TreeElement, TreeOptionsPopup } from "./components/tree";
 import { PropertiesPanel } from "./components/properties";
@@ -21,7 +23,9 @@ export const App = () => {
         <TreeElement />
       </div>
       <div id="center-panel">
-        <PreviewPanel />
+        <Stage options={{ backgroundColor: 0xffffff }}>
+          <PreviewPanel />
+        </Stage>
       </div>
       <div id="right-panel">
         <PropertiesPanel />
