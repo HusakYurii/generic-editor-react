@@ -1,99 +1,60 @@
 import React, { useEffect, useRef, useState } from "react";
-import { connect } from "react-redux";
-import { Stage, AppContext, Container } from 'react-pixi-fiber';
+import PropTypes from 'prop-types'
+import { connect, Provider } from "react-redux";
+import { Stage, AppContext, Container, withApp } from 'react-pixi-fiber';
 import { createPixiTree } from "./custom/createPixiTree";
 import { ResizeController } from "./ResizeContoller";
 import { CameraController } from "./CameraController";
 import { CGrid } from "./custom/CGrid";
+import { MainScene } from "./MainScene";
+import store from "../../store";
 
-/**
- * @typedef {{
- * treeData: import("../../store/tree").ITreeState["treeData"];
- * basePropertiesList: import("../../store/properties/base").IBasePropertiesListState;
- * spritePropertiesList: import("../../store/properties/sprite").ISpritePropertiesListState;
- * nineSliceSpritePropertiesList: import("../../store/properties/nineSliceSprite").INineSliceSpritePropertiesListState;
- * graphicsList: import("../../store/properties/graphics").IGraphicsPropertiesListState;
- * textPropertiesList: import("../../store/properties/text").ITextPropertiesListState;
- * entityTypesList: import("../../store/entityTypes").IEntityTypesListState;
- * resourcesList: import("../../store/resources").IResourcesListState;
- * }} PreviewPanelComponentDependencies
- */
-
-/**
- * @param { PreviewPanelComponentDependencies} props 
- */
-const PreviewPanelComponent = ({ treeData, ...dependencies }) => {
+const PreviewPanelComponent = ({ app }) => {
 
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [scale, setScale] = useState({ x: 1, y: 1 });
 
-    const pixiApp = useRef(null);
-    // for grid graphics
-    const cellSize = 50;
-    const gridSize = 100;
-
     useEffect(() => {
-        const stage = pixiApp.current.stage;
-        const view = pixiApp.current.view;
-        const ticker = pixiApp.current.ticker;
-        const renderer = pixiApp.current.renderer;
-        const parentDivElement = view.parentElement;
+        const parentDivElement = app.view.parentElement;
 
-        const resizeController = new ResizeController(renderer, { width: 1280, height: 1280 });
-        const cameraController = new CameraController(view, ticker, { min: 1, max: 3 }, { setPosition, setScale });
+        const resizeController = new ResizeController(app.renderer, { width: 1280, height: 1280 });
 
         const observer = new ResizeObserver(() => {
             resizeController.resize({ width: parentDivElement.offsetWidth, height: parentDivElement.offsetHeight });
             // I could have used useState and pass x,y to the <Stage/> but that makes an extra rendering call I don't need
-            stage.position.set(resizeController.size.width / 2, resizeController.size.height / 2)
+            app.stage.position.set(resizeController.size.width / 2, resizeController.size.height / 2)
         });
 
         observer.observe(parentDivElement);
 
-        return () => {
-            observer.unobserve(parentDivElement);
-            cameraController.destroy();
-        };
+        return () => observer.unobserve(parentDivElement);
     }, []);
 
-    // This is a small workaround to get the instance of the pixi app avoiding different issues
-    // when I tried to use withApp hook in combination with redux connect hook
-    const setApp = (app) => {
-        if (pixiApp.current) {
-            return;
-        }
-        pixiApp.current = app;
-    }
+    useEffect(() => {
+        const cameraController = new CameraController(app.view, app.ticker, { min: 1, max: 3 }, { setPosition, setScale });
+        return () => cameraController.destroy();
+    }, []);
 
     return (
-        <Stage options={{ backgroundColor: 0xffffff }}>
-            <AppContext.Consumer>
-                {setApp}
-            </AppContext.Consumer>
-            <Container x={position.x} y={position.y} scale={scale}>
-                <CGrid {...{ cellSize, gridSize, color: 0xc2c2c2, lineWidth: 2 }} />
-                {treeData ? createPixiTree(treeData, dependencies) : null}
-            </Container>
-        </Stage>
+        <Container x={position.x} y={position.y} scale={scale}>
+            <CGrid {...{ cellSize: 50, gridSize: 100, color: 0xc2c2c2, lineWidth: 2 }} />
+            {/* 
+                I have to rewrap the <MainScene /> with provider because, apparently, withApp() hook changes context, so I need to set it back.
+                Otherwise, I see: 
+                `Could not find "store" in the context of "Connect(MainSceneComponent)". 
+                Either wrap the root component in a <Provider>, or pass a custom React context provider to <Provider>
+                and the corresponding React context consumer to Connect(MainSceneComponent) in connect options.`
+
+            */}
+            <Provider store={store}>
+                <MainScene />
+            </Provider>
+        </Container>
     );
 };
 
-/**
- * @param {import("../../store").IStore} store 
- */
-const mapStateToProps = (store) => {
-    return {
-        treeData: store.tree.treeData,
-        basePropertiesList: store.basePropertiesList,
-        spritePropertiesList: store.spritePropertiesList,
-        nineSliceSpritePropertiesList: store.nineSliceSpritePropertiesList,
-        entityTypesList: store.entityTypesList,
-        resourcesList: store.resourcesList,
-        graphicsList: store.graphicsList,
-        textPropertiesList: store.textPropertiesList
-    };
+PreviewPanelComponent.propTypes = {
+    app: PropTypes.object.isRequired
 };
 
-export const PreviewPanel = connect(
-    mapStateToProps, {}
-)(PreviewPanelComponent)
+export const PreviewPanel = withApp(PreviewPanelComponent)
