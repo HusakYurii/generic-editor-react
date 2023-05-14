@@ -91,7 +91,6 @@ const TreeOptionsPopupComponent = (props) => {
         }
 
         const newID = getUID();
-        props.createNodeAction(id, newID);
         props.initBasePropertiesAction(newID);
 
         if (option === OPTIONS_MAP.SPRITE) {
@@ -116,6 +115,10 @@ const TreeOptionsPopupComponent = (props) => {
         else {
             throw new Error("You forgot to add a handler for ADD option")
         }
+        // I need to create the node at the end when all the props are created
+        // because PreviewPanel will add new UI when a node is added
+        // but it will throw error if the properties for that node doesn't exist yet
+        props.createNodeAction(id, newID);
     };
 
     return (
