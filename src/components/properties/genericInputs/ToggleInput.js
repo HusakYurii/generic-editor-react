@@ -26,6 +26,7 @@ export const ToggleInput = ({ label, value, onChange, dataID }) => {
                 type="checkbox"
                 data-id={dataID}
                 value={value}
+                checked={value}
                 onChange={onInputChange}
             />
         </div>
