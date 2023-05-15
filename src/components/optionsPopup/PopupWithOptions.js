@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 
 import "./popupWithOptions.css";
 
@@ -20,7 +20,7 @@ export const PopupWithOptions = (props) => {
     const [data, setData] = useState({ isVisible: false, hoveredElement: null });
 
     const mousePosition = useRef({ x: 0, y: 0 });
-    const popupRef = useRef(null);
+    const popupRef = useRef(document.createElement("div"));
 
     useEffect(() => {
         window.addEventListener("contextmenu", onContextmenu);
@@ -52,7 +52,7 @@ export const PopupWithOptions = (props) => {
 
     }, [data.isVisible])
 
-    const onContextmenu = (event) => {
+    const onContextmenu = useCallback((event) => {
         if (!props.canProcessContextMenu(event)) { return; }
 
         const { target, clientX, clientY } = event;
@@ -61,18 +61,18 @@ export const PopupWithOptions = (props) => {
 
         setData({ hoveredElement: target, isVisible: true });
         setPosition({ top: clientY, left: clientY });
-    };
+    }, []);
 
-    const onMouseleave = () => {
+    const onMouseleave = useCallback(() => {
         setData({ isVisible: false, hoveredElement: null });
-    };
+    }, []);
 
-    const onClick = (event) => {
+    const onClick = useCallback((event) => {
         if (!props.canProcessClick(event)) { return; }
 
         props.processClick(event, data.hoveredElement);
         onMouseleave();
-    }
+    }, [data.hoveredElement]);
 
     return (
         <div

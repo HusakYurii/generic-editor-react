@@ -190,7 +190,7 @@ export const getTextProperties = () => {
         fontStyle: FONT_STYLE.NORMAL,
         fontVariant: FONT_VARIANT.NORMAL,
         fontWeight: FONT_WEIGHT.NORMAL,
-        fontSize: 12
+        fontSize: 40
     };
 };
 
