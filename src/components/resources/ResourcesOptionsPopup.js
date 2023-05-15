@@ -22,12 +22,9 @@ const OPTIONS_MAP = {
  */
 
 /**
- * Each node must have base properties
  * @param { ResourcesOptionsPopupComponentDependencies} props 
  */
 const ResourcesOptionsPopupComponent = (props) => {
-
-
 
     const canShowRemoveOption = (hoveredElement) => {
         /* resources-panel can't have remove option when showing the popup */
@@ -46,7 +43,6 @@ const ResourcesOptionsPopupComponent = (props) => {
         { option: OPTIONS_MAP.DOWNLOAD_IMAGE, label: "Download Image", isAvailable: canShowDownloadOption },
         { option: OPTIONS_MAP.REMOVE_IMAGE, label: "Remove Image", className: "remove-option", isAvailable: canShowRemoveOption },
     ];
-
 
     const canProcessContextMenu = (event) => {
         const dataType = event.target.getAttribute("data-type");

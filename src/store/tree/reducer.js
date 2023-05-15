@@ -100,7 +100,7 @@ const processDeleteNodeNameAction = (state, payload) => {
     return newState;
 }
 
-const processCreateNodeNameAction = (state, payload) => {
+const processCreateNodeAction = (state, payload) => {
     const treeData = { ...state.treeData }
     const newState = { ...state, treeData };
 
@@ -136,7 +136,7 @@ export const treeReducer = (state = STATE, { type, payload }) => {
             return processUpdateNodeNameAction(state, payload);
 
         case TREE_ACTIONS.CREATE_NODE:
-            return processCreateNodeNameAction(state, payload);
+            return processCreateNodeAction(state, payload);
 
         case TREE_ACTIONS.DELETE_NODE:
             return processDeleteNodeNameAction(state, payload);
