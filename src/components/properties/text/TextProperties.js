@@ -21,32 +21,27 @@ import { ToggleInput } from "../genericInputs/ToggleInput";
  * @param { TextPropertiesComponentDependencies} props 
  */
 const TextPropertiesComponent = ({ selectedNodeID, textPropertiesList, updateTextPropertiesAction }) => {
-
-    const [useStroke, toggleStrokeProps] = useState(false);
-    const [useShadow, toggleShadowProps] = useState(false);
-    const [useMultiLine, toggleMultiLineProps] = useState(false);
-
     const id = selectedNodeID;
 
     const {
         text, color, anchorY, anchorX,
         fontFamily, fontStyle, fontVariant, fontWeight, fontSize,
         // stroke properties are optional and may not exist in the data if disabled
-        stroke = "#ffffff", strokeThickness = 1, miterLimit = 10, lineJoin = FONT_LINE_JOINT.MITER,
+        hasStroke = false, stroke = "#ffffff", strokeThickness = 1, miterLimit = 10, lineJoin = FONT_LINE_JOINT.MITER,
         // shadow props are optional and may NOT exist in the data if disabled
-        dropShadowAlpha = 1, dropShadowAngle = 0, dropShadowBlur = 0, dropShadowColor = "#ffffff",
-        dropShadowDistance = 0,
+        dropShadow = false, dropShadowAlpha = 1, dropShadowAngle = 0, dropShadowBlur = 0,
+        dropShadowColor = "#ffffff", dropShadowDistance = 0,
         // multi-line props are optional and may NOT exist in the data if disabled
-        breakWords = false, leading = 0, lineHeight = 0, wordWrapWidth = 200, align = TEXT_ALIGN.LEFT,
-        whiteSpace = TEXT_WHITE_SPACE.PRE,
+        wordWrap = false, breakWords = false, leading = 0, lineHeight = 0, wordWrapWidth = 200,
+        align = TEXT_ALIGN.LEFT, whiteSpace = TEXT_WHITE_SPACE.PRE,
     } = textPropertiesList[id];;
 
     // if booleans are not provided it means that the callback is called from the input
-    const onChange = (key, value, isStroke = useStroke, isShadow = useShadow, isMultiLine = useMultiLine) => {
+    const onChange = (key, value, isStroke = hasStroke, isShadow = dropShadow, isMultiLine = wordWrap) => {
         let properties = {
             text, color, anchorY, anchorX,
             fontFamily, fontStyle, fontVariant, fontWeight, fontSize,
-            ...(isStroke ? { stroke, strokeThickness, miterLimit, lineJoin } : {}),
+            ...(isStroke ? { hasStroke: true, stroke, strokeThickness, miterLimit, lineJoin } : {}),
             ...(isShadow ? { dropShadow: true, dropShadowAlpha, dropShadowAngle, dropShadowBlur, dropShadowColor, dropShadowDistance } : {}),
             ...(isMultiLine ? { wordWrap: true, breakWords, leading, lineHeight, wordWrapWidth, align, whiteSpace } : {}),
         };
@@ -67,10 +62,9 @@ const TextPropertiesComponent = ({ selectedNodeID, textPropertiesList, updateTex
     const fontSizeData = { label: "Size", dataID: "fontSize", value: fontSize, sign: "Px", onChange };
 
     // stroke properties are optional and may not exist in the data if disabled
-    const onStrokeToggled = (key, value) => {
+    const onStrokeToggled = (key, isStroke) => {
         // those two calls will make the component to rerender but I am sure React will make one repaint because of batching
-        onChange("", "", value, useShadow, useMultiLine);
-        toggleStrokeProps(value);
+        onChange("", "", isStroke, dropShadow, wordWrap);
     };
 
     const showStrokeProperties = () => {
@@ -89,10 +83,7 @@ const TextPropertiesComponent = ({ selectedNodeID, textPropertiesList, updateTex
         )
     };
 
-    const onShadowToggled = (key, value) => {
-        onChange("", "", useStroke, value, useMultiLine);
-        toggleShadowProps(value);
-    };
+    const onShadowToggled = (key, isShadow) => onChange("", "", hasStroke, isShadow, wordWrap);
 
     const showShadowProperties = () => {
         const dropShadowColorData = { label: "Color", dataID: "dropShadowColor", value: dropShadowColor, onChange };
@@ -112,10 +103,7 @@ const TextPropertiesComponent = ({ selectedNodeID, textPropertiesList, updateTex
         )
     };
 
-    const onMultiLineToggled = (key, value) => {
-        onChange("", "", useStroke, useShadow, value);
-        toggleMultiLineProps(value);
-    };
+    const onMultiLineToggled = (key, isMultiLine) => onChange("", "", hasStroke, dropShadow, isMultiLine);
 
     const showMultiLineProperties = () => {
         const breakWordsData = { label: "Break Words", dataID: "breakWords", value: breakWords, onChange };
@@ -149,14 +137,14 @@ const TextPropertiesComponent = ({ selectedNodeID, textPropertiesList, updateTex
             <SelectorInput {...fontWeightData} />
             <NumberInput {...fontSizeData} />
             <br></br>
-            <ToggleInput {...{ label: "Stroke", dataID: "", value: useStroke, onChange: onStrokeToggled }} />
-            {useStroke ? showStrokeProperties() : null}
+            <ToggleInput {...{ label: "Stroke", dataID: "", value: hasStroke, onChange: onStrokeToggled }} />
+            {hasStroke ? showStrokeProperties() : null}
             <br></br>
-            <ToggleInput {...{ label: "Shadow", dataID: "", value: useShadow, onChange: onShadowToggled }} />
-            {useShadow ? showShadowProperties() : null}
+            <ToggleInput {...{ label: "Shadow", dataID: "", value: dropShadow, onChange: onShadowToggled }} />
+            {dropShadow ? showShadowProperties() : null}
             <br></br>
-            <ToggleInput {...{ label: "Multiline", dataID: "", value: useMultiLine, onChange: onMultiLineToggled }} />
-            {useMultiLine ? showMultiLineProperties() : null}
+            <ToggleInput {...{ label: "Multiline", dataID: "", value: wordWrap, onChange: onMultiLineToggled }} />
+            {wordWrap ? showMultiLineProperties() : null}
         </div>
     )
 }

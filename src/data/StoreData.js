@@ -155,6 +155,7 @@ export const TEXT_WHITE_SPACE = Object.freeze({
  *  fontWeight : string | number;
  * 
  *  // stroke properties are optional and may not exist in the data if disabled
+ *  hasStroke?: boolean;
  *  lineJoin?: string;
  *  miterLimit?: number;
  *  stroke?: string;
