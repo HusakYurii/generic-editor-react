@@ -9,6 +9,7 @@ export const behavior = {
         // gridSize the length of a side of the square
 
         const gridContainer = new Container();
+        gridContainer.name = "CGrid";
 
         const totalWidth = cellSize * gridSize;
         const totalHeight = cellSize * gridSize;

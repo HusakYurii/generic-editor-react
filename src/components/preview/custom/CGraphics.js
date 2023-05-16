@@ -28,6 +28,7 @@ export const behavior = {
         instance.position.set(newProps.positionX, newProps.positionY);
         instance.scale.set(newProps.scaleX, newProps.scaleY);
         instance.rotation = toRadians(newProps.rotation);
+        instance.name = String(newProps.id);
     }
 };
 export const CGraphics = CustomPIXIComponent(behavior, "CGraphics");
