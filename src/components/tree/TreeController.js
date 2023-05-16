@@ -44,10 +44,10 @@ const TreeComponentController = ({ moveNodeAction, insertBeforeNodeAction, setSe
         - a node can be inserted before another node
         - we can't set a node before a root node, only append
     */
-    const draggedNodeData = createNode(-1);
-    const targetNodeData = createNode(-1);
-    const hoverNodeElement = document.createElement("div");
-    const insertPosition = ("");
+    let draggedNodeData = createNode(-1);
+    let targetNodeData = createNode(-1);
+    let hoverNodeElement = document.createElement("div");
+    let insertPosition = ("");
 
 
     const handleDragStart = (event) => {
