@@ -1,13 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import PropTypes from 'prop-types'
-import { connect, Provider } from "react-redux";
-import { Stage, AppContext, Container, withApp } from 'react-pixi-fiber';
-import { createPixiTree } from "./custom/createPixiTree";
+import { Provider } from "react-redux";
+import { withApp } from 'react-pixi-fiber';
 import { ResizeController } from "./ResizeContoller";
 import { CameraController } from "./CameraController";
 import { CGrid } from "./custom/CGrid";
 import { MainScene } from "./MainScene";
 import store from "../../store";
+import { CContainer } from "./custom/CContainer";
+
+export const CameraContainerID = "CameraContainer";
 
 const PreviewPanelComponent = ({ app }) => {
 
@@ -36,8 +38,8 @@ const PreviewPanelComponent = ({ app }) => {
     }, []);
 
     return (
-        <Container x={position.x} y={position.y} scale={scale}>
-            <CGrid {...{ cellSize: 50, gridSize: 100, color: 0xc2c2c2, lineWidth: 2 }} />
+        <CContainer {...{ id: CameraContainerID, positionX: position.x, positionY: position.y, scaleX: scale.x, scaleY: scale.y, rotation: 0 }}>
+            <CGrid {...{ id: "CGrid", cellSize: 50, gridSize: 100, color: 0xc2c2c2, lineWidth: 2 }} />
             {/* 
                 I have to rewrap the <MainScene /> with provider because, apparently, withApp() hook changes context, so I need to set it back.
                 Otherwise, I see: 
@@ -49,7 +51,7 @@ const PreviewPanelComponent = ({ app }) => {
             <Provider store={store}>
                 <MainScene />
             </Provider>
-        </Container>
+        </CContainer>
     );
 };
 
