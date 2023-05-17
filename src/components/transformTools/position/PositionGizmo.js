@@ -1,8 +1,7 @@
-import React, { useRef, useEffect } from "react";
-import { Application, Point } from "pixi.js";
+import React, { useEffect } from "react";
+import { Point } from "pixi.js";
 import { connect } from "react-redux";
 import { updateBasePropertiesAction } from "../../../store/properties/base";
-import { PositionArrows } from "./PositionArrows";
 import { round } from "lodash";
 
 const getGlobalRotation = (object) => {
@@ -19,11 +18,9 @@ const getGlobalRotation = (object) => {
 
 
 
-
-
 /**
  * @typedef {{
- * app: Application; 
+ * services: {},
  * selectedNodeID: number;
  * treeData: import("../../../store/tree").ITreeState["treeData"];
  * basePropertiesList: import("../../../store/properties/base").IBasePropertiesListState;
@@ -44,23 +41,26 @@ const getGlobalRotation = (object) => {
  */
 const PositionGizmoComponent = ({ services, selectedNodeID, updateBasePropertiesAction, basePropertiesList }) => {
 
-    const positionArrows = useRef(new PositionArrows(services.app.ticker));
-
     useEffect(() => {
-        return () => positionArrows.current.destroy();
+        services.gizmoPositionArrows.activate();
+        return () => {
+            services.gizmoPositionArrows.onMoved(null);
+            services.gizmoPositionArrows.deactivate();
+        };
     }, []);
 
+
     if (selectedNodeID) {
-        services.app.stage.addChild(positionArrows.current.view);
+        services.app.stage.addChild(services.gizmoPositionArrows.view);
 
         const element = services.getChildByName(services.app.stage, String(selectedNodeID));
 
         const globalPosition = element.toGlobal(new Point());
         const localPosition = services.app.stage.toLocal(globalPosition);
 
-        positionArrows.current.initPositions(localPosition);
+        services.gizmoPositionArrows.initPositions(localPosition);
 
-        positionArrows.current.onPositionMove((dx, dy) => {
+        services.gizmoPositionArrows.onMoved((dx, dy) => {
             const rotation = getGlobalRotation(element);
 
             const offset = services.camera.applyScale({ x: dx, y: dy });
@@ -76,8 +76,8 @@ const PositionGizmoComponent = ({ services, selectedNodeID, updateBaseProperties
         });
     }
     else {
-        services.app.stage.removeChild(positionArrows.current.view);
-        positionArrows.current.onPositionMove(null);
+        services.app.stage.removeChild(services.gizmoPositionArrows.view);
+        services.gizmoPositionArrows.onMoved(null);
     }
 
     return (

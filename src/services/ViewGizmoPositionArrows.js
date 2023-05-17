@@ -6,8 +6,9 @@ const MOVE_DIRECTIONS = {
     XY_AXIS: "xyAxis",
 };
 
-export class PositionArrows {
+export class ViewGizmoPositionArrows {
     constructor(ticker) {
+
         this.view = new Container();
 
         const size = 180;
@@ -67,10 +68,9 @@ export class PositionArrows {
         this._oldMousePosition = { x: 0, y: 0 };
         this._offset = { x: 0, y: 0 };
 
-        this.view.interactive = true;
-        this.view.interactiveChildren = false;
         this.view.hitArea = new Rectangle(-20, -190, 200, 200);
 
+        this.view.interactiveChildren = false;
         this.view.on("mousedown", this._onMouseDown, this);
         this.view.on("mousemove", this._onMouseMove, this);
         this.view.on("mouseup", this._onMouseUp, this);
@@ -78,29 +78,27 @@ export class PositionArrows {
 
         this._needToUpdate = false;
         this._ticker = ticker;
-        this._ticker.add(this._update, this);
 
-        this._onPositionMove = (dx, dy) => { };
+        this._onMoved = (dx, dy) => { }
     }
 
-    onPositionMove(cb) {
-        this._onPositionMove = cb ? cb : (dx, dy) => { };
+    onMoved(cb) {
+        this._onMoved = cb ? cb : (dx, dy) => { };
+    }
+
+    activate() {
+        this.view.interactive = true;
+        this._ticker.add(this._update, this);
+    }
+
+    deactivate() {
+        this._ticker.remove(this._update, this);
+        this.view.interactive = false;
     }
 
     initPositions(point) {
         this.view.x = point.x;
         this.view.y = point.y;
-    }
-
-    destroy() {
-        this._ticker.remove(this._update, this);
-
-        this.view.interactive = false;
-        this.view.off("mousedown", this._onMouseDown, this);
-        this.view.off("mousemove", this._onMouseMove, this);
-        this.view.off("mouseup", this._onMouseUp, this);
-
-        this.view.destroy();
     }
 
     _onMouseDown(event) {
@@ -147,10 +145,7 @@ export class PositionArrows {
 
         this._needToUpdate = false;
 
-        // this.view.x += this._offset.x;
-        // this.view.y += this._offset.y;
-
-        this._onPositionMove(this._offset.x, this._offset.y);
+        this._onMoved(this._offset.x, this._offset.y);
 
         this._offset = { x: 0, y: 0 };
     }
