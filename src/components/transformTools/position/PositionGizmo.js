@@ -1,7 +1,6 @@
-import React, { useRef, useState, useEffect } from "react";
-import { Application, Container, Graphics, mesh, Texture, Point, Circle, Rectangle } from "pixi.js";
+import React, { useRef, useEffect } from "react";
+import { Application, Point } from "pixi.js";
 import { connect } from "react-redux";
-import rectTexture from "../../assets/rectangle.png";
 import { updateBasePropertiesAction } from "../../../store/properties/base";
 import { PositionArrows } from "./PositionArrows";
 import { CameraContainerID } from "../../preview/PreviewPanel";
@@ -84,21 +83,6 @@ const PositionGizmoComponent = ({ app, selectedNodeID, updateBasePropertiesActio
         app.stage.removeChild(positionArrows.current.view);
         positionArrows.current.onPositionMove(null);
     }
-
-
-    // const bounds = element.getLocalBounds();
-
-
-
-
-
-
-    // const data = {
-    //     x: localPosition.x + (bounds.x * element.worldTransform.a),
-    //     y: localPosition.y + (bounds.y * element.worldTransform.d),
-    //     width: bounds.width * element.worldTransform.a,
-    //     height: bounds.height * element.worldTransform.d,
-    // };
 
     return (
         <></>
