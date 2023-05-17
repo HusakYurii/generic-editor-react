@@ -3,7 +3,6 @@ import { Application, Point } from "pixi.js";
 import { connect } from "react-redux";
 import { updateBasePropertiesAction } from "../../../store/properties/base";
 import { PositionArrows } from "./PositionArrows";
-import { CameraContainerID } from "../../preview/PreviewPanel";
 import { round } from "lodash";
 
 const getGlobalRotation = (object) => {
@@ -43,36 +42,33 @@ const getGlobalRotation = (object) => {
 /**
  * @param {PositionGizmoComponentDependencies} props 
  */
-const PositionGizmoComponent = ({ app, selectedNodeID, updateBasePropertiesAction, basePropertiesList }) => {
+const PositionGizmoComponent = ({ services, selectedNodeID, updateBasePropertiesAction, basePropertiesList }) => {
 
-    const positionArrows = useRef(new PositionArrows(app.ticker));
+    const positionArrows = useRef(new PositionArrows(services.app.ticker));
 
     useEffect(() => {
         return () => positionArrows.current.destroy();
     }, []);
 
     if (selectedNodeID) {
-        app.stage.addChild(positionArrows.current.view);
+        services.app.stage.addChild(positionArrows.current.view);
 
-        const baseProperties = basePropertiesList[selectedNodeID];
-
-        const element = app.stage.getChildByName(String(selectedNodeID));
-        const camera = app.stage.getChildByName(CameraContainerID);
+        const element = services.getChildByName(services.app.stage, String(selectedNodeID));
 
         const globalPosition = element.toGlobal(new Point());
-        const localPosition = app.stage.toLocal(globalPosition);
+        const localPosition = services.app.stage.toLocal(globalPosition);
 
         positionArrows.current.initPositions(localPosition);
+
         positionArrows.current.onPositionMove((dx, dy) => {
             const rotation = getGlobalRotation(element);
 
-            dx = dx / camera.scale.x;
-            dy = dy / camera.scale.y;
+            const offset = services.camera.applyScale({ x: dx, y: dy });
 
-            const x = dx * Math.cos(rotation) + dy * Math.sin(rotation)
-            const y = -dx * Math.sin(rotation) + dy * Math.cos(rotation)
+            const x = offset.x * Math.cos(rotation) + offset.y * Math.sin(rotation)
+            const y = -offset.x * Math.sin(rotation) + offset.y * Math.cos(rotation)
 
-            const properties = { ...baseProperties };
+            const properties = { ...basePropertiesList[selectedNodeID] };
             properties.positionX = round(properties.positionX + x, 2);
             properties.positionY = round(properties.positionY + y, 2);
 
@@ -80,7 +76,7 @@ const PositionGizmoComponent = ({ app, selectedNodeID, updateBasePropertiesActio
         });
     }
     else {
-        app.stage.removeChild(positionArrows.current.view);
+        services.app.stage.removeChild(positionArrows.current.view);
         positionArrows.current.onPositionMove(null);
     }
 

@@ -1,4 +1,4 @@
-import { Container, DisplayObject } from 'pixi.js';
+import { DisplayObject } from 'pixi.js';
 
 /**
  * The instance name of the object.
@@ -11,28 +11,28 @@ DisplayObject.prototype.name = null;
  * Returns the display object in the container.
  *
  * Recursive searches are done in a preorder traversal.
- * @method getChildByName
- * @memberof PIXI.Container#
+ * @param {PIXI.DisplayObject} element child with the specified name.
  * @param {string} name - Instance name.
  * @param {boolean}[deep=false] - Whether to search recursively
  * @returns {PIXI.DisplayObject} The child with the specified name.
  */
-Container.prototype.getChildByName = function getChildByName(name) {
-    for (let i = 0, j = this.children.length; i < j; i++) {
-        if (this.children[i].name === name) {
-            return this.children[i];
+
+export const getChildByName = (element, name) => {
+    for (let i = 0, j = element.children.length; i < j; i++) {
+        if (element.children[i].name === name) {
+            return element.children[i];
         }
     }
 
 
-    for (let i = 0, j = this.children.length; i < j; i++) {
-        const child = this.children[i];
+    for (let i = 0, j = element.children.length; i < j; i++) {
+        const child = element.children[i];
 
         if (!child.getChildByName) {
             continue;
         }
 
-        const target = child.getChildByName(name);
+        const target = getChildByName(child, name);
 
         if (target) {
             return target;
