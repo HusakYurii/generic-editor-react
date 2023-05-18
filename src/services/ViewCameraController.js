@@ -78,8 +78,10 @@ export class ViewCameraController extends utils.EventEmitter {
         }
         this._needUpdate = false;
 
-        this.emit("positionChanged", { ...this._cameraPosition });
-        this.emit("scaleChanged", { x: this._cameraScale, y: this._cameraScale });
+        this.emit("update", {
+            scale: { x: this._cameraScale, y: this._cameraScale },
+            position: { ...this._cameraPosition }
+        });
     }
 
     _onMouseDown(event) {

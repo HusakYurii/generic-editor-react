@@ -7,44 +7,50 @@ import { MainScene } from "./MainScene";
 import store from "../../store";
 import { CContainer } from "./custom/CContainer";
 
-export const CameraContainerID = "CameraContainer";
-
 export const PreviewPanel = ({ services }) => {
 
-    const [position, setPosition] = useState({ x: 0, y: 0 });
-    const [scale, setScale] = useState({ x: 1, y: 1 });
+    const [cameraData, setCameraData] = useState({
+        positionX: 0,
+        positionY: 0,
+        scaleX: 1,
+        scaleY: 1,
+    });
 
     useEffect(() => {
-        const resizeHandler = (size) => {
+        const handleResizeUpdate = (size) => {
             // I could have used useState and pass x,y to the <Stage/> but that makes an extra rendering call I don't need
             services.app.stage.position.set(size.width / 2, size.height / 2)
         };
-        services.resize.on("sizeChanged", resizeHandler);
+        services.resize.on("update", handleResizeUpdate);
         services.resize.activate();
 
         return () => {
-            services.resize.off("sizeChanged", resizeHandler);
+            services.resize.off("update", handleResizeUpdate);
             services.resize.deactivate();
         }
     }, []);
 
     useEffect(() => {
-        const handleScaleChanged = ({ x, y }) => setScale({ x, y });
-        const handlePositionChanged = ({ x, y }) => setPosition({ x, y });
+        const handleCameraUpdate = ({ scale, position }) => {
+            setCameraData({
+                positionX: position.x,
+                positionY: position.y,
+                scaleX: scale.x,
+                scaleY: scale.y,
+            });
+        };
 
-        services.camera.on("scaleChanged", handleScaleChanged);
-        services.camera.on("positionChanged", handlePositionChanged);
+        services.camera.on("update", handleCameraUpdate);
         services.camera.activate();
 
         return () => {
-            services.camera.off("scaleChanged", handleScaleChanged);
-            services.camera.off("positionChanged", handlePositionChanged);
+            services.camera.off("update", handleCameraUpdate);
             services.camera.deactivate();
         }
     }, []);
 
     return (
-        <CContainer {...{ id: CameraContainerID, positionX: position.x, positionY: position.y, scaleX: scale.x, scaleY: scale.y, rotation: 0 }}>
+        <CContainer {...{ id: "CameraContainer", rotation: 0, ...cameraData }}>
             <CGrid {...{ id: "CGrid", cellSize: 50, gridSize: 100, color: 0xc2c2c2, lineWidth: 2 }} />
             {/* 
                 I have to rewrap the <MainScene /> with provider because, apparently, pixi fiber components inherently get context from pixi, so I need to set it back.

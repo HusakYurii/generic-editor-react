@@ -53,6 +53,6 @@ export class ViewResizeController extends utils.EventEmitter {
 
         this.size = gameSize;
 
-        this.emit("sizeChanged", { ...gameSize });
+        this.emit("update", { ...gameSize });
     }
 }
