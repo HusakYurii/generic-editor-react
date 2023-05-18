@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { connect } from "react-redux";
-import { Stage, AppContext, Container } from 'react-pixi-fiber';
 import { createPixiTree } from "./custom/createPixiTree";
-import { CameraController } from "./CameraController";
-import { CGrid } from "./custom/CGrid";
 
 /**
  * @typedef {{

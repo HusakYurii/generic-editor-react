@@ -33,7 +33,7 @@ export const createPixiTree = (nodeData, dependencies) => {
 
     if (entity.type === ENTITY_TYPES.CONTAINER) {
         return (
-            <CContainer key={nodeData.id} {...baseProps}>
+            <CContainer key={nodeData.id} id={nodeData.id} {...baseProps}>
                 {nodeData.nodes.map((node) => createPixiTree(node, dependencies))}
             </CContainer>
         );
@@ -44,7 +44,7 @@ export const createPixiTree = (nodeData, dependencies) => {
         const texture = resource ? Texture.from(resource.name) : Texture.EMPTY;
 
         return (
-            <CSprite key={nodeData.id} {...{ texture, ...baseProps, ...spriteProps }}>
+            <CSprite key={nodeData.id} id={nodeData.id} {...{ texture, ...baseProps, ...spriteProps }}>
                 {nodeData.nodes.map((node) => createPixiTree(node, dependencies))}
             </CSprite>
         );
@@ -52,7 +52,7 @@ export const createPixiTree = (nodeData, dependencies) => {
     if (entity.type === ENTITY_TYPES.GRAPHICS) {
         const graphicsProps = graphicsList[nodeData.id];
         return (
-            <CGraphics key={nodeData.id} {...{ ...baseProps, ...graphicsProps }}>
+            <CGraphics key={nodeData.id} id={nodeData.id} {...{ ...baseProps, ...graphicsProps }}>
                 {nodeData.nodes.map((node) => createPixiTree(node, dependencies))}
             </CGraphics>
         );
@@ -63,7 +63,7 @@ export const createPixiTree = (nodeData, dependencies) => {
         const texture = resource ? Texture.from(resource.name) : Texture.EMPTY;
 
         return (
-            <CNineSlicePlane key={nodeData.id} {...{ texture, ...baseProps, ...nineSliceProps }}>
+            <CNineSlicePlane key={nodeData.id} id={nodeData.id} {...{ texture, ...baseProps, ...nineSliceProps }}>
                 {nodeData.nodes.map((node) => createPixiTree(node, dependencies))}
             </CNineSlicePlane>
         );
@@ -72,7 +72,7 @@ export const createPixiTree = (nodeData, dependencies) => {
         const textProps = textPropertiesList[nodeData.id];
 
         return (
-            <CText key={nodeData.id} {...{ baseProps, textProps }}>
+            <CText key={nodeData.id} id={nodeData.id} {...{ baseProps, textProps }}>
                 {nodeData.nodes.map((node) => createPixiTree(node, dependencies))}
             </CText>
         );

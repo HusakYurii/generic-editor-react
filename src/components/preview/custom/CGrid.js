@@ -4,11 +4,12 @@ import { Container, Graphics } from "pixi.js";
 import { toRadians } from "../../../tools/math";
 
 export const behavior = {
-    customDisplayObject: ({ cellSize, gridSize, color, lineWidth }) => {
+    customDisplayObject: ({ id, cellSize, gridSize, color, lineWidth }) => {
         // cellSize size of each square in the grid
         // gridSize the length of a side of the square
 
         const gridContainer = new Container();
+        gridContainer.name = id;
 
         const totalWidth = cellSize * gridSize;
         const totalHeight = cellSize * gridSize;

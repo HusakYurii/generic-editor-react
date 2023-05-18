@@ -93,8 +93,8 @@ const NineSliceSpritePropertiesComponent = ({
     return (
         <div className="properties propertiesTopOffset">
             <TextureInput {...textureData} />
-            <PointInput {...sizeData} />
             <PointInput {...anchorData} />
+            <PointInput {...sizeData} />
             <PointInput {...cornersABData} />
             <PointInput {...cornersCDData} />
         </div>

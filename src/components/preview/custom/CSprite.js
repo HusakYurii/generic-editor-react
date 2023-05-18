@@ -13,7 +13,7 @@ export const behavior = {
         instance.scale.set(newProps.scaleX, newProps.scaleY);
         instance.anchor.set(newProps.anchorX, newProps.anchorY);
         instance.rotation = toRadians(newProps.rotation);
-
+        instance.name = String(newProps.id);
     }
 };
 export const CSprite = CustomPIXIComponent(behavior, "CSprite");

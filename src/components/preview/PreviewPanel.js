@@ -1,45 +1,59 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from 'prop-types'
-import { connect, Provider } from "react-redux";
-import { Stage, AppContext, Container, withApp } from 'react-pixi-fiber';
-import { createPixiTree } from "./custom/createPixiTree";
-import { ResizeController } from "./ResizeContoller";
-import { CameraController } from "./CameraController";
+import { Provider } from "react-redux";
+import { withApp } from 'react-pixi-fiber';
 import { CGrid } from "./custom/CGrid";
 import { MainScene } from "./MainScene";
 import store from "../../store";
+import { CContainer } from "./custom/CContainer";
 
-const PreviewPanelComponent = ({ app }) => {
+export const PreviewPanel = ({ services }) => {
 
-    const [position, setPosition] = useState({ x: 0, y: 0 });
-    const [scale, setScale] = useState({ x: 1, y: 1 });
+    const [cameraData, setCameraData] = useState({
+        positionX: 0,
+        positionY: 0,
+        scaleX: 1,
+        scaleY: 1,
+    });
 
     useEffect(() => {
-        const parentDivElement = app.view.parentElement;
-
-        const resizeController = new ResizeController(app.renderer, { width: 1280, height: 1280 });
-
-        const observer = new ResizeObserver(() => {
-            resizeController.resize({ width: parentDivElement.offsetWidth, height: parentDivElement.offsetHeight });
+        const handleResizeUpdate = (size) => {
             // I could have used useState and pass x,y to the <Stage/> but that makes an extra rendering call I don't need
-            app.stage.position.set(resizeController.size.width / 2, resizeController.size.height / 2)
-        });
+            services.app.stage.position.set(size.width / 2, size.height / 2)
+        };
+        services.resize.on("update", handleResizeUpdate);
+        services.resize.activate();
 
-        observer.observe(parentDivElement);
-
-        return () => observer.unobserve(parentDivElement);
+        return () => {
+            services.resize.off("update", handleResizeUpdate);
+            services.resize.deactivate();
+        }
     }, []);
 
     useEffect(() => {
-        const cameraController = new CameraController(app.view, app.ticker, { min: 1, max: 3 }, { setPosition, setScale });
-        return () => cameraController.destroy();
+        const handleCameraUpdate = ({ scale, position }) => {
+            setCameraData({
+                positionX: position.x,
+                positionY: position.y,
+                scaleX: scale.x,
+                scaleY: scale.y,
+            });
+        };
+
+        services.camera.on("update", handleCameraUpdate);
+        services.camera.activate();
+
+        return () => {
+            services.camera.off("update", handleCameraUpdate);
+            services.camera.deactivate();
+        }
     }, []);
 
     return (
-        <Container x={position.x} y={position.y} scale={scale}>
-            <CGrid {...{ cellSize: 50, gridSize: 100, color: 0xc2c2c2, lineWidth: 2 }} />
+        <CContainer {...{ id: "CameraContainer", rotation: 0, ...cameraData }}>
+            <CGrid {...{ id: "CGrid", cellSize: 50, gridSize: 100, color: 0xc2c2c2, lineWidth: 2 }} />
             {/* 
-                I have to rewrap the <MainScene /> with provider because, apparently, withApp() hook changes context, so I need to set it back.
+                I have to rewrap the <MainScene /> with provider because, apparently, pixi fiber components inherently get context from pixi, so I need to set it back.
                 Otherwise, I see: 
                 `Could not find "store" in the context of "Connect(MainSceneComponent)". 
                 Either wrap the root component in a <Provider>, or pass a custom React context provider to <Provider>
@@ -49,12 +63,6 @@ const PreviewPanelComponent = ({ app }) => {
             <Provider store={store}>
                 <MainScene />
             </Provider>
-        </Container>
+        </CContainer>
     );
 };
-
-PreviewPanelComponent.propTypes = {
-    app: PropTypes.object.isRequired
-};
-
-export const PreviewPanel = withApp(PreviewPanelComponent)
