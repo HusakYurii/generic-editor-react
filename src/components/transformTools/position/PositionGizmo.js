@@ -1,22 +1,7 @@
 import React, { useEffect } from "react";
-import { Point } from "pixi.js";
 import { connect } from "react-redux";
 import { updateBasePropertiesAction } from "../../../store/properties/base";
 import { round } from "lodash";
-
-const getGlobalRotation = (object) => {
-    let globalRotation = 0;
-
-    let parentContainer = object.parent;
-    while (parentContainer) {
-        globalRotation += parentContainer.rotation;
-        parentContainer = parentContainer.parent;
-    }
-
-    return globalRotation;
-};
-
-
 
 /**
  * @typedef {{
@@ -42,26 +27,46 @@ const getGlobalRotation = (object) => {
 const PositionGizmoComponent = ({ services, selectedNodeID, updateBasePropertiesAction, basePropertiesList }) => {
 
     useEffect(() => {
+        services.app.stage.addChild(services.gizmoPositionArrows.view);
         services.gizmoPositionArrows.activate();
         return () => {
-            services.gizmoPositionArrows.onMoved(null);
+            services.app.stage.removeChild(services.gizmoPositionArrows.view);
             services.gizmoPositionArrows.deactivate();
         };
     }, []);
 
+    useEffect(() => {
+        if (!selectedNodeID) {
+            return () => { };
+        }
+
+        const handleCameraUpdate = () => {
+            const element = services.pixiTools.getChildByName(services.app.stage, String(selectedNodeID));
+            services.gizmoPositionArrows.initPositions(
+                services.pixiTools.getChildRelativePosition(element, services.app.stage)
+            );
+        };
+
+        handleCameraUpdate();
+
+        services.camera.on("update", handleCameraUpdate);
+
+        return () => services.camera.off("update", handleCameraUpdate);
+
+    }, [selectedNodeID]);
+
 
     if (selectedNodeID) {
-        services.app.stage.addChild(services.gizmoPositionArrows.view);
 
-        const element = services.getChildByName(services.app.stage, String(selectedNodeID));
+        const element = services.pixiTools.getChildByName(services.app.stage, String(selectedNodeID));
 
-        const globalPosition = element.toGlobal(new Point());
-        const localPosition = services.app.stage.toLocal(globalPosition);
-
-        services.gizmoPositionArrows.initPositions(localPosition);
+        services.gizmoPositionArrows.show();
+        services.gizmoPositionArrows.initPositions(
+            services.pixiTools.getChildRelativePosition(element, services.app.stage)
+        );
 
         services.gizmoPositionArrows.onMoved((dx, dy) => {
-            const rotation = getGlobalRotation(element);
+            const rotation = services.pixiTools.getGlobalRotation(element);
 
             const offset = services.camera.applyScale({ x: dx, y: dy });
 
@@ -76,7 +81,7 @@ const PositionGizmoComponent = ({ services, selectedNodeID, updateBaseProperties
         });
     }
     else {
-        services.app.stage.removeChild(services.gizmoPositionArrows.view);
+        services.gizmoPositionArrows.hide();
         services.gizmoPositionArrows.onMoved(null);
     }
 

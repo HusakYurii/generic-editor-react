@@ -10,6 +10,7 @@ export class ViewGizmoPositionArrows {
     constructor(ticker) {
 
         this.view = new Container();
+        this.view.visible = false;
 
         const size = 180;
         const arrowSize = 30;
@@ -84,6 +85,14 @@ export class ViewGizmoPositionArrows {
 
     onMoved(cb) {
         this._onMoved = cb ? cb : (dx, dy) => { };
+    }
+
+    show() {
+        this.view.visible = true;
+    }
+
+    hide() {
+        this.view.visible = false;
     }
 
     activate() {

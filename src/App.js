@@ -17,7 +17,7 @@ import { InteractiveTransformTools } from "./components/transformTools/Interacti
 import { ViewCameraController } from "./services/ViewCameraController";
 import { ViewResizeController } from "./services/ViewResizeController";
 // I have to copy it because the available npm packages incompatible with pixi 4.6.0 this project use 
-import { getChildByName } from "./services/ViewGetChildByName";
+import { getChildByName, getChildRelativePosition, getGlobalRotation } from "./services/ViewTools";
 import { ViewGizmoPositionArrows } from "./services/ViewGizmoPositionArrows";
 
 window["__store"] = store;
@@ -40,7 +40,11 @@ export const App = () => {
       camera: new ViewCameraController(app.view, app.ticker, { min: 1, max: 3 }),
       resize: new ViewResizeController(canvasContainerRef.current, app.renderer, { width: 1280, height: 1280 }),
       gizmoPositionArrows: new ViewGizmoPositionArrows(app.ticker),
-      getChildByName,
+      pixiTools: {
+        getChildByName,
+        getChildRelativePosition,
+        getGlobalRotation
+      }
     });
 
   }, []);
