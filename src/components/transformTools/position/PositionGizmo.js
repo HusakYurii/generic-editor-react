@@ -42,9 +42,9 @@ const PositionGizmoComponent = ({ services, selectedNodeID, updateBaseProperties
 
         const handleCameraUpdate = () => {
             const element = services.pixiTools.getChildByName(services.app.stage, String(selectedNodeID));
-            services.gizmoPositionArrows.initPositions(
-                services.pixiTools.getChildRelativePosition(element, services.app.stage)
-            );
+            services.gizmoPositionArrows.setPosition(services.pixiTools.getChildRelativePosition(element, services.app.stage));
+            services.gizmoPositionArrows.setRotation(services.pixiTools.getGlobalRotation(element));
+            services.gizmoPositionArrows.setElementRotation(element.rotation);
         };
 
         handleCameraUpdate();
@@ -61,21 +61,16 @@ const PositionGizmoComponent = ({ services, selectedNodeID, updateBaseProperties
         const element = services.pixiTools.getChildByName(services.app.stage, String(selectedNodeID));
 
         services.gizmoPositionArrows.show();
-        services.gizmoPositionArrows.initPositions(
-            services.pixiTools.getChildRelativePosition(element, services.app.stage)
-        );
+        services.gizmoPositionArrows.setPosition(services.pixiTools.getChildRelativePosition(element, services.app.stage));
+        services.gizmoPositionArrows.setRotation(services.pixiTools.getGlobalRotation(element));
+        services.gizmoPositionArrows.setElementRotation(element.rotation);
 
         services.gizmoPositionArrows.onMoved((dx, dy) => {
-            const rotation = services.pixiTools.getGlobalRotation(element);
-
             const offset = services.camera.applyScale({ x: dx, y: dy });
 
-            const x = offset.x * Math.cos(rotation) + offset.y * Math.sin(rotation)
-            const y = -offset.x * Math.sin(rotation) + offset.y * Math.cos(rotation)
-
             const properties = { ...basePropertiesList[selectedNodeID] };
-            properties.positionX = round(properties.positionX + x, 2);
-            properties.positionY = round(properties.positionY + y, 2);
+            properties.positionX = round(properties.positionX + offset.x, 2);
+            properties.positionY = round(properties.positionY + offset.y, 2);
 
             updateBasePropertiesAction({ nodeID: selectedNodeID, properties });
         });

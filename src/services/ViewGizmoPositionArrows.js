@@ -68,6 +68,7 @@ export class ViewGizmoPositionArrows {
         this._targetAxis = "";
         this._oldMousePosition = { x: 0, y: 0 };
         this._offset = { x: 0, y: 0 };
+        this._elementRotation = 0;
 
         this.view.hitArea = new Rectangle(-20, -190, 200, 200);
 
@@ -105,9 +106,29 @@ export class ViewGizmoPositionArrows {
         this.view.interactive = false;
     }
 
-    initPositions(point) {
+    /**
+     * To set gizmo position. It will be used for UI
+     * @param {{x: number; y: number;}} point 
+     */
+    setPosition(point) {
         this.view.x = point.x;
         this.view.y = point.y;
+    }
+
+    /**
+     * To set gizmo rotation. It will be used for UI
+     * @param {{x: number; y: number;}} point 
+     */
+    setRotation(angle) {
+        this.view.rotation = angle;
+    }
+
+    /**
+     * To set selected element rotation. It will be used for actual math. 
+     * @param {{x: number; y: number;}} point 
+     */
+    setElementRotation(angle) {
+        this._elementRotation = angle;
     }
 
     _onMouseDown(event) {
@@ -129,13 +150,30 @@ export class ViewGizmoPositionArrows {
         if (!this._isClicked) {
             return;
         };
-        const dx = event.data.global.x - this._oldMousePosition.x;
-        const dy = event.data.global.y - this._oldMousePosition.y;
+
+        const x = event.data.global.x - this._oldMousePosition.x;
+        const y = (event.data.global.y - this._oldMousePosition.y);
+
+        let dx = 0;
+        let dy = 0;
+
+        if (this._targetAxis === MOVE_DIRECTIONS.X_AXIS) {
+            dx = x;
+            dy = x * Math.tan(this._elementRotation);
+        }
+        else if (this._targetAxis === MOVE_DIRECTIONS.Y_AXIS) {
+            dx = -y * Math.tan(this._elementRotation);
+            dy = y;
+        }
+        else {
+            dx = x;
+            dy = y;
+        }
 
         this._oldMousePosition = { ...event.data.global };
         // accumulate the offset, it will be applied in update function
-        this._offset.x += (this._targetAxis === MOVE_DIRECTIONS.XY_AXIS || this._targetAxis === MOVE_DIRECTIONS.X_AXIS) ? dx : 0;
-        this._offset.y += (this._targetAxis === MOVE_DIRECTIONS.XY_AXIS || this._targetAxis === MOVE_DIRECTIONS.Y_AXIS) ? dy : 0;
+        this._offset.x += dx;
+        this._offset.y += dy;
         this._needToUpdate = true;
     }
 

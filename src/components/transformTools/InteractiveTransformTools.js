@@ -21,7 +21,7 @@ const METHODS_TO_GIZMO_MAP = {
  * @param { {services: {} }} props 
  */
 export const InteractiveTransformTools = (props) => {
-    const [transformMethod, setTransformMethod] = useState(TRANSFORM_METHODS.SCALE);
+    const [transformMethod, setTransformMethod] = useState(TRANSFORM_METHODS.POSITION);
 
     return (
         /* 
