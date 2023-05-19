@@ -2,8 +2,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./app.css";
 
-import store from "./store";
-
 import { Stage } from 'react-pixi-fiber';
 import { Application } from "pixi.js"
 
@@ -19,15 +17,14 @@ import { ViewResizeController } from "./services/ViewResizeController";
 // I have to copy it because the available npm packages incompatible with pixi 4.6.0 this project use 
 import { getChildByName, getChildRelativePosition, getGlobalRotation } from "./services/ViewTools";
 import { ViewGizmoPositionArrows } from "./services/ViewGizmoPositionArrows";
+import { ViewGizmoScaleBox } from "./services/ViewGizmoScaleBox";
+import { ViewGizmoRotation } from "./services/ViewGizmoRotation";
+import { DOMGizmoButtons } from "./services/DOMGizmoButtons";
 
 import move from "./assets/icons/move.png";
 import resize from "./assets/icons/resize.png";
 import rotate from "./assets/icons/rotate.png";
 
-import { ViewGizmoScaleBox } from "./services/ViewGizmoScaleBox";
-import { DOMGizmoButtons } from "./services/DOMGizmoButtons";
-
-window["__store"] = store;
 
 export const App = () => {
   window.addEventListener("contextmenu", (event) => event.preventDefault());
@@ -47,13 +44,13 @@ export const App = () => {
       view: canvasRef.current
     });
 
-    console.log(gizmoButtons);
     setServices({
       app,
       camera: new ViewCameraController(app.view, app.ticker, { min: 1, max: 3 }),
       resize: new ViewResizeController(canvasContainerRef.current, app.renderer, { width: 1280, height: 1280 }),
       gizmoPositionArrows: new ViewGizmoPositionArrows(app.ticker),
       gizmoScaleBox: new ViewGizmoScaleBox(app.ticker),
+      gizmoRotation: new ViewGizmoRotation(app.ticker),
       gizmoButtons: new DOMGizmoButtons({
         move: gizmoButtons.move.current,
         resize: gizmoButtons.resize.current,

@@ -5,35 +5,23 @@ import store from "../../store"
 import { PositionGizmo } from "./position";
 import { ScaleGizmo } from "./scale";
 import { DOM_GIZMO_BUTTON_TYPES } from "../../services/DOMGizmoButtons";
+import { RotationGizmo } from "./rotation";
 
-const TRANSFORM_METHODS = {
-    SCALE: "SCALE",
-    POSITION: "POSITION",
-    ROTATION: "ROTATION"
-};
-
-
-const METHODS_TO_BUTTONS_MAP = {
-    [DOM_GIZMO_BUTTON_TYPES.MOVE]: TRANSFORM_METHODS.POSITION,
-    [DOM_GIZMO_BUTTON_TYPES.SCALE]: TRANSFORM_METHODS.SCALE,
-    [DOM_GIZMO_BUTTON_TYPES.ROTATE]: TRANSFORM_METHODS.ROTATION,
-}
 
 const METHODS_TO_GIZMO_MAP = {
-    [TRANSFORM_METHODS.POSITION]: (props) => <PositionGizmo services={props.services} />,
-    [TRANSFORM_METHODS.SCALE]: (props) => <ScaleGizmo services={props.services} />,
+    [DOM_GIZMO_BUTTON_TYPES.MOVE]: (props) => <PositionGizmo services={props.services} />,
+    [DOM_GIZMO_BUTTON_TYPES.SCALE]: (props) => <ScaleGizmo services={props.services} />,
+    [DOM_GIZMO_BUTTON_TYPES.ROTATE]: (props) => <RotationGizmo services={props.services} />,
 };
 
 /**
  * @param { {services: {} }} props 
  */
 export const InteractiveTransformTools = (props) => {
-    const [transformMethod, setTransformMethod] = useState(TRANSFORM_METHODS.SCALE);
+    const [transformMethod, setTransformMethod] = useState("");
 
     useEffect(() => {
-        props.services.gizmoButtons.onButtonClicked((type) => {
-            setTransformMethod(METHODS_TO_BUTTONS_MAP[type]);
-        });
+        props.services.gizmoButtons.onButtonClicked((type) => setTransformMethod(type));
         props.services.gizmoButtons.activate();
 
         return () => {
@@ -49,7 +37,7 @@ export const InteractiveTransformTools = (props) => {
           */
         <Provider store={store}>
             {
-                METHODS_TO_GIZMO_MAP[transformMethod](props)
+                METHODS_TO_GIZMO_MAP[transformMethod] && METHODS_TO_GIZMO_MAP[transformMethod](props)
             }
         </Provider>
     )
