@@ -20,6 +20,9 @@ import { ViewResizeController } from "./services/ViewResizeController";
 import { getChildByName, getChildRelativePosition, getGlobalRotation } from "./services/ViewTools";
 import { ViewGizmoPositionArrows } from "./services/ViewGizmoPositionArrows";
 
+import rectangleImage from "./assets/rectangle.png";
+import { ViewGizmoScaleBox } from "./services/ViewGizmoScaleBox";
+
 window["__store"] = store;
 
 export const App = () => {
@@ -40,6 +43,7 @@ export const App = () => {
       camera: new ViewCameraController(app.view, app.ticker, { min: 1, max: 3 }),
       resize: new ViewResizeController(canvasContainerRef.current, app.renderer, { width: 1280, height: 1280 }),
       gizmoPositionArrows: new ViewGizmoPositionArrows(app.ticker),
+      gizmoScaleBox: new ViewGizmoScaleBox(app.ticker, rectangleImage),
       pixiTools: {
         getChildByName,
         getChildRelativePosition,
