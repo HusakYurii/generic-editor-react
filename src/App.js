@@ -20,8 +20,12 @@ import { ViewResizeController } from "./services/ViewResizeController";
 import { getChildByName, getChildRelativePosition, getGlobalRotation } from "./services/ViewTools";
 import { ViewGizmoPositionArrows } from "./services/ViewGizmoPositionArrows";
 
-import rectangleImage from "./assets/rectangle.png";
+import move from "./assets/icons/move.png";
+import resize from "./assets/icons/resize.png";
+import rotate from "./assets/icons/rotate.png";
+
 import { ViewGizmoScaleBox } from "./services/ViewGizmoScaleBox";
+import { DOMGizmoButtons } from "./services/DOMGizmoButtons";
 
 window["__store"] = store;
 
@@ -31,6 +35,11 @@ export const App = () => {
   const [services, setServices] = useState(null);
   const canvasRef = useRef(null);
   const canvasContainerRef = useRef(null);
+  const gizmoButtons = {
+    move: useRef(null),
+    resize: useRef(null),
+    rotate: useRef(null),
+  };
 
   useEffect(() => {
     const app = new Application({
@@ -38,12 +47,18 @@ export const App = () => {
       view: canvasRef.current
     });
 
+    console.log(gizmoButtons);
     setServices({
       app,
       camera: new ViewCameraController(app.view, app.ticker, { min: 1, max: 3 }),
       resize: new ViewResizeController(canvasContainerRef.current, app.renderer, { width: 1280, height: 1280 }),
       gizmoPositionArrows: new ViewGizmoPositionArrows(app.ticker),
-      gizmoScaleBox: new ViewGizmoScaleBox(app.ticker, rectangleImage),
+      gizmoScaleBox: new ViewGizmoScaleBox(app.ticker),
+      gizmoButtons: new DOMGizmoButtons({
+        move: gizmoButtons.move.current,
+        resize: gizmoButtons.resize.current,
+        rotate: gizmoButtons.rotate.current,
+      }),
       pixiTools: {
         getChildByName,
         getChildRelativePosition,
@@ -69,6 +84,11 @@ export const App = () => {
             </Stage>
           )
         }
+      </div>
+      <div id="gizmo-buttons">
+        <input ref={gizmoButtons.move} type="image" className="gizmoButton" src={move} />
+        <input ref={gizmoButtons.resize} type="image" className="gizmoButton" src={resize} />
+        <input ref={gizmoButtons.rotate} type="image" className="gizmoButton" src={rotate} />
       </div>
       <div id="right-panel">
         <PropertiesPanel />
