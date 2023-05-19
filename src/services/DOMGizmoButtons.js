@@ -31,8 +31,6 @@ export class DOMGizmoButtons {
         this._buttons.move.addEventListener("click", this._processClick)
         this._buttons.resize.addEventListener("click", this._processClick)
         this._buttons.rotate.addEventListener("click", this._processClick);
-
-        this._processClick({ target: this._buttons.move })
     }
 
     deactivate() {
@@ -48,6 +46,9 @@ export class DOMGizmoButtons {
         const dataID = event.target.getAttribute("data-id");
 
         if (this._currentActiveMethod === dataID) {
+            event.target.classList.remove("selected");
+            this._currentActiveMethod = "";
+            this._onButtonClick("");
             return;
         }
 
