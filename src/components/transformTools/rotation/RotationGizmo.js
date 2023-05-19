@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { updateBasePropertiesAction } from "../../../store/properties/base";
 import { round } from "lodash";
+import { toDegrees } from "../../../tools/math";
 
 /**
  * @typedef {{
@@ -17,21 +18,21 @@ import { round } from "lodash";
  * resourcesList: import("../../../store/resources").IResourcesListState;
  * updateBasePropertiesAction: typeof updateBasePropertiesAction;
  * 
- * }} PositionGizmoComponentDependencies
+ * }} RotationGizmoComponentDependencies
  */
 
 
 /**
- * @param {PositionGizmoComponentDependencies} props 
+ * @param {RotationGizmoComponentDependencies} props 
  */
-const PositionGizmoComponent = ({ services, selectedNodeID, updateBasePropertiesAction, basePropertiesList }) => {
+const RotationGizmoComponent = ({ services, selectedNodeID, updateBasePropertiesAction, basePropertiesList }) => {
 
     useEffect(() => {
-        services.app.stage.addChild(services.gizmoPositionArrows.view);
-        services.gizmoPositionArrows.activate();
+        services.app.stage.addChild(services.gizmoRotation.view);
+        services.gizmoRotation.activate();
         return () => {
-            services.app.stage.removeChild(services.gizmoPositionArrows.view);
-            services.gizmoPositionArrows.deactivate();
+            services.app.stage.removeChild(services.gizmoRotation.view);
+            services.gizmoRotation.deactivate();
         };
     }, []);
 
@@ -42,9 +43,9 @@ const PositionGizmoComponent = ({ services, selectedNodeID, updateBaseProperties
 
         const handleCameraUpdate = () => {
             const element = services.pixiTools.getChildByName(services.app.stage, String(selectedNodeID));
-            services.gizmoPositionArrows.setPosition(services.pixiTools.getChildRelativePosition(element, services.app.stage));
-            services.gizmoPositionArrows.setRotation(services.pixiTools.getGlobalRotation(element));
-            services.gizmoPositionArrows.setElementRotation(element.rotation);
+            services.gizmoRotation.setPosition(services.pixiTools.getChildRelativePosition(element, services.app.stage));
+            // services.gizmoRotation.setRotation(services.pixiTools.getGlobalRotation(element));
+            // services.gizmoRotation.setElementRotation(element.rotation);
         };
 
         handleCameraUpdate();
@@ -60,24 +61,23 @@ const PositionGizmoComponent = ({ services, selectedNodeID, updateBaseProperties
 
         const element = services.pixiTools.getChildByName(services.app.stage, String(selectedNodeID));
 
-        services.gizmoPositionArrows.show();
-        services.gizmoPositionArrows.setPosition(services.pixiTools.getChildRelativePosition(element, services.app.stage));
-        services.gizmoPositionArrows.setRotation(services.pixiTools.getGlobalRotation(element));
-        services.gizmoPositionArrows.setElementRotation(element.rotation);
+        services.gizmoRotation.show();
+        services.gizmoRotation.setPosition(services.pixiTools.getChildRelativePosition(element, services.app.stage));
+        // services.gizmoRotation.setRotation(services.pixiTools.getGlobalRotation(element));
+        // services.gizmoRotation.setElementRotation(element.rotation);
 
-        services.gizmoPositionArrows.onMoved((dx, dy) => {
-            const offset = services.camera.applyScale({ x: dx, y: dy });
+        services.gizmoRotation.onMoved((angle) => {
+            // const offset = services.camera.applyScale({ x: dx, y: dy });
 
             const properties = { ...basePropertiesList[selectedNodeID] };
-            properties.positionX = round(properties.positionX + offset.x, 2);
-            properties.positionY = round(properties.positionY + offset.y, 2);
+            properties.rotation = round(properties.rotation + toDegrees(angle), 2);
 
             updateBasePropertiesAction({ nodeID: selectedNodeID, properties });
         });
     }
     else {
-        services.gizmoPositionArrows.hide();
-        services.gizmoPositionArrows.onMoved(null);
+        services.gizmoRotation.hide();
+        services.gizmoRotation.onMoved(null);
     }
 
     return (
@@ -103,7 +103,7 @@ const mapStateToProps = (store) => {
 };
 
 
-export const PositionGizmo = connect(
+export const RotationGizmo = connect(
     mapStateToProps,
     { updateBasePropertiesAction }
-)(PositionGizmoComponent)
+)(RotationGizmoComponent)

@@ -16,22 +16,21 @@ import { round } from "lodash";
  * entityTypesList: import("../../../store/entityTypes").IEntityTypesListState;
  * resourcesList: import("../../../store/resources").IResourcesListState;
  * updateBasePropertiesAction: typeof updateBasePropertiesAction;
- * 
- * }} PositionGizmoComponentDependencies
+ * }} ScaleGizmoComponentDependencies
  */
 
 
 /**
- * @param {PositionGizmoComponentDependencies} props 
+ * @param {ScaleGizmoComponentDependencies} props 
  */
-const PositionGizmoComponent = ({ services, selectedNodeID, updateBasePropertiesAction, basePropertiesList }) => {
+const ScaleGizmoComponent = ({ services, selectedNodeID, updateBasePropertiesAction, basePropertiesList }) => {
 
     useEffect(() => {
-        services.app.stage.addChild(services.gizmoPositionArrows.view);
-        services.gizmoPositionArrows.activate();
+        services.app.stage.addChild(services.gizmoScaleBox.view);
+        services.gizmoScaleBox.activate();
         return () => {
-            services.app.stage.removeChild(services.gizmoPositionArrows.view);
-            services.gizmoPositionArrows.deactivate();
+            services.app.stage.removeChild(services.gizmoScaleBox.view);
+            services.gizmoScaleBox.deactivate();
         };
     }, []);
 
@@ -42,9 +41,8 @@ const PositionGizmoComponent = ({ services, selectedNodeID, updateBaseProperties
 
         const handleCameraUpdate = () => {
             const element = services.pixiTools.getChildByName(services.app.stage, String(selectedNodeID));
-            services.gizmoPositionArrows.setPosition(services.pixiTools.getChildRelativePosition(element, services.app.stage));
-            services.gizmoPositionArrows.setRotation(services.pixiTools.getGlobalRotation(element));
-            services.gizmoPositionArrows.setElementRotation(element.rotation);
+            services.gizmoScaleBox.setPosition(services.pixiTools.getChildRelativePosition(element, services.app.stage));
+            services.gizmoScaleBox.setRotation(services.pixiTools.getGlobalRotation(element));
         };
 
         handleCameraUpdate();
@@ -60,24 +58,24 @@ const PositionGizmoComponent = ({ services, selectedNodeID, updateBaseProperties
 
         const element = services.pixiTools.getChildByName(services.app.stage, String(selectedNodeID));
 
-        services.gizmoPositionArrows.show();
-        services.gizmoPositionArrows.setPosition(services.pixiTools.getChildRelativePosition(element, services.app.stage));
-        services.gizmoPositionArrows.setRotation(services.pixiTools.getGlobalRotation(element));
-        services.gizmoPositionArrows.setElementRotation(element.rotation);
+        services.gizmoScaleBox.show();
+        services.gizmoScaleBox.setPosition(services.pixiTools.getChildRelativePosition(element, services.app.stage));
+        services.gizmoScaleBox.setRotation(services.pixiTools.getGlobalRotation(element));
 
-        services.gizmoPositionArrows.onMoved((dx, dy) => {
-            const offset = services.camera.applyScale({ x: dx, y: dy });
+        services.gizmoScaleBox.onMoved((dx, dy) => {
+            const x = dx / 100;
+            const y = dy / 100;
 
             const properties = { ...basePropertiesList[selectedNodeID] };
-            properties.positionX = round(properties.positionX + offset.x, 2);
-            properties.positionY = round(properties.positionY + offset.y, 2);
+            properties.scaleX = round(properties.scaleX + x, 2);
+            properties.scaleY = round(properties.scaleY + y, 2);
 
             updateBasePropertiesAction({ nodeID: selectedNodeID, properties });
         });
     }
     else {
-        services.gizmoPositionArrows.hide();
-        services.gizmoPositionArrows.onMoved(null);
+        services.gizmoScaleBox.hide();
+        services.gizmoScaleBox.onMoved(null);
     }
 
     return (
@@ -103,7 +101,7 @@ const mapStateToProps = (store) => {
 };
 
 
-export const PositionGizmo = connect(
+export const ScaleGizmo = connect(
     mapStateToProps,
     { updateBasePropertiesAction }
-)(PositionGizmoComponent)
+)(ScaleGizmoComponent)

@@ -24,7 +24,8 @@ body {
 #left-panel,
 #center-panel,
 #right-panel,
-#bottom-panel {
+#bottom-panel,
+#gizmo-buttons {
   position: absolute;
 }
 
@@ -44,6 +45,29 @@ body {
   left: 300px;
   height: calc(100% - 200px - 50px);
   background-color: #ffffff;
+}
+
+#gizmo-buttons {
+  z-index: 50;
+  top: 50px;
+  left: 300px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+#gizmo-buttons .gizmoButton {
+  margin: 5px 0;
+  width: 35px;
+  height: 35px;
+  padding: 2px;
+  background-color: #ffffff;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+#gizmo-buttons .gizmoButton.selected {
+  background-color: #acbcc0;
 }
 
 #right-panel {

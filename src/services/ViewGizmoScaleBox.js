@@ -1,4 +1,5 @@
-import { Container, Graphics, Circle, Rectangle } from "pixi.js";
+
+import { Container, Graphics, Rectangle, mesh, Texture, Circle } from "pixi.js";
 
 const MOVE_DIRECTIONS = {
     X_AXIS: "xAxis",
@@ -6,61 +7,51 @@ const MOVE_DIRECTIONS = {
     XY_AXIS: "xyAxis",
 };
 
-export class ViewGizmoPositionArrows {
+export class ViewGizmoScaleBox {
     constructor(ticker) {
 
         this.view = new Container();
         this.view.visible = false;
 
         const size = 180;
-        const arrowSize = 30;
+        const pointerSize = 20;
         // Y axis
         this._yAxisArrow = new Graphics().lineStyle(5, 0x00ff00)
             .moveTo(0, 0)
             .lineTo(0, -size)
-            .moveTo(0, -size)
-            .lineTo(-arrowSize / 2, -size + arrowSize)
-            .lineTo(0, -size)
-            .lineTo(arrowSize / 2, -size + arrowSize)
             .beginFill(0x00ff00)
-            .drawPolygon([0, -size, -arrowSize / 2, -size + arrowSize, arrowSize / 2, -size + arrowSize])
+            .drawRect(-pointerSize / 2, -size + (-pointerSize / 2), pointerSize, pointerSize)
             .endFill();
 
         // X axis
         this._xAxisArrow = new Graphics().lineStyle(5, 0x0000ff)
             .moveTo(0, 0)
             .lineTo(size, 0)
-            .moveTo(size, 0)
-            .lineTo(size - arrowSize, -arrowSize / 2)
-            .lineTo(size, 0)
-            .lineTo(size - arrowSize, arrowSize / 2)
             .beginFill(0x0000ff)
-            .drawPolygon([size, 0, size - arrowSize, -arrowSize / 2, size - arrowSize, arrowSize / 2])
+            .drawRect(size - pointerSize / 2, -pointerSize / 2, pointerSize, pointerSize)
             .endFill();
 
-        // a circle at the centre
-        const circleRadius = 20;
-        const segmentColors = [0x00ff00, 0x0000ff, 0x00ff00, 0x0000ff]
 
+        const segmentColors = [0x00ff00, 0x0000ff, 0x0000ff, 0x00ff00]; // colors for each segment
+
+        // Draw the center rectangle
         this._center = new Graphics();
-        this._center.beginFill(0xffffff);
-        this._center.drawCircle(0, 0, circleRadius);
 
-        // Divide the circle into four segments
-        const segmentAngle = Math.PI / 2; // angle for each segment (90 degrees)
+        // Divide the rectangle into four segments
+        const positions = [[-15, -15], [0, -15], [-15, 0], [0, 0]]
+
         for (let i = 0; i < segmentColors.length; i++) {
             this._center.beginFill(segmentColors[i]);
-            this._center.moveTo(0, 0);
-            this._center.arc(0, 0, circleRadius, i * segmentAngle, (i + 1) * segmentAngle);
-            this._center.lineTo(0, 0);
-            this._center.endFill();
+            this._center.drawRect(positions[i][0], positions[i][1], 15, 15);
         }
+
+        this._center.endFill();
 
         this.view.addChild(this._yAxisArrow, this._xAxisArrow, this._center);
 
         this._axisHitBoxes = {
-            [MOVE_DIRECTIONS.X_AXIS]: new Circle(size - arrowSize / 2, 0, arrowSize),
-            [MOVE_DIRECTIONS.Y_AXIS]: new Circle(0, -size + arrowSize / 2, arrowSize),
+            [MOVE_DIRECTIONS.X_AXIS]: new Circle(size, 0, pointerSize),
+            [MOVE_DIRECTIONS.Y_AXIS]: new Circle(0, -size, pointerSize),
             [MOVE_DIRECTIONS.XY_AXIS]: new Circle(0, 0, 30),
         };
 
@@ -68,9 +59,8 @@ export class ViewGizmoPositionArrows {
         this._targetAxis = "";
         this._oldMousePosition = { x: 0, y: 0 };
         this._offset = { x: 0, y: 0 };
-        this._elementRotation = 0;
 
-        this.view.hitArea = new Rectangle(-20, -190, 200, 200);
+        this.view.hitArea = new Rectangle(-30, -200, 230, 230);
 
         this.view.interactiveChildren = false;
         this.view.on("mousedown", this._onMouseDown, this);
@@ -106,29 +96,13 @@ export class ViewGizmoPositionArrows {
         this.view.interactive = false;
     }
 
-    /**
-     * To set gizmo position. It will be used for UI
-     * @param {{x: number; y: number;}} point 
-     */
     setPosition(point) {
         this.view.x = point.x;
         this.view.y = point.y;
     }
 
-    /**
-     * To set gizmo rotation. It will be used for UI
-     * @param {{x: number; y: number;}} point 
-     */
     setRotation(angle) {
         this.view.rotation = angle;
-    }
-
-    /**
-     * To set selected element rotation. It will be used for actual math. 
-     * @param {{x: number; y: number;}} point 
-     */
-    setElementRotation(angle) {
-        this._elementRotation = angle;
     }
 
     _onMouseDown(event) {
@@ -142,38 +116,47 @@ export class ViewGizmoPositionArrows {
         if (axisName !== undefined) {
             this._isClicked = true;
             this._targetAxis = axisName;
-            this._oldMousePosition = { ...event.data.global };
+            this._oldMousePosition = { x, y };
         }
     }
 
-    _onMouseMove(event) {
+    _onMouseMove({ data }) {
         if (!this._isClicked) {
             return;
         };
 
-        const x = event.data.global.x - this._oldMousePosition.x;
-        const y = (event.data.global.y - this._oldMousePosition.y);
+        const point = data.getLocalPosition(this.view);
 
         let dx = 0;
         let dy = 0;
 
         if (this._targetAxis === MOVE_DIRECTIONS.X_AXIS) {
-            dx = x;
-            dy = x * Math.tan(this._elementRotation);
+            dx = point.x - this._oldMousePosition.x;
         }
         else if (this._targetAxis === MOVE_DIRECTIONS.Y_AXIS) {
-            dx = -y * Math.tan(this._elementRotation);
-            dy = y;
+            dy = (point.y - this._oldMousePosition.y) * -1;
         }
         else {
-            dx = x;
-            dy = y;
+            // I am not very good at math now but imperatively I found the solution to make it work
+            // almost the same as in Unity
+            dx = point.x - this._oldMousePosition.x;
+            dy = (point.y - this._oldMousePosition.y) * -1;
+            if (dx <= 0) {
+                dx = dy;
+            }
+            else if (dy <= 0) {
+                dy = dx;
+            }
+            else {
+                dx = dy = Math.min(dx, dy);
+            }
         }
 
-        this._oldMousePosition = { ...event.data.global };
+        this._oldMousePosition = point;
         // accumulate the offset, it will be applied in update function
         this._offset.x += dx;
         this._offset.y += dy;
+
         this._needToUpdate = true;
     }
 
