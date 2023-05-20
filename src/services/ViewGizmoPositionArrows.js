@@ -13,7 +13,7 @@ export class ViewGizmoPositionArrows {
         this.view.visible = false;
 
         const size = 180;
-        const arrowSize = 30;
+        const arrowSize = 25;
         // Y axis
         this._yAxisArrow = new Graphics().lineStyle(5, 0x00ff00)
             .moveTo(0, 0)
@@ -38,31 +38,29 @@ export class ViewGizmoPositionArrows {
             .drawPolygon([size, 0, size - arrowSize, -arrowSize / 2, size - arrowSize, arrowSize / 2])
             .endFill();
 
-        // a circle at the centre
-        const circleRadius = 20;
-        const segmentColors = [0x00ff00, 0x0000ff, 0x00ff00, 0x0000ff]
+        const segmentColors = [0x00ff00, 0x0000ff, 0x0000ff, 0x00ff00]; // colors for each segment
 
+        // Draw the center rectangle
         this._center = new Graphics();
-        this._center.beginFill(0xffffff);
-        this._center.drawCircle(0, 0, circleRadius);
+        this._center.position.set(15, -15)
+        // Divide the rectangle into four segments
+        const positions = [[-15, -15], [0, -15], [-15, 0], [0, 0]]
 
-        // Divide the circle into four segments
-        const segmentAngle = Math.PI / 2; // angle for each segment (90 degrees)
         for (let i = 0; i < segmentColors.length; i++) {
             this._center.beginFill(segmentColors[i]);
-            this._center.moveTo(0, 0);
-            this._center.arc(0, 0, circleRadius, i * segmentAngle, (i + 1) * segmentAngle);
-            this._center.lineTo(0, 0);
-            this._center.endFill();
+            this._center.drawRect(positions[i][0], positions[i][1], 15, 15);
         }
+
+        this._center.endFill();
 
         this.view.addChild(this._yAxisArrow, this._xAxisArrow, this._center);
 
         this._axisHitBoxes = {
             [MOVE_DIRECTIONS.X_AXIS]: new Circle(size - arrowSize / 2, 0, arrowSize),
             [MOVE_DIRECTIONS.Y_AXIS]: new Circle(0, -size + arrowSize / 2, arrowSize),
-            [MOVE_DIRECTIONS.XY_AXIS]: new Circle(0, 0, 30),
+            [MOVE_DIRECTIONS.XY_AXIS]: new Rectangle(0, -30, 30, 30),
         };
+
 
         this._isClicked = false;
         this._targetAxis = "";

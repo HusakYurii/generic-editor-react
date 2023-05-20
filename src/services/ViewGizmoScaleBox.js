@@ -1,5 +1,5 @@
 
-import { Container, Graphics, Rectangle, mesh, Texture, Circle } from "pixi.js";
+import { Container, Graphics, Rectangle, Circle } from "pixi.js";
 
 const MOVE_DIRECTIONS = {
     X_AXIS: "xAxis",
@@ -36,6 +36,7 @@ export class ViewGizmoScaleBox {
 
         // Draw the center rectangle
         this._center = new Graphics();
+        this._center.position.set(15, -15)
 
         // Divide the rectangle into four segments
         const positions = [[-15, -15], [0, -15], [-15, 0], [0, 0]]
@@ -52,7 +53,7 @@ export class ViewGizmoScaleBox {
         this._axisHitBoxes = {
             [MOVE_DIRECTIONS.X_AXIS]: new Circle(size, 0, pointerSize),
             [MOVE_DIRECTIONS.Y_AXIS]: new Circle(0, -size, pointerSize),
-            [MOVE_DIRECTIONS.XY_AXIS]: new Circle(0, 0, 30),
+            [MOVE_DIRECTIONS.XY_AXIS]: new Rectangle(0, -30, 30, 30),
         };
 
         this._isClicked = false;
