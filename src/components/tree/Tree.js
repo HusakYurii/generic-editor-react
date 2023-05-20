@@ -15,11 +15,11 @@ import { connect } from "react-redux";
 /**
 * @param { TreeComponentDependencies} props 
 */
-const TreeComponent = ({ treeData }) => {
+const TreeComponent = ({ treeData, selectedNodeID }) => {
 
     return (
         <>
-            {treeData ? <Node key={treeData.id} node={treeData} /> : null}
+            {treeData ? <Node key={treeData.id} selectedNodeID={selectedNodeID} node={treeData} /> : null}
         </>
     );
 };
@@ -29,6 +29,7 @@ const TreeComponent = ({ treeData }) => {
  */
 const mapStateToProps = ({ tree }) => {
     return {
+        selectedNodeID: tree.selectedNodeID,
         treeData: tree.treeData,
     };
 };

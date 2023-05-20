@@ -9,6 +9,7 @@ import textIcon from "../../assets/icons/text.png";
 import nineSliceSpriteIcon from "../../assets/icons/nine-slice-sprite.png";
 import animatedSpriteIcon from "../../assets/icons/animated-sprite.png";
 import graphicsIcon from "../../assets/icons/graphics.png";
+import { isChild } from "../../tools/treeTools";
 
 export const NODE_DATA_TYPE_ATTRIBUTE = "node-element";
 
@@ -24,11 +25,15 @@ const ICONS_TO_ENTITIES_MAP = {
  * 
  * @param {{node: import("../../data/NodeData").INodeData}} props 
  */
-export const Node = ({ node }) => {
+export const Node = ({ node, selectedNodeID }) => {
     const [collapsed, setCollapsed] = useState(true);
 
+    if (isChild(selectedNodeID, node)) {
+        collapsed && setCollapsed(() => false)
+    }
+
     const nodesList = <div className="node-nodes">
-        {node.nodes.map(node => <Node key={node.id} node={node} />)}
+        {node.nodes.map(node => <Node key={node.id} selectedNodeID={selectedNodeID} node={node} />)}
     </div>;
 
     const toggler = <div className="toggler" onClick={() => setCollapsed(!collapsed)}>{collapsed ? <>&#43;</> : <>&#x2212;</>}</div>;
@@ -40,7 +45,7 @@ export const Node = ({ node }) => {
         <div className="node">
             {node.nodes.length === 0 ? null : toggler}
             <div className="node-icon" style={iconStyle}></div>
-            <div draggable="true" className="node-name" data-id={node.id} data-type={NODE_DATA_TYPE_ATTRIBUTE}>
+            <div draggable="true" className={`node-name ${selectedNodeID === node.id ? "selected" : ""}`} data-id={node.id} data-type={NODE_DATA_TYPE_ATTRIBUTE}>
                 {node.name ? node.name : "---"}
             </div>
             {collapsed ? null : nodesList}

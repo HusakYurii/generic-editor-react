@@ -56,8 +56,8 @@ export class ViewGizmoPositionArrows {
         this.view.addChild(this._yAxisArrow, this._xAxisArrow, this._center);
 
         this._axisHitBoxes = {
-            [MOVE_DIRECTIONS.X_AXIS]: new Circle(size - arrowSize / 2, 0, arrowSize),
-            [MOVE_DIRECTIONS.Y_AXIS]: new Circle(0, -size + arrowSize / 2, arrowSize),
+            [MOVE_DIRECTIONS.X_AXIS]: new Circle(size - arrowSize / 2, 0, arrowSize * 1.1),
+            [MOVE_DIRECTIONS.Y_AXIS]: new Circle(0, -size + arrowSize / 2, arrowSize * 1.1),
             [MOVE_DIRECTIONS.XY_AXIS]: new Rectangle(0, -30, 30, 30),
         };
 
@@ -68,9 +68,6 @@ export class ViewGizmoPositionArrows {
         this._offset = { x: 0, y: 0 };
         this._elementRotation = 0;
 
-        this.view.hitArea = new Rectangle(-20, -190, 200, 200);
-
-        this.view.interactiveChildren = false;
         this.view.on("mousedown", this._onMouseDown, this);
         this.view.on("mousemove", this._onMouseMove, this);
         this.view.on("mouseup", this._onMouseUp, this);

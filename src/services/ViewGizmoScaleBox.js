@@ -51,8 +51,8 @@ export class ViewGizmoScaleBox {
         this.view.addChild(this._yAxisArrow, this._xAxisArrow, this._center);
 
         this._axisHitBoxes = {
-            [MOVE_DIRECTIONS.X_AXIS]: new Circle(size, 0, pointerSize),
-            [MOVE_DIRECTIONS.Y_AXIS]: new Circle(0, -size, pointerSize),
+            [MOVE_DIRECTIONS.X_AXIS]: new Circle(size, 0, pointerSize * 1.1),
+            [MOVE_DIRECTIONS.Y_AXIS]: new Circle(0, -size, pointerSize * 1.1),
             [MOVE_DIRECTIONS.XY_AXIS]: new Rectangle(0, -30, 30, 30),
         };
 
@@ -61,9 +61,6 @@ export class ViewGizmoScaleBox {
         this._oldMousePosition = { x: 0, y: 0 };
         this._offset = { x: 0, y: 0 };
 
-        this.view.hitArea = new Rectangle(-30, -200, 230, 230);
-
-        this.view.interactiveChildren = false;
         this.view.on("mousedown", this._onMouseDown, this);
         this.view.on("mousemove", this._onMouseMove, this);
         this.view.on("mouseup", this._onMouseUp, this);
