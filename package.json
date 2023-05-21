@@ -18,6 +18,8 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "createVersionFile": "node ./createVersionFile.js",
     "start": "npm run createVersionFile && react-scripts start",
     "build": "createVersionFile && react-scripts build",
@@ -41,5 +43,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^5.0.0"
   }
 }
