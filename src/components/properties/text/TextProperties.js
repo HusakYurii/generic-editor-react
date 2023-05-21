@@ -24,7 +24,7 @@ const TextPropertiesComponent = ({ selectedNodeID, textPropertiesList, updateTex
     const id = selectedNodeID;
 
     const {
-        text, color, anchorY, anchorX,
+        text, fill, anchorY, anchorX,
         fontFamily, fontStyle, fontVariant, fontWeight, fontSize,
         // stroke properties are optional and may not exist in the data if disabled
         hasStroke = false, stroke = "#ffffff", strokeThickness = 1, miterLimit = 10, lineJoin = FONT_LINE_JOINT.MITER,
@@ -39,7 +39,7 @@ const TextPropertiesComponent = ({ selectedNodeID, textPropertiesList, updateTex
     // if booleans are not provided it means that the callback is called from the input
     const onChange = (key, value, isStroke = hasStroke, isShadow = dropShadow, isMultiLine = wordWrap) => {
         let properties = {
-            text, color, anchorY, anchorX,
+            text, fill, anchorY, anchorX,
             fontFamily, fontStyle, fontVariant, fontWeight, fontSize,
             ...(isStroke ? { hasStroke: true, stroke, strokeThickness, miterLimit, lineJoin } : {}),
             ...(isShadow ? { dropShadow: true, dropShadowAlpha, dropShadowAngle, dropShadowBlur, dropShadowColor, dropShadowDistance } : {}),
@@ -54,7 +54,7 @@ const TextPropertiesComponent = ({ selectedNodeID, textPropertiesList, updateTex
     // essential style values
     const textData = { label: "Text", dataID: "text", value: text, onChange };
     const anchorData = { label: "Anchor", dataIDs: ["anchorX", "anchorY"], values: [anchorX, anchorY], signs: ["X", "Y"], onChange };
-    const colorData = { label: "Color", dataID: "color", value: color, onChange };
+    const colorData = { label: "Color", dataID: "fill", value: fill, onChange };
     const fontFamilyData = { label: "Font Family", dataID: "fontFamily", selected: fontFamily, options: Object.values(FONT_FAMILIES), onChange };
     const fontStyleData = { label: "Font Style", dataID: "fontStyle", selected: fontStyle, options: Object.values(FONT_STYLE), onChange };
     const fontVariantData = { label: "Font Variant", dataID: "fontVariant", selected: fontVariant, options: Object.values(FONT_VARIANT), onChange };

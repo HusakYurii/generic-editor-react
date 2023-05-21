@@ -146,7 +146,7 @@ export const TEXT_WHITE_SPACE = Object.freeze({
  * @typedef {{
  *  anchorX: number;
  *  anchorY: number;
- *  color:  string;
+ *  fill:  string;
  *  text: string;
  *  fontFamily: sting;
  *  fontSize: number;
@@ -186,7 +186,7 @@ export const getTextProperties = () => {
         anchorX: 0,
         anchorY: 0,
         text: "No text",
-        color: "#000000",
+        fill: "#000000",
         fontFamily: FONT_FAMILIES.ARIAL,
         fontStyle: FONT_STYLE.NORMAL,
         fontVariant: FONT_VARIANT.NORMAL,
