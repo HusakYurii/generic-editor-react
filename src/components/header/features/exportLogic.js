@@ -18,20 +18,26 @@ const FILE_NAMES = {
     RESOURCES: "assesMapAsBase64.json"
 };
 
-
 /**
- * To save resources which are used and export them in the map in base 64 format
- * @param {import("../../store").IStore} store 
- * @param {() => void} onFinish 
+ * @param {import("../../../store/properties/sprite").ISpritePropertiesListState & import("../../../store/properties/nineSliceSprite").INineSliceSpritePropertiesListState} data 
+ * @param {import("../../../store/resources").IResourcesListState} resourcesList 
  */
-const exportResourcesAsBase64 = (store, onFinish) => {
-    const { resourcesList, spritePropertiesList } = store.getState();
-
-    const resourcesToExport = Object.values(spritePropertiesList)
+const collectUsedResources = (data, resourcesList) => {
+    return Object.values(data)
         .reduce((acc, { resourceID }) => {
             if (resourceID) { acc.push([resourceID, resourcesList[resourceID]]) }
             return acc;
         }, []);
+}
+/**
+ * To save resources which are used and export them in the map in base 64 format
+ * @param {import("../../../store").Store} store 
+ * @param {() => void} onFinish 
+ */
+const exportResourcesAsBase64 = (store, onFinish) => {
+    const { resourcesList, spritePropertiesList, nineSliceSpritePropertiesList } = store.getState();
+
+    const resourcesToExport = collectUsedResources({ ...spritePropertiesList, ...nineSliceSpritePropertiesList }, resourcesList);
 
     /**
      * @param {{[id: string]: { name: string; url: string;}}} resources 
@@ -56,7 +62,7 @@ const exportResourcesAsBase64 = (store, onFinish) => {
 
 /**
  * To make a bundle with all the data and save it as json file
- * @param {{getState: () => import("../../../store").IStore} } store 
+ * @param {import("../../../store").Store } store 
  * @param {() => void} onFinish
  */
 const exportMainData = (store, onFinish) => {
@@ -92,7 +98,7 @@ const exportMainData = (store, onFinish) => {
 };
 
 /**
- * @param {import("../../../store").IStore} store 
+ * @param {import("../../../store").Store} store 
  * @param {() => void} [onFinish]
  */
 export const exportData = (store, onFinish = () => { }) => {

@@ -22,7 +22,11 @@ import { textPropertiesListReducer } from './properties/text';
  */
 
 /**
- * @type {{getState: () => IStore}};
+ * @typedef {{getState: () => IStore}} Store
+ */
+
+/**
+ * @type Store
  */
 const store = createStore(combineReducers({
     // tree of nodes hierarchy
